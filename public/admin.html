@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Playlist Wrapped</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Circular+Std:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .admin-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+        
+        .admin-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .admin-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: var(--border-radius);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+        
+        .admin-form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        
+        .admin-input {
+            padding: 12px 16px;
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            font-size: 16px;
+        }
+        
+        .admin-btn {
+            padding: 12px 24px;
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        
+        .admin-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(29, 185, 84, 0.3);
+        }
+        
+        .admin-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .status-card {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .status-item {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 16px;
+            text-align: center;
+        }
+        
+        .status-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--accent-primary);
+            margin-bottom: 4px;
+        }
+        
+        .status-label {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        .auth-status {
+            padding: 16px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            text-align: center;
+            font-weight: 500;
+        }
+        
+        .auth-status.authenticated {
+            background: rgba(29, 185, 84, 0.1);
+            border: 1px solid rgba(29, 185, 84, 0.3);
+            color: #1db954;
+        }
+        
+        .auth-status.not-authenticated {
+            background: rgba(255, 69, 58, 0.1);
+            border: 1px solid rgba(255, 69, 58, 0.3);
+            color: #ff453a;
+        }
+        
+        .log {
+            background: var(--bg-secondary);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            padding: 16px;
+            max-height: 200px;
+            overflow-y: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <div class="admin-header">
+            <h1>🔧 Admin Panel</h1>
+            <p>Manage playlist data cache</p>
+        </div>
+        
+        <div class="status-card" id="status-card">
+            <!-- Status will be loaded here -->
+        </div>
+          <div class="admin-card">
+            <h2>🔄 Refresh Data</h2>
+            <p>Fetch fresh data from Spotify and update the cache.</p>
+            
+            <div class="admin-form">
+                <div id="auth-status" class="auth-status">
+                    <!-- Auth status will be shown here -->
+                </div>
+                <button id="refresh-btn" class="admin-btn" disabled>
+                    <i class="fas fa-sync"></i>
+                    Fetch Data
+                </button>
+            </div>
+        </div>
+        
+        <div class="admin-card">
+            <h2>📊 Quick Actions</h2>
+            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                <button id="auth-btn" class="admin-btn" style="background: #1db954;">
+                    <i class="fab fa-spotify"></i>
+                    Get Spotify Token
+                </button>
+                <button id="view-data-btn" class="admin-btn" style="background: #3b82f6;">
+                    <i class="fas fa-eye"></i>
+                    View Public Data
+                </button>
+                <a href="/" class="admin-btn" style="background: #6b7280; text-decoration: none; display: inline-flex; align-items: center; gap: 8px;">
+                    <i class="fas fa-home"></i>
+                    Back to App
+                </a>
+            </div>
+        </div>
+        
+        <div class="admin-card">
+            <h2>📝 Activity Log</h2>
+            <div id="log" class="log">
+                Admin panel loaded...\n
+            </div>
+        </div>
+    </div>
+    
+    <script>        const log = document.getElementById('log');
+        const statusCard = document.getElementById('status-card');
+        const authStatus = document.getElementById('auth-status');
+        const refreshBtn = document.getElementById('refresh-btn');
+        
+        function addLog(message) {
+            const timestamp = new Date().toLocaleTimeString();
+            log.textContent += `[${timestamp}] ${message}\n`;
+            log.scrollTop = log.scrollHeight;
+        }
+        
+        async function checkAuthStatus() {
+            try {
+                const response = await fetch('/auth/status');
+                const data = await response.json();
+                
+                if (data.authenticated) {
+                    authStatus.className = 'auth-status authenticated';
+                    authStatus.innerHTML = '<i class="fas fa-check-circle"></i> Authenticated with Spotify';
+                    refreshBtn.disabled = false;
+                    addLog('✅ Spotify authentication verified');
+                } else {
+                    authStatus.className = 'auth-status not-authenticated';
+                    authStatus.innerHTML = '<i class="fas fa-times-circle"></i> Not authenticated - Click "Get Spotify Token" first';
+                    refreshBtn.disabled = true;
+                    addLog('❌ Not authenticated with Spotify');
+                }
+            } catch (error) {
+                authStatus.className = 'auth-status not-authenticated';
+                authStatus.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Error checking authentication';
+                refreshBtn.disabled = true;
+                addLog(`Error checking auth: ${error.message}`);
+            }
+        }
+        
+        async function loadStatus() {
+            try {
+                const response = await fetch('/api/admin/status');
+                const data = await response.json();
+                
+                statusCard.innerHTML = `
+                    <div class="status-item">
+                        <div class="status-value">${data.hasData ? '✅' : '❌'}</div>
+                        <div class="status-label">Data Available</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-value">${data.tracksCount}</div>
+                        <div class="status-label">Tracks Cached</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-value">${data.lastUpdated ? new Date(data.lastUpdated).toLocaleDateString() : 'Never'}</div>
+                        <div class="status-label">Last Updated</div>
+                    </div>
+                `;
+                
+                addLog(`Status loaded: ${data.hasData ? 'Data available' : 'No data'}`);
+            } catch (error) {
+                addLog(`Error loading status: ${error.message}`);
+            }
+        }
+          document.getElementById('refresh-btn').addEventListener('click', async () => {
+            const btn = document.getElementById('refresh-btn');
+            
+            // Get access token from cookies
+            const accessToken = document.cookie
+                .split('; ')
+                .find(row => row.startsWith('spotify_access_token='))
+                ?.split('=')[1];
+            
+            if (!accessToken) {
+                addLog('❌ No access token found. Please authenticate with Spotify first.');
+                return;
+            }
+            
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Fetching Data...';
+            addLog('🔄 Starting data fetch from Spotify...');
+            
+            try {
+                const response = await fetch('/api/admin/refresh', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        password: 'admin123', // Default password, no need for user input
+                        accessToken: accessToken
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok) {
+                    addLog(`✅ Success: ${result.message}`);
+                    loadStatus(); // Refresh status
+                    addLog('🎉 Data is now available for public users!');
+                } else {
+                    addLog(`❌ Error: ${result.error}`);
+                }
+            } catch (error) {
+                addLog(`❌ Network error: ${error.message}`);
+            }
+            
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-sync"></i> Fetch Data';
+        });
+        
+        document.getElementById('auth-btn').addEventListener('click', () => {
+            addLog('Redirecting to Spotify auth...');
+            window.location.href = '/auth/login';
+        });
+        
+        document.getElementById('view-data-btn').addEventListener('click', async () => {
+            try {
+                const response = await fetch('/api/public/data');
+                const result = await response.json();
+                
+                if (response.ok) {
+                    addLog(`✅ Public data available: ${result.data.playlist.name} (${result.data.playlist.totalTracks} tracks)`);
+                    addLog(`Last updated: ${new Date(result.lastUpdated).toLocaleString()}`);
+                } else {
+                    addLog(`❌ ${result.error}`);
+                }
+            } catch (error) {
+                addLog(`❌ Error fetching public data: ${error.message}`);
+            }
+        });
+          // Load status and auth on page load
+        loadStatus();
+        checkAuthStatus();
+        
+        // Auto-refresh status every 30 seconds
+        setInterval(() => {
+            loadStatus();
+            checkAuthStatus();
+        }, 30000);
+    </script>
+</body>
+</html>
