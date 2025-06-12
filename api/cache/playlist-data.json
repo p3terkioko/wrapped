@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-06-12T13:56:50.537Z",
+  "lastUpdated": "2025-06-12T14:11:43.624Z",
   "data": {
     "playlist": {
       "id": "1BZY7mhShLhc2fIlI6uIa4",
@@ -7,7 +7,7 @@
       "description": "",
       "image": "https://mosaic.scdn.co/640/ab67616d00001e020d456455c3e249dff59254efab67616d00001e02681265e351fc75e60d0fa50bab67616d00001e02e465904fbcc8de1920c60867ab67616d00001e02fd0184ab3186d02fbd61cce5",
       "owner": "tanuiii",
-      "totalTracks": 223,
+      "totalTracks": 224,
       "followers": 48,
       "public": false
     },
@@ -63,11 +63,11 @@
         "id": "5K4W6rqBFWDnAN6FQUkS6x"
       }
     ],
-    "totalUniqueArtists": 274,
+    "totalUniqueArtists": 275,
     "topGenres": [
       {
         "genre": "afro soul",
-        "count": 51
+        "count": 52
       },
       {
         "genre": "amapiano",
@@ -82,12 +82,12 @@
         "count": 41
       },
       {
-        "genre": "afropiano",
+        "genre": "afro r&b",
         "count": 40
       },
       {
-        "genre": "afro r&b",
-        "count": 39
+        "genre": "afropiano",
+        "count": 40
       },
       {
         "genre": "gengetone",
@@ -127,7 +127,7 @@
     },
     "dateRange": {
       "earliest": "2024-03-13T10:29:03.000Z",
-      "latest": "2025-06-12T12:20:19.000Z"
+      "latest": "2025-06-12T13:56:57.000Z"
     },
     "totalAnalyzedTracks": 0,
     "topContributors": [
@@ -2805,7 +2805,7 @@
         "mostActive": "Dr. C",
         "avgContribution": 9,
         "totalGenres": 85,
-        "totalArtists": 274
+        "totalArtists": 275
       }
     },
     "genreMaestros": [
@@ -2814,8 +2814,8 @@
         "contributorId": "xua99owgtnso375kz2zz41rtf",
         "contributorName": "Dr. C",
         "songCount": 19,
-        "totalGenreTracks": 56,
-        "percentage": 34,
+        "totalGenreTracks": 57,
+        "percentage": 33,
         "title": "🌟 Afro Soul Sovereign",
         "tracks": [
           {
@@ -2934,8 +2934,8 @@
         "contributorId": "xua99owgtnso375kz2zz41rtf",
         "contributorName": "Dr. C",
         "songCount": 11,
-        "totalGenreTracks": 44,
-        "percentage": 25,
+        "totalGenreTracks": 45,
+        "percentage": 24,
         "title": "💫 Afro R&B Royalty",
         "tracks": [
           {
@@ -3328,6 +3328,15 @@
           "description": "Added 3 tracks"
         },
         {
+          "id": "31gtfhnntfjyl4taa5xlaje34s3m",
+          "tracksAdded": 3,
+          "role": "🎶 Contributor",
+          "isContributor": true,
+          "name": "KamiLimu",
+          "icon": "🎶",
+          "description": "Added 3 tracks"
+        },
+        {
           "id": "31edzcgyjv6zpuahz5uxo2t53kda",
           "tracksAdded": 3,
           "role": "🎶 Contributor",
@@ -3369,15 +3378,6 @@
           "role": "🎶 Contributor",
           "isContributor": true,
           "name": "Chiri bett",
-          "icon": "🎶",
-          "description": "Added 2 tracks"
-        },
-        {
-          "id": "31gtfhnntfjyl4taa5xlaje34s3m",
-          "tracksAdded": 2,
-          "role": "🎶 Contributor",
-          "isContributor": true,
-          "name": "KamiLimu",
           "icon": "🎶",
           "description": "Added 2 tracks"
         },
