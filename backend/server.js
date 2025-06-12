@@ -205,11 +205,22 @@ app.post('/api/admin/refresh', async (req, res) => {
                 });
             }
         }
-        
-        console.log(`Admin refresh: Fetched profiles for ${allUserProfiles.length} contributors (out of ${allContributorIds.length} total)`);
+          console.log(`Admin refresh: Fetched profiles for ${allUserProfiles.length} contributors (out of ${allContributorIds.length} total)`);
         
         const contributorAnalytics = generateAdvancedContributorAnalytics(validTracks, audioFeatures, artists, allUserProfiles);
         insights.contributors = contributorAnalytics;
+        
+        // Calculate genre maestros - import the function
+        const { calculateGenreMaestros } = require('./routes/playlist');
+        const genreMaestros = calculateGenreMaestros(validTracks, artists, allUserProfiles);
+        insights.genreMaestros = genreMaestros;
+        console.log(`Admin refresh: Found ${genreMaestros.length} genre maestros`);
+          // Generate playlist members list - import the function and pass follower count
+        const { generatePlaylistMembers } = require('./routes/playlist');
+        const followerCount = playlist.followers?.total || 0;
+        const playlistMembers = generatePlaylistMembers(validTracks, allUserProfiles, followerCount);
+        insights.playlistMembers = playlistMembers;
+        console.log(`Admin refresh: Found ${playlistMembers.totalMembers} playlist members`);
         
         // Cache the data
         const success = writeCache(insights);

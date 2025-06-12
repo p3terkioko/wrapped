@@ -203,6 +203,22 @@ class SpotifyAPI {
       return [];
     }
   }
+
+  // Get playlist followers information (note: Spotify doesn't provide follower lists for privacy)
+  async getPlaylistFollowers(playlistId, accessToken) {
+    try {
+      // Note: Spotify API doesn't provide a way to get the list of followers
+      // We can only get the follower count from the playlist endpoint
+      const playlist = await this.getPlaylist(playlistId, accessToken);
+      return {
+        total: playlist.followers?.total || 0,
+        followers: [] // Empty array since Spotify doesn't provide follower lists
+      };
+    } catch (error) {
+      console.error('Error fetching playlist followers:', error.response?.data || error.message);
+      return { total: 0, followers: [] };
+    }
+  }
 }
 
 module.exports = SpotifyAPI;

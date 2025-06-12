@@ -336,8 +336,7 @@ function populateDashboard(data) {
     
     // Charts
     createGenresChart(data.topGenres);
-    createMoodChart(data.audioFeatures);
-      // Load advanced analytics - use existing comprehensive data if available
+    createMoodChart(data.audioFeatures);    // Load advanced analytics - use existing comprehensive data if available
     if (data.contributors) {
         console.log('✅ Using existing comprehensive contributor analytics');
         console.log('Contributors data structure:', data.contributors);
@@ -346,6 +345,23 @@ function populateDashboard(data) {
     } else {
         console.log('📊 Loading advanced analytics separately...');
         loadAdvancedAnalytics();
+    }
+    
+    // Load genre maestros and playlist members if available in data
+    if (data.genreMaestros) {
+        console.log('✅ Using existing genre maestros data');
+        populateGenreMaestros(data.genreMaestros);
+    }
+    
+    if (data.playlistMembers) {
+        console.log('✅ Using existing playlist members data');
+        populatePlaylistMembers(data.playlistMembers);
+    }
+    
+    // If not available in main data, load them separately
+    if (!data.genreMaestros || !data.playlistMembers) {
+        console.log('📊 Loading members and champions separately...');
+        loadMembersAndChampions();
     }
 }
 
@@ -786,10 +802,8 @@ function populateContributorAnalytics(contributorData) {
                             <span class="badge-preview">💃 Dancefloor Commander</span>
                             <span class="badge-description">Makes everyone move with danceable tracks</span>
                         </div>
-                        <div class="legend-item">
-                            <span class="badge-preview">🌈 Vibes Master</span>
-                            <span class="badge-description">Spreads positive energy with uplifting songs</span>
-                        </div>
+                        <div class="badge-preview">🌈 Vibes Master</div>
+                        <div class="badge-description">Spreads positive energy with uplifting songs</div>
                         <div class="legend-item">
                             <span class="badge-preview">🌧️ Sad Boi</span>
                             <span class="badge-description">Embraces melancholy with emotional tracks</span>
@@ -1848,4 +1862,218 @@ function getCountryFromGenre(genre) {
     }
     
     return 'Unknown';
+}
+
+// Populate genre maestros section
+function populateGenreMaestros(genreMaestros) {
+    const container = document.getElementById('genre-maestros');
+    if (!container || !genreMaestros || genreMaestros.length === 0) {
+        if (container) {
+            container.innerHTML = '<p class="no-data">No genre maestros found</p>';
+        }
+        return;
+    }
+
+    console.log('🎵 Populating genre maestros:', genreMaestros.length);
+
+    container.innerHTML = `
+        <div class="genre-maestros-grid">
+            ${genreMaestros.slice(0, 12).map(maestro => `
+                <div class="genre-maestro-card">
+                    <div class="maestro-header">
+                        <div class="maestro-avatar">
+                            ${maestro.avatar ? 
+                                `<img src="${maestro.avatar}" alt="${maestro.contributorName}" />` : 
+                                `<div class="avatar-placeholder">${maestro.contributorName.charAt(0).toUpperCase()}</div>`
+                            }
+                        </div>
+                        <div class="maestro-info">
+                            <h4 class="maestro-name">${maestro.contributorName}</h4>
+                            <p class="maestro-title">${maestro.title}</p>
+                        </div>
+                    </div>
+                    <div class="maestro-stats">
+                        <div class="stat-row">
+                            <span class="stat-label">Tracks</span>
+                            <span class="stat-value">${maestro.songCount}/${maestro.totalGenreTracks}</span>
+                        </div>
+                        <div class="stat-row">
+                            <span class="stat-label">Dominance</span>
+                            <span class="stat-value">${maestro.percentage}%</span>
+                        </div>
+                    </div>
+                    <div class="genre-badge">
+                        <span class="genre-name">${maestro.genre}</span>
+                    </div>
+                    ${maestro.tracks && maestro.tracks.length > 0 ? `
+                        <div class="maestro-tracks">
+                            <p class="tracks-label">Top tracks:</p>
+                            ${maestro.tracks.slice(0, 2).map(track => `
+                                <div class="track-item">
+                                    <span class="track-name">${track.name}</span>
+                                    <span class="track-artist">${track.artists}</span>
+                                </div>
+                            `).join('')}
+                        </div>
+                    ` : ''}
+                </div>
+            `).join('')}
+        </div>
+        
+        <div class="maestros-summary">
+            <div class="summary-text">
+                <i class="fas fa-crown"></i>
+                <span>Found ${genreMaestros.length} genre champions across the playlist</span>
+            </div>
+        </div>
+    `;
+}
+
+// Populate playlist members section
+function populatePlaylistMembers(membersData) {
+    const container = document.getElementById('playlist-members');
+    if (!container || !membersData) {
+        if (container) {
+            container.innerHTML = '<p class="no-data">No members data available</p>';
+        }
+        return;
+    }
+
+    console.log('👥 Populating playlist members:', membersData);
+
+    const { contributors, listeners, summary } = membersData;
+
+    container.innerHTML = `
+        <div class="members-overview">
+            <div class="members-stats">
+                <div class="stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-info">
+                        <span class="stat-number">${summary.totalMembers}</span>
+                        <span class="stat-label">Total Members</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🎶</div>
+                    <div class="stat-info">
+                        <span class="stat-number">${summary.contributorCount}</span>
+                        <span class="stat-label">Contributors</span>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🎧</div>
+                    <div class="stat-info">
+                        <span class="stat-number">${summary.listenerCount}</span>
+                        <span class="stat-label">Listeners</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="members-sections">
+            <div class="contributors-section">
+                <div class="section-header">
+                    <h4><i class="fas fa-plus-circle"></i> Contributors</h4>
+                    <p>People who have added tracks to this playlist</p>
+                </div>
+                <div class="members-list">
+                    ${contributors.map((member, index) => `
+                        <div class="member-card contributor">
+                            <div class="member-rank">#${index + 1}</div>
+                            <div class="member-avatar">
+                                ${member.avatar ? 
+                                    `<img src="${member.avatar}" alt="${member.name}" />` : 
+                                    `<div class="avatar-placeholder">${member.name.charAt(0).toUpperCase()}</div>`
+                                }
+                                <div class="member-role-badge">${member.icon}</div>
+                            </div>
+                            <div class="member-info">
+                                <h5 class="member-name">${member.name}</h5>
+                                <p class="member-role">${member.role}</p>
+                                <p class="member-description">${member.description}</p>
+                                ${member.followerCount ? `
+                                    <p class="member-followers">${member.followerCount.toLocaleString()} followers</p>
+                                ` : ''}
+                            </div>
+                            <div class="member-stats">
+                                <div class="stat-item">
+                                    <span class="stat-value">${member.tracksAdded}</span>
+                                    <span class="stat-label">tracks</span>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+
+            ${listeners.count > 0 ? `
+                <div class="listeners-section">
+                    <div class="section-header">
+                        <h4><i class="fas fa-headphones"></i> Listeners</h4>
+                        <p>People who follow this playlist</p>
+                    </div>
+                    <div class="listeners-info">
+                        <div class="listeners-count">
+                            <span class="count">${listeners.count}</span>
+                            <span class="label">estimated listeners</span>
+                        </div>
+                        <div class="listeners-note">
+                            <i class="fas fa-info-circle"></i>
+                            <span>${listeners.note}</span>
+                        </div>
+                    </div>
+                </div>
+            ` : ''}
+        </div>
+    `;
+}
+
+// Load and display members and genre champions
+async function loadMembersAndChampions() {
+    const playlistId = '1BZY7mhShLhc2fIlI6uIa4';
+    
+    try {
+        console.log('🔍 Loading playlist members and genre champions...');
+        
+        const accessToken = getCookie('spotify_access_token');
+        
+        const response = await fetch('/api/playlist/members-and-champions', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                playlistId: playlistId,
+                accessToken: accessToken
+            })
+        });
+        
+        if (!response.ok) {
+            throw new Error('Failed to load members and champions');
+        }
+        
+        const data = await response.json();
+        
+        // Populate the sections
+        populateGenreMaestros(data.genreChampions);
+        populatePlaylistMembers(data.members);
+        
+        console.log('✅ Members and champions loaded successfully');
+        
+        return data;
+        
+    } catch (error) {
+        console.error('Error loading members and champions:', error);
+        
+        // Show error state
+        const genreMaestrosContainer = document.getElementById('genre-maestros');
+        const playlistMembersContainer = document.getElementById('playlist-members');
+        
+        if (genreMaestrosContainer) {
+            genreMaestrosContainer.innerHTML = '<p class="error-message">Failed to load genre champions</p>';
+        }
+        if (playlistMembersContainer) {
+            playlistMembersContainer.innerHTML = '<p class="error-message">Failed to load playlist members</p>';
+        }
+    }
 }

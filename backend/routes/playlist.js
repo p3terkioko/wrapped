@@ -12,10 +12,11 @@ router.post('/analyze', async (req, res) => {
     
     if (!playlistId || !accessToken) {
       return res.status(400).json({ error: 'Playlist ID and access token are required' });
-    }
-
-    // Get playlist details
+    }    // Get playlist details
     const playlist = await spotify.getPlaylist(playlistId, accessToken);
+    
+    // Get playlist followers information
+    const followersInfo = await spotify.getPlaylistFollowers(playlistId, accessToken);
     
     // Get all tracks
     const tracks = await spotify.getPlaylistTracks(playlistId, accessToken);
@@ -127,11 +128,20 @@ router.post('/analyze', async (req, res) => {
         });
       }
     }
-    
-    console.log(`Fetched profiles for ${allUserProfiles.length} contributors (out of ${allContributorIds.length} total)`);
+      console.log(`Fetched profiles for ${allUserProfiles.length} contributors (out of ${allContributorIds.length} total)`);
     
     const contributorAnalytics = generateAdvancedContributorAnalytics(validTracks, audioFeatures, artists, allUserProfiles);
     insights.contributors = contributorAnalytics;
+    
+    // Calculate genre maestros
+    const genreMaestros = calculateGenreMaestros(validTracks, artists, allUserProfiles);
+    insights.genreMaestros = genreMaestros;
+    console.log(`Found ${genreMaestros.length} genre maestros`);
+      // Generate playlist members list with proper follower count
+    const followerCount = playlist.followers?.total || 0;
+    const playlistMembers = generatePlaylistMembers(validTracks, allUserProfiles, followerCount);
+    insights.playlistMembers = playlistMembers;
+    console.log(`Found ${playlistMembers.totalMembers} total playlist members (${playlistMembers.summary.contributorCount} contributors, ${playlistMembers.summary.listenerCount} listeners)`);
     
     res.json(insights);
     
@@ -324,9 +334,276 @@ router.post('/contributors', async (req, res) => {
   }
 });
 
+// Calculate genre maestros - who contributed most songs for each genre (enhanced version)
+function calculateGenreMaestros(tracks, artists, userProfiles) {
+  const genreContributors = {};
+  
+  // Map each track to its genres and contributor
+  tracks.forEach(item => {
+    const contributorId = item.added_by?.id;
+    if (!contributorId || contributorId === 'unknown') return;
+    
+    // Get genres for this track's artists
+    const trackGenres = new Set();
+    item.track.artists.forEach(trackArtist => {
+      const artistData = artists.find(a => a && a.id === trackArtist.id);
+      if (artistData && artistData.genres) {
+        artistData.genres.forEach(genre => trackGenres.add(genre));
+      }
+    });
+    
+    // Add this track to each genre's contributors
+    trackGenres.forEach(genre => {
+      if (!genreContributors[genre]) {
+        genreContributors[genre] = {};
+      }
+      if (!genreContributors[genre][contributorId]) {
+        genreContributors[genre][contributorId] = {
+          count: 0,
+          tracks: []
+        };
+      }
+      genreContributors[genre][contributorId].count++;
+      genreContributors[genre][contributorId].tracks.push({
+        name: item.track.name,
+        artists: item.track.artists.map(a => a.name).join(', '),
+        popularity: item.track.popularity || 0,
+        trackId: item.track.id
+      });
+    });
+  });
+  
+  // Find the maestro (top contributor) for each genre
+  const genreMaestros = [];
+  
+  Object.entries(genreContributors).forEach(([genre, contributors]) => {
+    const topContributor = Object.entries(contributors)
+      .sort(([,a], [,b]) => b.count - a.count)[0];
+    
+    if (topContributor && topContributor[1].count >= 2) { // Minimum 2 songs to be a maestro
+      const [contributorId, contributorData] = topContributor;
+      const userProfile = userProfiles.find(p => p.id === contributorId);
+      
+      // Calculate percentage dominance in this genre
+      const totalGenreTracks = Object.values(contributors).reduce((sum, c) => sum + c.count, 0);
+      const percentage = Math.round((contributorData.count / totalGenreTracks) * 100);
+      
+      genreMaestros.push({
+        genre,
+        contributorId,
+        contributorName: userProfile ? userProfile.displayName : `User ${contributorId.slice(-4)}`,
+        songCount: contributorData.count,
+        totalGenreTracks,
+        percentage,
+        title: generateGenreMaestroTitle(genre),
+        tracks: contributorData.tracks.sort((a, b) => b.popularity - a.popularity).slice(0, 3), // Top 3 tracks
+        avatar: userProfile?.images?.[0]?.url || null
+      });
+    }
+  });
+  
+  // Sort by song count (descending) and take top 12
+  return genreMaestros
+    .sort((a, b) => b.songCount - a.songCount)
+    .slice(0, 12);
+}
+
+// Generate creative titles for genre maestros
+function generateGenreMaestroTitle(genre) {
+  const titleMap = {
+    'gengetone': '🎤 Gengetone Guru',
+    'afro soul': '🌟 Afro Soul Sovereign', 
+    'amapiano': '🎹 Amapiano Ace',
+    'afropop': '🌍 Afropop Authority',
+    'afrobeats': '🥁 Afrobeats Architect',
+    'afro r&b': '💫 Afro R&B Royalty',
+    'gqom': '⚡ Gqom Guardian',
+    'afropiano': '🎼 Afropiano Prince',
+    'bongo flava': '🔥 Bongo Flava Boss',
+    'afrobeat': '🪘 Afrobeat Authority',
+    'hip hop': '🎤 Hip Hop Hero',
+    'rap': '🎯 Rap Ruler',
+    'pop': '⭐ Pop Pioneer',
+    'rock': '🎸 Rock Royalty',
+    'alt rock': '🎸 Alt Rock Ace',
+    'indie rock': '🎵 Indie Rock Icon',
+    'r&b': '💎 R&B Regent',
+    'neo soul': '✨ Neo Soul Sage',
+    'reggae': '🌴 Reggae Ruler',
+    'dancehall': '💃 Dancehall Duke',
+    'house': '🏠 House Heavyweight',
+    'deep house': '🌊 Deep House Deity',
+    'afro house': '🏡 Afro House Hero',
+    'electronic': '⚡ Electronic Emperor',
+    'jazz': '🎺 Jazz Juggernaut',
+    'blues': '🎸 Blues Baron',
+    'country': '🤠 Country Commander',
+    'folk': '🌾 Folk Philosopher',
+    'gospel': '🙏 Gospel Guardian',
+    'african gospel': '⛪ African Gospel Guru',
+    'latin': '💃 Latin Legend',
+    'reggaeton': '🔥 Reggaeton Royalty',
+    'trap': '🎯 Trap Titan',
+    'drill': '⚡ Drill Deity',
+    'uk drill': '🇬🇧 UK Drill Duke',
+    'afroswing': '🎵 Afroswing Admiral',
+    'alté': '🌟 Alté Ambassador',
+    'afrobeats': '🥁 Afrobeats Baron'
+  };
+  
+  // Return specific title or generate a generic one
+  return titleMap[genre.toLowerCase()] || `🎵 ${genre.split(' ').map(word => 
+    word.charAt(0).toUpperCase() + word.slice(1)
+  ).join(' ')} Master`;
+}
+
+// Generate comprehensive playlist members list with Contributors and Listeners
+function generatePlaylistMembers(tracks, userProfiles, playlistFollowerCount = 0) {
+  const memberStats = {};
+  
+  // Count contributions for each member
+  tracks.forEach(item => {
+    const contributorId = item.added_by?.id;
+    if (contributorId && contributorId !== 'unknown') {
+      if (!memberStats[contributorId]) {
+        memberStats[contributorId] = {
+          id: contributorId,
+          tracksAdded: 0,
+          role: 'Contributor',
+          isContributor: true
+        };
+      }
+      memberStats[contributorId].tracksAdded++;
+    }
+  });
+  
+  // Add user profile information for contributors
+  const contributors = Object.values(memberStats).map(member => {
+    const userProfile = userProfiles.find(p => p.id === member.id);
+    return {
+      ...member,
+      name: userProfile ? userProfile.displayName : `User ${member.id.slice(-4)}`,
+      role: '🎶 Contributor',
+      icon: '🎶',
+      description: `Added ${member.tracksAdded} track${member.tracksAdded > 1 ? 's' : ''}`
+    };
+  });
+  
+  // Note: Spotify API doesn't provide follower lists for privacy reasons
+  // We can only show the follower count and known contributors
+  const members = [...contributors];
+  
+  // Sort contributors by number of tracks added (descending)
+  members.sort((a, b) => b.tracksAdded - a.tracksAdded);
+  
+  return {
+    totalMembers: members.length,
+    totalFollowers: playlistFollowerCount,
+    contributors: members,
+    listeners: [], // Cannot fetch due to Spotify API privacy restrictions
+    summary: {
+      contributorCount: contributors.length,
+      listenerCount: Math.max(0, playlistFollowerCount - contributors.length), // Estimated
+      totalMembers: Math.max(members.length, playlistFollowerCount)
+    }
+  };
+}
+
+// New endpoint: Get playlist members directory and genre champions
+router.post('/members-and-champions', async (req, res) => {
+  try {
+    const { playlistId, accessToken } = req.body;
+    
+    if (!playlistId || !accessToken) {
+      return res.status(400).json({ error: 'Playlist ID and access token are required' });
+    }
+
+    // Get playlist details and follower count
+    const playlist = await spotify.getPlaylist(playlistId, accessToken);
+    const followersInfo = await spotify.getPlaylistFollowers(playlistId, accessToken);
+    
+    // Get all tracks
+    const tracks = await spotify.getPlaylistTracks(playlistId, accessToken);
+    const validTracks = tracks.filter(item => item.track && item.track.id);
+    
+    // Get artist details for genre analysis
+    const artistIds = [...new Set(
+      validTracks.flatMap(item => 
+        item.track.artists.map(artist => artist.id)
+      )
+    )];
+    const artists = await spotify.getArtists(artistIds, accessToken);
+    
+    // Get all contributor user IDs
+    const allContributorIds = [...new Set(
+      validTracks
+        .map(item => item.added_by?.id)
+        .filter(id => id && id !== 'unknown')
+    )];
+    
+    // Fetch user profiles for ALL contributors
+    const allUserProfiles = [];
+    for (const userId of allContributorIds) {
+      try {
+        const { data: profile } = await axios.get(`https://api.spotify.com/v1/users/${userId}`, {
+          headers: { Authorization: `Bearer ${accessToken}` }
+        });
+        allUserProfiles.push({
+          id: profile.id,
+          displayName: profile.display_name || profile.id,
+          images: profile.images || [],
+          followers: profile.followers?.total || 0,
+          type: profile.type
+        });
+      } catch (error) {
+        console.warn(`Failed to fetch profile for user ${userId}:`, error.response?.status);
+        allUserProfiles.push({
+          id: userId,
+          displayName: `User ${userId.slice(-4)}`,
+          images: [],
+          followers: 0,
+          type: 'user'
+        });
+      }
+    }
+
+    // Generate comprehensive playlist members with detailed roles
+    const playlistMembers = generateEnhancedPlaylistMembers(
+      validTracks, 
+      allUserProfiles, 
+      followersInfo.total,
+      playlist.owner
+    );
+    
+    // Generate genre champions with track details
+    const genreChampions = generateGenreChampions(validTracks, artists, allUserProfiles);
+    
+    console.log(`Generated members list: ${playlistMembers.totalMembers} total members`);
+    console.log(`Generated genre champions: ${genreChampions.length} champions across genres`);
+
+    res.json({
+      members: playlistMembers,
+      genreChampions: genreChampions,
+      playlist: {
+        id: playlist.id,
+        name: playlist.name,
+        owner: playlist.owner,
+        followerCount: followersInfo.total,
+        trackCount: validTracks.length
+      }
+    });
+    
+  } catch (error) {
+    console.error('Error fetching members and champions:', error);
+    res.status(500).json({ error: 'Failed to fetch playlist members and genre champions' });
+  }
+});
+
 module.exports = router;
 module.exports.generateInsights = generateInsights;
 module.exports.generateAdvancedContributorAnalytics = generateAdvancedContributorAnalytics;
+module.exports.calculateGenreMaestros = calculateGenreMaestros;
+module.exports.generatePlaylistMembers = generatePlaylistMembers;
 
 // Utility Functions for Advanced Analytics
 
@@ -692,4 +969,121 @@ function assignComprehensiveBadges(contributors) {
       }
     }
   }
+}
+
+// Generate enhanced playlist members list with detailed roles and genre champions
+function generateEnhancedPlaylistMembers(tracks, userProfiles, followerCount, playlistOwner) {
+  const memberStats = {};
+  
+  // Count contributions for each member
+  tracks.forEach(item => {
+    const contributorId = item.added_by?.id;
+    if (contributorId && contributorId !== 'unknown') {
+      if (!memberStats[contributorId]) {
+        memberStats[contributorId] = {
+          id: contributorId,
+          tracksAdded: 0,
+          role: 'Contributor',
+          isContributor: true,
+          isOwner: contributorId === playlistOwner.id,
+          tracks: []
+        };
+      }
+      memberStats[contributorId].tracksAdded++;
+      memberStats[contributorId].tracks.push({
+        name: item.track.name,
+        artists: item.track.artists.map(a => a.name).join(', '),
+        addedAt: item.added_at,
+        trackId: item.track.id
+      });
+    }
+  });
+  
+  // Add user profile information for contributors
+  const contributors = Object.values(memberStats).map(member => {
+    const userProfile = userProfiles.find(p => p.id === member.id);
+    const isOwner = member.isOwner;
+    
+    return {
+      ...member,
+      name: userProfile ? userProfile.displayName : `User ${member.id.slice(-4)}`,
+      role: isOwner ? '👑 Owner & Contributor' : '🎶 Contributor',
+      icon: isOwner ? '👑' : '🎶',
+      description: `Added ${member.tracksAdded} track${member.tracksAdded > 1 ? 's' : ''}`,
+      avatar: userProfile?.images?.[0]?.url || null,
+      followerCount: userProfile?.followers || 0,
+      profileType: userProfile?.type || 'user'
+    };
+  });
+  
+  // Sort contributors by number of tracks added (descending)
+  contributors.sort((a, b) => {
+    // Owner always comes first if they contributed
+    if (a.isOwner && !b.isOwner) return -1;
+    if (!a.isOwner && b.isOwner) return 1;
+    // Then sort by track count
+    return b.tracksAdded - a.tracksAdded;
+  });
+  
+  // Calculate estimated listeners (followers who haven't contributed)
+  const estimatedListeners = Math.max(0, followerCount - contributors.length);
+  
+  return {
+    totalMembers: followerCount,
+    contributors: contributors,
+    listeners: {
+      count: estimatedListeners,
+      note: "Spotify doesn't provide follower lists for privacy reasons"
+    },
+    summary: {
+      contributorCount: contributors.length,
+      listenerCount: estimatedListeners,
+      totalMembers: followerCount,
+      ownerIsContributor: contributors.some(c => c.isOwner)
+    }
+  };
+}
+
+// Generate genre champions with detailed information and track breakdowns
+function generateGenreChampions(tracks, artists, userProfiles) {
+  const genreContributors = {};
+  
+  // Map each track to its genres
+  tracks.forEach(item => {
+    const trackGenres = item.track.artists.flatMap(artist => {
+      const artistData = artists.find(a => a && a.id === artist.id);
+      return artistData ? artistData.genres : [];
+    });
+    
+    // Add this track to each genre's champion list
+    trackGenres.forEach(genre => {
+      if (!genreContributors[genre]) {
+        genreContributors[genre] = {
+          genre,
+          championId: item.added_by?.id,
+          championName: '',
+          trackCount: 0,
+          tracks: []
+        };
+      }
+      genreContributors[genre].trackCount++;
+      genreContributors[genre].tracks.push({
+        name: item.track.name,
+        artists: item.track.artists.map(a => a.name).join(', '),
+        popularity: item.track.popularity || 0,
+        trackId: item.track.id
+      });
+    });
+  });
+  
+  // Resolve champion names
+  Object.keys(genreContributors).forEach(genre => {
+    const championId = genreContributors[genre].championId;
+    const userProfile = userProfiles.find(p => p.id === championId);
+    genreContributors[genre].championName = userProfile ? userProfile.displayName : `User ${championId.slice(-4)}`;
+  });
+  
+  // Convert to array and sort by track count (descending)
+  return Object.values(genreContributors)
+    .sort((a, b) => b.trackCount - a.trackCount);
 }

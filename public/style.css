@@ -1547,3 +1547,425 @@ body {
 .scale-45 { width: 45%; }
 .scale-25 { width: 25%; }
 .scale-10 { width: 10%; }
+
+/* Genre Maestros Styles */
+.genre-maestros-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.genre-maestro-card {
+    background: linear-gradient(135deg, #2a2a2a 0%, #1e1e1e 100%);
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid #333;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+.genre-maestro-card:hover {
+    transform: translateY(-5px);
+    border-color: #1db954;
+    box-shadow: 0 10px 30px rgba(29, 185, 84, 0.2);
+}
+
+.maestro-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.maestro-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+}
+
+.maestro-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.avatar-placeholder {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, #1db954, #1ed760);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+.maestro-info h4 {
+    margin: 0;
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.maestro-title {
+    margin: 0.25rem 0 0 0;
+    font-size: 0.9rem;
+    color: #1db954;
+    font-weight: 500;
+}
+
+.maestro-stats {
+    margin-bottom: 1rem;
+}
+
+.stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+}
+
+.stat-row:last-child {
+    margin-bottom: 0;
+}
+
+.stat-label {
+    color: #b3b3b3;
+    font-size: 0.85rem;
+}
+
+.stat-value {
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.genre-badge {
+    background: linear-gradient(135deg, #1db954, #1ed760);
+    color: white;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.genre-name {
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: capitalize;
+}
+
+.maestro-tracks {
+    border-top: 1px solid #333;
+    padding-top: 1rem;
+}
+
+.tracks-label {
+    color: #b3b3b3;
+    font-size: 0.8rem;
+    margin: 0 0 0.5rem 0;
+    font-weight: 500;
+}
+
+.track-item {
+    margin-bottom: 0.5rem;
+    padding: 0.5rem;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 6px;
+}
+
+.track-name {
+    display: block;
+    color: #fff;
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin-bottom: 0.2rem;
+}
+
+.track-artist {
+    display: block;
+    color: #b3b3b3;
+    font-size: 0.75rem;
+}
+
+.maestros-summary {
+    margin-top: 2rem;
+    text-align: center;
+    padding: 1rem;
+    background: rgba(29, 185, 84, 0.1);
+    border-radius: 8px;
+    border: 1px solid rgba(29, 185, 84, 0.2);
+}
+
+.summary-text {
+    color: #1db954;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+/* Playlist Members Styles */
+.members-overview {
+    margin-bottom: 2rem;
+}
+
+.members-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.stat-card {
+    background: linear-gradient(135deg, #2a2a2a 0%, #1e1e1e 100%);
+    border-radius: 12px;
+    padding: 1.5rem;
+    text-align: center;
+    border: 1px solid #333;
+    transition: all 0.3s ease;
+}
+
+.stat-card:hover {
+    border-color: #1db954;
+    transform: translateY(-2px);
+}
+
+.stat-icon {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+.stat-number {
+    display: block;
+    font-size: 2rem;
+    font-weight: bold;
+    color: #1db954;
+    margin-bottom: 0.25rem;
+}
+
+.stat-label {
+    color: #b3b3b3;
+    font-size: 0.9rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.members-sections {
+    display: grid;
+    gap: 2rem;
+}
+
+.section-header {
+    margin-bottom: 1.5rem;
+}
+
+.section-header h4 {
+    margin: 0 0 0.5rem 0;
+    color: #fff;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.section-header p {
+    margin: 0;
+    color: #b3b3b3;
+    font-size: 0.9rem;
+}
+
+.members-list {
+    display: grid;
+    gap: 1rem;
+}
+
+.member-card {
+    background: linear-gradient(135deg, #2a2a2a 0%, #1e1e1e 100%);
+    border-radius: 12px;
+    padding: 1.5rem;
+    border: 1px solid #333;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: all 0.3s ease;
+}
+
+.member-card:hover {
+    border-color: #1db954;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 20px rgba(29, 185, 84, 0.1);
+}
+
+.member-card.contributor {
+    border-left: 3px solid #1db954;
+}
+
+.member-rank {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #1db954;
+    min-width: 30px;
+}
+
+.member-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    position: relative;
+    flex-shrink: 0;
+}
+
+.member-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.member-role-badge {
+    position: absolute;
+    bottom: -2px;
+    right: -2px;
+    background: #1db954;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    border: 2px solid #121212;
+}
+
+.member-info {
+    flex: 1;
+}
+
+.member-name {
+    margin: 0 0 0.25rem 0;
+    color: #fff;
+    font-size: 1.1rem;
+    font-weight: 600;
+}
+
+.member-role {
+    margin: 0 0 0.25rem 0;
+    color: #1db954;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+.member-description {
+    margin: 0 0 0.25rem 0;
+    color: #b3b3b3;
+    font-size: 0.85rem;
+}
+
+.member-followers {
+    margin: 0;
+    color: #888;
+    font-size: 0.8rem;
+}
+
+.member-stats {
+    text-align: center;
+}
+
+.member-stats .stat-item {
+    margin-bottom: 0.5rem;
+}
+
+.member-stats .stat-value {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #1db954;
+}
+
+.member-stats .stat-label {
+    color: #b3b3b3;
+    font-size: 0.8rem;
+}
+
+.listeners-section {
+    margin-top: 2rem;
+}
+
+.listeners-info {
+    background: rgba(29, 185, 84, 0.1);
+    border-radius: 12px;
+    padding: 2rem;
+    text-align: center;
+    border: 1px solid rgba(29, 185, 84, 0.2);
+}
+
+.listeners-count {
+    margin-bottom: 1rem;
+}
+
+.listeners-count .count {
+    display: block;
+    font-size: 3rem;
+    font-weight: bold;
+    color: #1db954;
+    margin-bottom: 0.5rem;
+}
+
+.listeners-count .label {
+    color: #b3b3b3;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.listeners-note {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    color: #888;
+    font-size: 0.85rem;
+    font-style: italic;
+}
+
+/* Error and loading states */
+.error-message {
+    text-align: center;
+    color: #ff6b6b;
+    padding: 2rem;
+    font-style: italic;
+}
+
+.no-data {
+    text-align: center;
+    color: #b3b3b3;
+    padding: 2rem;
+    font-style: italic;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .genre-maestros-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .members-stats {
+        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    }
+    
+    .member-card {
+        flex-direction: column;
+        text-align: center;
+    }
+    
+    .member-rank {
+        min-width: auto;
+    }
+}
