@@ -12,15 +12,18 @@ const playlistRoutes = require('../backend/routes/playlist');
 
 const app = express();
 
-// Cache file paths
-const CACHE_FILE = '/tmp/playlist-data.json';
-const FALLBACK_CACHE = path.join(__dirname, 'cache', 'playlist-data.json');
+// Cache file paths - multiple locations for redundancy
+const RUNTIME_CACHE = '/tmp/playlist-data.json';
+const API_CACHE = path.join(__dirname, 'cache', 'playlist-data.json');
+const BACKEND_CACHE = path.join(__dirname, '..', 'backend', 'cache', 'playlist-data.json');
 
-// Ensure cache directory exists
-const cacheDir = path.dirname(CACHE_FILE);
-if (!fs.existsSync(cacheDir)) {
-    fs.mkdirSync(cacheDir, { recursive: true });
-}
+// Ensure all cache directories exist
+[RUNTIME_CACHE, API_CACHE, BACKEND_CACHE].forEach(cacheFile => {
+    const cacheDir = path.dirname(cacheFile);
+    if (!fs.existsSync(cacheDir)) {
+        fs.mkdirSync(cacheDir, { recursive: true });
+    }
+});
 
 // Admin password
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin123';
@@ -28,17 +31,24 @@ const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin123';
 // Utility functions for cache
 function readCache() {
     try {
-        // Try /tmp first (runtime cache)
-        if (fs.existsSync(CACHE_FILE)) {
-            const data = fs.readFileSync(CACHE_FILE, 'utf8');
+        // Try runtime cache first (fastest)
+        if (fs.existsSync(RUNTIME_CACHE)) {
+            const data = fs.readFileSync(RUNTIME_CACHE, 'utf8');
             console.log('Using runtime cache data');
             return JSON.parse(data);
         }
         
-        // Fallback to local cache file
-        if (fs.existsSync(FALLBACK_CACHE)) {
-            const data = fs.readFileSync(FALLBACK_CACHE, 'utf8');
-            console.log('Using fallback cache data');
+        // Try backend cache next
+        if (fs.existsSync(BACKEND_CACHE)) {
+            const data = fs.readFileSync(BACKEND_CACHE, 'utf8');
+            console.log('Using backend cache data');
+            return JSON.parse(data);
+        }
+        
+        // Fallback to api cache
+        if (fs.existsSync(API_CACHE)) {
+            const data = fs.readFileSync(API_CACHE, 'utf8');
+            console.log('Using api cache data');
             return JSON.parse(data);
         }
     } catch (error) {
@@ -54,8 +64,27 @@ function writeCache(data) {
             data: data,
             lastUpdated: new Date().toISOString()
         };
-        fs.writeFileSync(CACHE_FILE, JSON.stringify(cacheData, null, 2));
-        console.log('Cache updated successfully');
+        
+        // Write to all cache locations for redundancy
+        const locations = [
+            { path: RUNTIME_CACHE, name: 'runtime' },
+            { path: API_CACHE, name: 'api' },
+            { path: BACKEND_CACHE, name: 'backend' }
+        ];
+        
+        let successCount = 0;
+        locations.forEach(location => {
+            try {
+                fs.writeFileSync(location.path, JSON.stringify(cacheData, null, 2));
+                console.log(`✅ Cache written to ${location.name}: ${location.path}`);
+                successCount++;
+            } catch (error) {
+                console.error(`❌ Failed to write cache to ${location.name}:`, error.message);
+            }
+        });
+        
+        console.log(`Cache update complete: ${successCount}/${locations.length} locations updated`);
+        
     } catch (error) {
         console.error('Error writing cache:', error);
     }

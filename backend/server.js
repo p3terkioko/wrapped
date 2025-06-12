@@ -11,13 +11,19 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const spotify = new SpotifyAPI();
 
-// Cache file path
-const CACHE_FILE = path.join(__dirname, 'cache', 'playlist-data.json');
+// Cache file paths - both backend and api directories
+const BACKEND_CACHE_FILE = path.join(__dirname, 'cache', 'playlist-data.json');
+const API_CACHE_FILE = path.join(__dirname, '..', 'api', 'cache', 'playlist-data.json');
 
-// Ensure cache directory exists
-const cacheDir = path.dirname(CACHE_FILE);
-if (!fs.existsSync(cacheDir)) {
-    fs.mkdirSync(cacheDir, { recursive: true });
+// Ensure both cache directories exist
+const backendCacheDir = path.dirname(BACKEND_CACHE_FILE);
+const apiCacheDir = path.dirname(API_CACHE_FILE);
+
+if (!fs.existsSync(backendCacheDir)) {
+    fs.mkdirSync(backendCacheDir, { recursive: true });
+}
+if (!fs.existsSync(apiCacheDir)) {
+    fs.mkdirSync(apiCacheDir, { recursive: true });
 }
 
 // Admin password (in production, use environment variable)
@@ -26,8 +32,14 @@ const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin123';
 // Utility functions for cache
 function readCache() {
     try {
-        if (fs.existsSync(CACHE_FILE)) {
-            const data = fs.readFileSync(CACHE_FILE, 'utf8');
+        // Try to read from backend cache first, then api cache as fallback
+        let cacheFile = BACKEND_CACHE_FILE;
+        if (!fs.existsSync(BACKEND_CACHE_FILE) && fs.existsSync(API_CACHE_FILE)) {
+            cacheFile = API_CACHE_FILE;
+        }
+        
+        if (fs.existsSync(cacheFile)) {
+            const data = fs.readFileSync(cacheFile, 'utf8');
             return JSON.parse(data);
         }
     } catch (error) {
@@ -42,10 +54,34 @@ function writeCache(data) {
             lastUpdated: new Date().toISOString(),
             data: data
         };
-        fs.writeFileSync(CACHE_FILE, JSON.stringify(cacheData, null, 2));
-        return true;
+        
+        // Write to both cache locations
+        const success1 = writeCacheFile(BACKEND_CACHE_FILE, cacheData);
+        const success2 = writeCacheFile(API_CACHE_FILE, cacheData);
+        
+        if (success1 && success2) {
+            console.log('✅ Cache updated in both backend and api directories');
+            return true;
+        } else if (success1 || success2) {
+            console.log('⚠️ Cache updated partially - one location failed');
+            return true;
+        } else {
+            console.log('❌ Failed to update cache in both locations');
+            return false;
+        }
     } catch (error) {
         console.error('Error writing cache:', error);
+        return false;
+    }
+}
+
+function writeCacheFile(filePath, data) {
+    try {
+        fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
+        console.log(`Cache written to: ${filePath}`);
+        return true;
+    } catch (error) {
+        console.error(`Error writing cache to ${filePath}:`, error);
         return false;
     }
 }
