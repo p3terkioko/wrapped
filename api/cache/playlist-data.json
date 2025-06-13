@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-06-12T14:11:43.624Z",
+  "lastUpdated": "2025-06-13T18:45:50.985Z",
   "data": {
     "playlist": {
       "id": "1BZY7mhShLhc2fIlI6uIa4",
@@ -7,7 +7,7 @@
       "description": "",
       "image": "https://mosaic.scdn.co/640/ab67616d00001e020d456455c3e249dff59254efab67616d00001e02681265e351fc75e60d0fa50bab67616d00001e02e465904fbcc8de1920c60867ab67616d00001e02fd0184ab3186d02fbd61cce5",
       "owner": "tanuiii",
-      "totalTracks": 224,
+      "totalTracks": 225,
       "followers": 48,
       "public": false
     },
@@ -63,7 +63,7 @@
         "id": "5K4W6rqBFWDnAN6FQUkS6x"
       }
     ],
-    "totalUniqueArtists": 275,
+    "totalUniqueArtists": 276,
     "topGenres": [
       {
         "genre": "afro soul",
@@ -82,12 +82,12 @@
         "count": 41
       },
       {
-        "genre": "afro r&b",
+        "genre": "afropiano",
         "count": 40
       },
       {
-        "genre": "afropiano",
-        "count": 40
+        "genre": "afro r&b",
+        "count": 39
       },
       {
         "genre": "gengetone",
@@ -127,7 +127,7 @@
     },
     "dateRange": {
       "earliest": "2024-03-13T10:29:03.000Z",
-      "latest": "2025-06-12T13:56:57.000Z"
+      "latest": "2025-06-13T13:49:02.000Z"
     },
     "totalAnalyzedTracks": 0,
     "topContributors": [
@@ -147,14 +147,14 @@
         "displayName": "0xFidel"
       },
       {
+        "userId": "31h7e6lwcumgv67635rand65lj6e",
+        "count": 13,
+        "displayName": "Ryan"
+      },
+      {
         "userId": "a3a3hg4jr1ezhnww7u2pck6vi",
         "count": 12,
         "displayName": "tanuiii"
-      },
-      {
-        "userId": "31h7e6lwcumgv67635rand65lj6e",
-        "count": 12,
-        "displayName": "Ryan"
       }
     ],
     "contributors": {
@@ -164,7 +164,7 @@
           "id": "xua99owgtnso375kz2zz41rtf",
           "name": "Dr. C",
           "tracksAdded": 70,
-          "totalPopularity": 2522,
+          "totalPopularity": 2521,
           "genres": [
             "gengetone",
             "bongo flava",
@@ -348,7 +348,7 @@
             {
               "name": "Where Is The Love?",
               "artists": "Black Eyed Peas",
-              "popularity": 5,
+              "popularity": 4,
               "addedAt": "2024-04-05T07:39:57.000Z",
               "releaseDate": "2003-01-01",
               "trackId": "1FreAz1lmnDi5aKLB6GdFM"
@@ -1080,7 +1080,7 @@
           "id": "31gqlwjf2ejtzfcv7yhjgpebhuxa",
           "name": "Pepp🍂",
           "tracksAdded": 27,
-          "totalPopularity": 1663,
+          "totalPopularity": 1664,
           "genres": [
             "new wave",
             "synthpop",
@@ -1176,7 +1176,7 @@
             {
               "name": "I Lived",
               "artists": "OneRepublic",
-              "popularity": 80,
+              "popularity": 81,
               "addedAt": "2024-03-14T10:10:58.000Z",
               "releaseDate": "2013-01-01",
               "trackId": "3IQF4xCQUPicbA4hWfTxPo"
@@ -1256,7 +1256,7 @@
             {
               "name": "Here With Me",
               "artists": "Karun, Higo",
-              "popularity": 35,
+              "popularity": 36,
               "addedAt": "2024-04-26T09:24:31.000Z",
               "releaseDate": "2021-03-26",
               "trackId": "3zTObKcN6vfo9teWsKCU34"
@@ -1280,7 +1280,7 @@
             {
               "name": "CHANGES",
               "artists": "Savara",
-              "popularity": 41,
+              "popularity": 40,
               "addedAt": "2024-07-23T08:49:25.000Z",
               "releaseDate": "2022-02-25",
               "trackId": "7zbnpZxFc5xlqHvDr7bZE0"
@@ -1456,7 +1456,7 @@
           "id": "31t76imks5ojgagmhuclld6bvbuq",
           "name": "0xFidel",
           "tracksAdded": 21,
-          "totalPopularity": 1032,
+          "totalPopularity": 1033,
           "genres": [
             "kompa",
             "afrobeats",
@@ -1466,8 +1466,8 @@
             "alté",
             "afroswing",
             "dancehall",
-            "afro r&b",
             "afropiano",
+            "afro r&b",
             "afro soul",
             "tropical house",
             "deep house",
@@ -1690,7 +1690,7 @@
             {
               "name": "Under Control (feat. Hurts)",
               "artists": "Calvin Harris, Alesso, Hurts",
-              "popularity": 77,
+              "popularity": 78,
               "addedAt": "2024-06-26T18:15:56.000Z",
               "releaseDate": "2014-10-31",
               "trackId": "4J7CKHCF3mdL4diUsmW8lq"
@@ -1750,7 +1750,7 @@
             2023,
             2014
           ],
-          "avgPopularity": 49.1,
+          "avgPopularity": 49.2,
           "genreDiversity": 23,
           "artistDiversity": 42,
           "avgAudioFeatures": {
@@ -1767,6 +1767,195 @@
               "id": "genre_guru",
               "name": "🎖️ Genre Guru",
               "description": "Master of kompa with 21 tracks"
+            }
+          ]
+        },
+        {
+          "id": "31h7e6lwcumgv67635rand65lj6e",
+          "name": "Ryan",
+          "tracksAdded": 13,
+          "totalPopularity": 967,
+          "genres": [
+            "rap",
+            "hip hop",
+            "west coast hip hop",
+            "country hip hop",
+            "country",
+            "post-grunge",
+            "rock"
+          ],
+          "artists": [
+            "J. Cole",
+            "TLC",
+            "Kendrick Lamar",
+            "Eminem",
+            "Dido",
+            "Skylar Grey",
+            "Jelly Roll",
+            "Elton John",
+            "Nickelback"
+          ],
+          "tracks": [
+            {
+              "name": "Crooked Smile (feat. TLC)",
+              "artists": "J. Cole, TLC",
+              "popularity": 71,
+              "addedAt": "2024-03-16T17:37:38.000Z",
+              "releaseDate": "2013-06-18",
+              "trackId": "5gFoAVTN9YlM9uJCrFZtgl"
+            },
+            {
+              "name": "The Art of Peer Pressure",
+              "artists": "Kendrick Lamar",
+              "popularity": 58,
+              "addedAt": "2024-03-16T17:37:55.000Z",
+              "releaseDate": "2012-10-22",
+              "trackId": "4F8rYEoiBjPaRgQXLVtN5a"
+            },
+            {
+              "name": "PRIDE.",
+              "artists": "Kendrick Lamar",
+              "popularity": 86,
+              "addedAt": "2024-03-16T17:38:09.000Z",
+              "releaseDate": "2017-04-14",
+              "trackId": "6IZvVAP7VPPnsGX6bvgkqg"
+            },
+            {
+              "name": "4 Your Eyez Only",
+              "artists": "J. Cole",
+              "popularity": 68,
+              "addedAt": "2024-03-16T17:38:37.000Z",
+              "releaseDate": "2016-12-09",
+              "trackId": "1vvnYpYEMVB4aq9I6tHIEB"
+            },
+            {
+              "name": "Stan",
+              "artists": "Eminem, Dido",
+              "popularity": 83,
+              "addedAt": "2024-03-16T17:39:10.000Z",
+              "releaseDate": "2000-05-23",
+              "trackId": "3UmaczJpikHgJFyBTAJVoz"
+            },
+            {
+              "name": "Hailie's Song",
+              "artists": "Eminem",
+              "popularity": 67,
+              "addedAt": "2024-03-16T17:39:20.000Z",
+              "releaseDate": "2002-05-26",
+              "trackId": "6Db8IlZ7YY1pfIjJllejyH"
+            },
+            {
+              "name": "Not Like Us",
+              "artists": "Kendrick Lamar",
+              "popularity": 94,
+              "addedAt": "2024-05-10T19:29:07.000Z",
+              "releaseDate": "2024-05-04",
+              "trackId": "6AI3ezQ4o3HUoP6Dhudph3"
+            },
+            {
+              "name": "Renaissance",
+              "artists": "Eminem",
+              "popularity": 64,
+              "addedAt": "2024-07-18T16:09:17.000Z",
+              "releaseDate": "2024-07-12",
+              "trackId": "55u5QIlEuzCipJBtZPdJio"
+            },
+            {
+              "name": "Guilty Conscience 2",
+              "artists": "Eminem",
+              "popularity": 62,
+              "addedAt": "2024-07-18T16:09:27.000Z",
+              "releaseDate": "2024-07-12",
+              "trackId": "3LkXOTWDwskwciQoARFDzu"
+            },
+            {
+              "name": "Temporary",
+              "artists": "Eminem, Skylar Grey",
+              "popularity": 65,
+              "addedAt": "2024-07-18T16:09:28.000Z",
+              "releaseDate": "2024-07-12",
+              "trackId": "6uMGHQvhZq8YyT4kdnG1L3"
+            },
+            {
+              "name": "Somebody Save Me",
+              "artists": "Eminem, Jelly Roll",
+              "popularity": 75,
+              "addedAt": "2024-07-18T16:09:41.000Z",
+              "releaseDate": "2024-07-12",
+              "trackId": "4HMUrFl8y6rQCzEbaGEkcj"
+            },
+            {
+              "name": "I'm Still Standing",
+              "artists": "Elton John",
+              "popularity": 86,
+              "addedAt": "2025-06-10T00:05:08.000Z",
+              "releaseDate": "1983-05-30",
+              "trackId": "1jDJFeK9x3OZboIAHsY9k2"
+            },
+            {
+              "name": "How You Remind Me",
+              "artists": "Nickelback",
+              "popularity": 88,
+              "addedAt": "2025-06-13T13:49:02.000Z",
+              "releaseDate": "2001-09-11",
+              "trackId": "0gmbgwZ8iqyMPmXefof8Yf"
+            }
+          ],
+          "audioFeatures": {
+            "energy": [],
+            "danceability": [],
+            "valence": [],
+            "acousticness": [],
+            "speechiness": [],
+            "tempo": []
+          },
+          "addedDates": [
+            "2024-03-16T17:37:38.000Z",
+            "2024-03-16T17:37:55.000Z",
+            "2024-03-16T17:38:09.000Z",
+            "2024-03-16T17:38:37.000Z",
+            "2024-03-16T17:39:10.000Z",
+            "2024-03-16T17:39:20.000Z",
+            "2024-05-10T19:29:07.000Z",
+            "2024-07-18T16:09:17.000Z",
+            "2024-07-18T16:09:27.000Z",
+            "2024-07-18T16:09:28.000Z",
+            "2024-07-18T16:09:41.000Z",
+            "2025-06-10T00:05:08.000Z",
+            "2025-06-13T13:49:02.000Z"
+          ],
+          "releaseYears": [
+            2013,
+            2012,
+            2017,
+            2016,
+            2000,
+            2002,
+            2024,
+            2024,
+            2024,
+            2024,
+            2024,
+            1983,
+            2001
+          ],
+          "avgPopularity": 74.4,
+          "genreDiversity": 7,
+          "artistDiversity": 9,
+          "avgAudioFeatures": {
+            "energy": 0,
+            "danceability": 0,
+            "valence": 0,
+            "acousticness": 0,
+            "speechiness": 0,
+            "tempo": 0
+          },
+          "avgReleaseYear": 2013,
+          "badges": [
+            {
+              "id": "genre_guru",
+              "name": "🎖️ Genre Guru",
+              "description": "Master of rap with 13 tracks"
             }
           ]
         },
@@ -1966,190 +2155,15 @@
           ]
         },
         {
-          "id": "31h7e6lwcumgv67635rand65lj6e",
-          "name": "Ryan",
-          "tracksAdded": 12,
-          "totalPopularity": 879,
-          "genres": [
-            "rap",
-            "hip hop",
-            "west coast hip hop",
-            "country hip hop",
-            "country"
-          ],
-          "artists": [
-            "J. Cole",
-            "TLC",
-            "Kendrick Lamar",
-            "Eminem",
-            "Dido",
-            "Skylar Grey",
-            "Jelly Roll",
-            "Elton John"
-          ],
-          "tracks": [
-            {
-              "name": "Crooked Smile (feat. TLC)",
-              "artists": "J. Cole, TLC",
-              "popularity": 71,
-              "addedAt": "2024-03-16T17:37:38.000Z",
-              "releaseDate": "2013-06-18",
-              "trackId": "5gFoAVTN9YlM9uJCrFZtgl"
-            },
-            {
-              "name": "The Art of Peer Pressure",
-              "artists": "Kendrick Lamar",
-              "popularity": 58,
-              "addedAt": "2024-03-16T17:37:55.000Z",
-              "releaseDate": "2012-10-22",
-              "trackId": "4F8rYEoiBjPaRgQXLVtN5a"
-            },
-            {
-              "name": "PRIDE.",
-              "artists": "Kendrick Lamar",
-              "popularity": 86,
-              "addedAt": "2024-03-16T17:38:09.000Z",
-              "releaseDate": "2017-04-14",
-              "trackId": "6IZvVAP7VPPnsGX6bvgkqg"
-            },
-            {
-              "name": "4 Your Eyez Only",
-              "artists": "J. Cole",
-              "popularity": 68,
-              "addedAt": "2024-03-16T17:38:37.000Z",
-              "releaseDate": "2016-12-09",
-              "trackId": "1vvnYpYEMVB4aq9I6tHIEB"
-            },
-            {
-              "name": "Stan",
-              "artists": "Eminem, Dido",
-              "popularity": 83,
-              "addedAt": "2024-03-16T17:39:10.000Z",
-              "releaseDate": "2000-05-23",
-              "trackId": "3UmaczJpikHgJFyBTAJVoz"
-            },
-            {
-              "name": "Hailie's Song",
-              "artists": "Eminem",
-              "popularity": 67,
-              "addedAt": "2024-03-16T17:39:20.000Z",
-              "releaseDate": "2002-05-26",
-              "trackId": "6Db8IlZ7YY1pfIjJllejyH"
-            },
-            {
-              "name": "Not Like Us",
-              "artists": "Kendrick Lamar",
-              "popularity": 94,
-              "addedAt": "2024-05-10T19:29:07.000Z",
-              "releaseDate": "2024-05-04",
-              "trackId": "6AI3ezQ4o3HUoP6Dhudph3"
-            },
-            {
-              "name": "Renaissance",
-              "artists": "Eminem",
-              "popularity": 64,
-              "addedAt": "2024-07-18T16:09:17.000Z",
-              "releaseDate": "2024-07-12",
-              "trackId": "55u5QIlEuzCipJBtZPdJio"
-            },
-            {
-              "name": "Guilty Conscience 2",
-              "artists": "Eminem",
-              "popularity": 62,
-              "addedAt": "2024-07-18T16:09:27.000Z",
-              "releaseDate": "2024-07-12",
-              "trackId": "3LkXOTWDwskwciQoARFDzu"
-            },
-            {
-              "name": "Temporary",
-              "artists": "Eminem, Skylar Grey",
-              "popularity": 65,
-              "addedAt": "2024-07-18T16:09:28.000Z",
-              "releaseDate": "2024-07-12",
-              "trackId": "6uMGHQvhZq8YyT4kdnG1L3"
-            },
-            {
-              "name": "Somebody Save Me",
-              "artists": "Eminem, Jelly Roll",
-              "popularity": 75,
-              "addedAt": "2024-07-18T16:09:41.000Z",
-              "releaseDate": "2024-07-12",
-              "trackId": "4HMUrFl8y6rQCzEbaGEkcj"
-            },
-            {
-              "name": "I'm Still Standing",
-              "artists": "Elton John",
-              "popularity": 86,
-              "addedAt": "2025-06-10T00:05:08.000Z",
-              "releaseDate": "1983-05-30",
-              "trackId": "1jDJFeK9x3OZboIAHsY9k2"
-            }
-          ],
-          "audioFeatures": {
-            "energy": [],
-            "danceability": [],
-            "valence": [],
-            "acousticness": [],
-            "speechiness": [],
-            "tempo": []
-          },
-          "addedDates": [
-            "2024-03-16T17:37:38.000Z",
-            "2024-03-16T17:37:55.000Z",
-            "2024-03-16T17:38:09.000Z",
-            "2024-03-16T17:38:37.000Z",
-            "2024-03-16T17:39:10.000Z",
-            "2024-03-16T17:39:20.000Z",
-            "2024-05-10T19:29:07.000Z",
-            "2024-07-18T16:09:17.000Z",
-            "2024-07-18T16:09:27.000Z",
-            "2024-07-18T16:09:28.000Z",
-            "2024-07-18T16:09:41.000Z",
-            "2025-06-10T00:05:08.000Z"
-          ],
-          "releaseYears": [
-            2013,
-            2012,
-            2017,
-            2016,
-            2000,
-            2002,
-            2024,
-            2024,
-            2024,
-            2024,
-            2024,
-            1983
-          ],
-          "avgPopularity": 73.3,
-          "genreDiversity": 5,
-          "artistDiversity": 8,
-          "avgAudioFeatures": {
-            "energy": 0,
-            "danceability": 0,
-            "valence": 0,
-            "acousticness": 0,
-            "speechiness": 0,
-            "tempo": 0
-          },
-          "avgReleaseYear": 2014,
-          "badges": [
-            {
-              "id": "genre_guru",
-              "name": "🎖️ Genre Guru",
-              "description": "Master of rap with 12 tracks"
-            }
-          ]
-        },
-        {
           "id": "cl4u400dvbwcmn6vkind9twor",
           "name": "Kush",
           "tracksAdded": 10,
-          "totalPopularity": 421,
+          "totalPopularity": 420,
           "genres": [
             "indie folk",
             "rumba congolaise",
             "zouk",
+            "traditional music",
             "champeta",
             "afro soul",
             "afropop"
@@ -2195,7 +2209,7 @@
             {
               "name": "Fati Mata",
               "artists": "Sam Mangwana",
-              "popularity": 41,
+              "popularity": 40,
               "addedAt": "2024-06-07T19:13:53.000Z",
               "releaseDate": "1994",
               "trackId": "2FC0FejM3C0vYNPb1B36ku"
@@ -2281,8 +2295,8 @@
             2023,
             2024
           ],
-          "avgPopularity": 42.1,
-          "genreDiversity": 6,
+          "avgPopularity": 42,
+          "genreDiversity": 7,
           "artistDiversity": 11,
           "avgAudioFeatures": {
             "energy": 0,
@@ -2804,8 +2818,8 @@
       "summary": {
         "mostActive": "Dr. C",
         "avgContribution": 9,
-        "totalGenres": 85,
-        "totalArtists": 275
+        "totalGenres": 88,
+        "totalArtists": 276
       }
     },
     "genreMaestros": [
@@ -2934,8 +2948,8 @@
         "contributorId": "xua99owgtnso375kz2zz41rtf",
         "contributorName": "Dr. C",
         "songCount": 11,
-        "totalGenreTracks": 45,
-        "percentage": 24,
+        "totalGenreTracks": 44,
+        "percentage": 25,
         "title": "💫 Afro R&B Royalty",
         "tracks": [
           {
@@ -3202,20 +3216,20 @@
           "description": "Added 21 tracks"
         },
         {
+          "id": "31h7e6lwcumgv67635rand65lj6e",
+          "tracksAdded": 13,
+          "role": "🎶 Contributor",
+          "isContributor": true,
+          "name": "Ryan",
+          "icon": "🎶",
+          "description": "Added 13 tracks"
+        },
+        {
           "id": "a3a3hg4jr1ezhnww7u2pck6vi",
           "tracksAdded": 12,
           "role": "🎶 Contributor",
           "isContributor": true,
           "name": "tanuiii",
-          "icon": "🎶",
-          "description": "Added 12 tracks"
-        },
-        {
-          "id": "31h7e6lwcumgv67635rand65lj6e",
-          "tracksAdded": 12,
-          "role": "🎶 Contributor",
-          "isContributor": true,
-          "name": "Ryan",
           "icon": "🎶",
           "description": "Added 12 tracks"
         },
