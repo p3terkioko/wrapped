@@ -1408,11 +1408,19 @@ async function loadCachedData() {
     try {
         console.log('Attempting to load cached data...');
         const response = await fetch('/api/public/data');
-        
-        if (response.ok) {
+          if (response.ok) {
             const result = await response.json();
             currentData = result.data;
             console.log('✅ Cached data loaded successfully:', currentData.playlist.name);
+            
+            // Update hero subtitle with actual track count
+            const heroSubtitle = document.querySelector('.hero-subtitle');
+            if (heroSubtitle && currentData.playlist.totalTracks) {
+                heroSubtitle.innerHTML = `
+                    Discover the hidden stories and musical insights from this amazing playlist
+                    with ${currentData.playlist.totalTracks} tracks of diverse genres and artists.
+                `;
+            }
             
             // Don't auto-show dashboard - let user click "Dive In"
             // Just store the data and keep showing landing page
