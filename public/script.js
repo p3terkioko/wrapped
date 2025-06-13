@@ -536,19 +536,12 @@ function createGenresChart(genres) {
                     labels: {
                         color: '#ffffff',
                         usePointStyle: true,
-                        padding: 15,
+                        padding: 25,
                         font: {
-                            size: 14,
-                            weight: '500'
-                        },
-                        boxWidth: 15,
-                        boxHeight: 15
+                            size: 16,
+                            weight: 'bold'
+                        }
                     }
-                }
-            },
-            layout: {
-                padding: {
-                    bottom: 20
                 }
             }
         }
