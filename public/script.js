@@ -527,18 +527,28 @@ function createGenresChart(genres) {
                 ],
                 borderWidth: 0
             }]
-        },
-        options: {
+        },        options: {
             responsive: true,
             maintainAspectRatio: false,
             plugins: {
                 legend: {
                     position: 'bottom',
                     labels: {
-                        color: 'var(--text-primary)',
+                        color: '#ffffff',
                         usePointStyle: true,
-                        padding: 20
+                        padding: 15,
+                        font: {
+                            size: 14,
+                            weight: '500'
+                        },
+                        boxWidth: 15,
+                        boxHeight: 15
                     }
+                }
+            },
+            layout: {
+                padding: {
+                    bottom: 20
                 }
             }
         }
@@ -1408,19 +1418,11 @@ async function loadCachedData() {
     try {
         console.log('Attempting to load cached data...');
         const response = await fetch('/api/public/data');
-          if (response.ok) {
+        
+        if (response.ok) {
             const result = await response.json();
             currentData = result.data;
             console.log('✅ Cached data loaded successfully:', currentData.playlist.name);
-            
-            // Update hero subtitle with actual track count
-            const heroSubtitle = document.querySelector('.hero-subtitle');
-            if (heroSubtitle && currentData.playlist.totalTracks) {
-                heroSubtitle.innerHTML = `
-                    Discover the hidden stories and musical insights from this amazing playlist
-                    with ${currentData.playlist.totalTracks} tracks of diverse genres and artists.
-                `;
-            }
             
             // Don't auto-show dashboard - let user click "Dive In"
             // Just store the data and keep showing landing page
