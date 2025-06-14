@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-06-13T18:45:50.985Z",
+  "lastUpdated": "2025-06-14T16:59:14.108Z",
   "data": {
     "playlist": {
       "id": "1BZY7mhShLhc2fIlI6uIa4",
@@ -164,7 +164,7 @@
           "id": "xua99owgtnso375kz2zz41rtf",
           "name": "Dr. C",
           "tracksAdded": 70,
-          "totalPopularity": 2521,
+          "totalPopularity": 2523,
           "genres": [
             "gengetone",
             "bongo flava",
@@ -468,7 +468,7 @@
             {
               "name": "Rude",
               "artists": "MAGIC!",
-              "popularity": 86,
+              "popularity": 87,
               "addedAt": "2024-04-05T07:55:20.000Z",
               "releaseDate": "2014-06-25",
               "trackId": "6RtPijgfPKROxEzTHNRiDp"
@@ -620,7 +620,7 @@
             {
               "name": "Sinema",
               "artists": "King Kaka, Pascal Tokodi",
-              "popularity": 1,
+              "popularity": 2,
               "addedAt": "2024-04-18T05:59:35.000Z",
               "releaseDate": "2018-11-30",
               "trackId": "50V4squ3Xxmnj0S66UBcn5"
@@ -756,7 +756,7 @@
             {
               "name": "Nakei Nairobi",
               "artists": "Mbilia Bel",
-              "popularity": 34,
+              "popularity": 33,
               "addedAt": "2024-07-22T19:12:33.000Z",
               "releaseDate": "2005",
               "trackId": "2IemABs3q1K4zCYLiKc23H"
@@ -788,7 +788,7 @@
             {
               "name": "Dear Me (You've Got This)",
               "artists": "David Onka, Lorie Ladd, Reels Choir",
-              "popularity": 32,
+              "popularity": 33,
               "addedAt": "2024-11-23T09:31:08.000Z",
               "releaseDate": "2024-09-26",
               "trackId": "1ZVtljC1qb6FnmW9ri7PtB"
@@ -1080,7 +1080,7 @@
           "id": "31gqlwjf2ejtzfcv7yhjgpebhuxa",
           "name": "Pepp🍂",
           "tracksAdded": 27,
-          "totalPopularity": 1664,
+          "totalPopularity": 1667,
           "genres": [
             "new wave",
             "synthpop",
@@ -1240,7 +1240,7 @@
             {
               "name": "LEVII'S JEANS",
               "artists": "Beyoncé, Post Malone",
-              "popularity": 72,
+              "popularity": 73,
               "addedAt": "2024-04-15T05:05:33.000Z",
               "releaseDate": "2024-03-29",
               "trackId": "2UDARQiksl207HcSduDpov"
@@ -1264,7 +1264,7 @@
             {
               "name": "Digane",
               "artists": "Bob Sinclar, Sofiya Nzau",
-              "popularity": 46,
+              "popularity": 47,
               "addedAt": "2024-06-16T07:38:32.000Z",
               "releaseDate": "2024-05-10",
               "trackId": "2jRH7jNpx7kqTHLyay4Fhe"
@@ -1280,7 +1280,7 @@
             {
               "name": "CHANGES",
               "artists": "Savara",
-              "popularity": 40,
+              "popularity": 41,
               "addedAt": "2024-07-23T08:49:25.000Z",
               "releaseDate": "2022-02-25",
               "trackId": "7zbnpZxFc5xlqHvDr7bZE0"
@@ -1432,7 +1432,7 @@
             1978,
             2000
           ],
-          "avgPopularity": 61.6,
+          "avgPopularity": 61.7,
           "genreDiversity": 30,
           "artistDiversity": 33,
           "avgAudioFeatures": {
@@ -1456,7 +1456,7 @@
           "id": "31t76imks5ojgagmhuclld6bvbuq",
           "name": "0xFidel",
           "tracksAdded": 21,
-          "totalPopularity": 1033,
+          "totalPopularity": 1034,
           "genres": [
             "kompa",
             "afrobeats",
@@ -1562,7 +1562,7 @@
             {
               "name": "One Call Away",
               "artists": "Legendury Beatz, Maleek Berry",
-              "popularity": 28,
+              "popularity": 29,
               "addedAt": "2024-04-07T17:43:32.000Z",
               "releaseDate": "2017-02-17",
               "trackId": "6iAqo6JTBkZBt8mrJPJyrT"
@@ -2158,7 +2158,7 @@
           "id": "cl4u400dvbwcmn6vkind9twor",
           "name": "Kush",
           "tracksAdded": 10,
-          "totalPopularity": 420,
+          "totalPopularity": 421,
           "genres": [
             "indie folk",
             "rumba congolaise",
@@ -2257,7 +2257,7 @@
             {
               "name": "Monaco",
               "artists": "Jude York",
-              "popularity": 55,
+              "popularity": 56,
               "addedAt": "2024-09-13T03:16:53.000Z",
               "releaseDate": "2024-07-12",
               "trackId": "0ieUviafigTnoovXhb8jyd"
@@ -2295,7 +2295,7 @@
             2023,
             2024
           ],
-          "avgPopularity": 42,
+          "avgPopularity": 42.1,
           "genreDiversity": 7,
           "artistDiversity": 11,
           "avgAudioFeatures": {

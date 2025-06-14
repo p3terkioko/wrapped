@@ -69,35 +69,8 @@ function setupEventListeners() {
     backBtn?.addEventListener('click', () => {
         showLandingPage();
     });
-      // Story navigation (with null checks) - excluding view story btn which is handled separately
-    const prevBtn = document.getElementById('prev-btn');
-    const nextBtn = document.getElementById('next-btn');
-    const exitStoryBtn = document.getElementById('exit-story-btn');
-    const shareStoryBtn = document.getElementById('share-story-btn');
     
-    if (prevBtn) {
-        prevBtn.addEventListener('click', previousSlide);
-    }
-    if (nextBtn) {
-        nextBtn.addEventListener('click', nextSlide);
-    }
-    if (exitStoryBtn) {
-        exitStoryBtn.addEventListener('click', exitStory);
-    }
-    if (shareStoryBtn) {
-        shareStoryBtn.addEventListener('click', shareStory);
-    }
-    
-    // Keyboard navigation for story
-    document.addEventListener('keydown', (e) => {
-        const storyContainer = document.getElementById('story-container');
-        if (storyContainer && !storyContainer.classList.contains('hidden')) {
-            if (e.key === 'ArrowLeft') previousSlide();
-            if (e.key === 'ArrowRight') nextSlide();
-            if (e.key === 'Escape') exitStory();
-        }
-    });
-      // Share and export buttons
+    // Share and export buttons
     const shareBtn = document.getElementById('share-btn');
     const exportBtn = document.getElementById('export-btn');
     const advancedAnalyticsBtn = document.getElementById('advanced-analytics-btn');
@@ -903,507 +876,1015 @@ function showNotification(message, type) {
     }, 3000);
 }
 
-// Story Experience Functions
+// ==============================================
+// PLAYLIST WRAPPED STORY MODE IMPLEMENTATION
+// ==============================================
+
+let storyCurrentSlide = 0;
+const TOTAL_STORY_SLIDES = 12;
+let storyData = null;
+let touchStartX = 0;
+let touchStartY = 0;
+
+// Story Slide Templates
+const STORY_SLIDES = [
+    'welcome',
+    'genre-diversity', 
+    'top-artists',
+    'most-popular-track',
+    'hidden-gem',
+    'contributions',
+    'genre-champions',
+    'timeline',
+    'vibe-check',
+    'music-time-span',
+    'summary',
+    'outro'
+];
+
+// Main Story Functions
 function showStory() {
-    console.log('=== showStory called ===');
-    console.log('currentData exists:', !!currentData);
+    console.log('🎬 Launching Playlist Wrapped Story Mode');
     
     if (!currentData) {
-        console.log('No currentData available');
-        alert('No playlist data available!');
+        showNotification('No playlist data available for story mode', 'error');
         return;
     }
     
+    storyData = currentData;
+    storyCurrentSlide = 0;
+    
+    // Debug: Log the data structure to understand what's available
+    console.log('📊 Story data structure:', {
+        playlist: storyData.playlist,
+        topGenres: storyData.topGenres?.slice(0, 3),
+        topArtists: storyData.topArtists?.slice(0, 3),
+        topContributors: storyData.topContributors?.slice(0, 3),
+        mostPopular: storyData.mostPopular,
+        leastPopular: storyData.leastPopular,
+        audioFeatures: storyData.audioFeatures
+    });
+    
+    // Show story container
     const storyContainer = document.getElementById('story-container');
-    const storySlides = document.getElementById('story-slides');
+    const dashboard = document.getElementById('dashboard');
     
-    console.log('storyContainer found:', !!storyContainer);
-    console.log('storySlides found:', !!storySlides);
-    
-    if (!storyContainer) {
-        console.log('storyContainer not found');
-        alert('Story container not found in DOM');
-        return;
+    if (storyContainer && dashboard) {
+        storyContainer.classList.remove('hidden');
+        dashboard.classList.add('hidden');
+        
+        // Generate all story slides
+        generateAllStorySlides();
+        
+        // Initialize story UI
+        initializeStoryUI();
+        
+        // Setup story navigation
+        setupStoryNavigation();
+        
+        // Show first slide
+        showStorySlide(0);
+        
+        console.log('✅ Story mode activated');
     }
-    
-    console.log('Generating story slides...');
-    currentSlide = 0;
-    generateStorySlides(currentData);    console.log('Showing story container...');
-    storyContainer.classList.remove('hidden');
-    dashboard.classList.add('hidden');
-    
-    console.log('Updating progress and showing first slide...');
-    updateStoryProgress();
-    showSlide(0);
-    
-    console.log('Setting up story navigation...');
-    setupStoryNavigation();
-    
-    console.log('=== Story setup complete ===');
 }
 
 function exitStory() {
-    console.log('Exiting story...');
+    console.log('👋 Exiting story mode');
     
     const storyContainer = document.getElementById('story-container');
-    if (storyContainer) {
+    const dashboard = document.getElementById('dashboard');
+    
+    if (storyContainer && dashboard) {
         storyContainer.classList.add('hidden');
         dashboard.classList.remove('hidden');
-        console.log('✅ Returned to dashboard');
     }
 }
 
-function setupStoryNavigation() {
-    const prevBtn = document.getElementById('prev-btn');
-    const nextBtn = document.getElementById('next-btn');
-    const exitStoryBtn = document.getElementById('exit-story-btn');
-    const shareStoryBtn = document.getElementById('share-story-btn');
+function generateAllStorySlides() {
+    const slidesContainer = document.getElementById('story-slides');
+    if (!slidesContainer) return;
     
-    if (prevBtn) {
-        prevBtn.onclick = previousSlide;
-    }
-    if (nextBtn) {
-        nextBtn.onclick = nextSlide;
-    }
-    if (exitStoryBtn) {
-        exitStoryBtn.onclick = exitStory;
-    }
-    if (shareStoryBtn) {
-        shareStoryBtn.onclick = shareStory;
-    }
-    
-    console.log('Story navigation setup complete');
-}
-
-function generateStorySlides(data) {    const slides = [
-        generateWelcomeSlide(data),
-        generateOverviewSlide(data),
-        generateGenreJourneySlide(data),
-        generateGenreBreakdownSlide(data),
-        generateTopArtistsSlide(data),
-        generatePopularTrackSlide(data),
-        generatePopularityExplanationSlide(data),
-        generateHiddenGemSlide(data),
-        generateContributorsSlide(data),
-        generateMoodSlide(data),
-        generateTimelineSlide(data),
-        generateFinalSlide(data)
-    ];
-    
-    const storySlides = document.getElementById('story-slides');
-    if (storySlides) {
-        storySlides.innerHTML = slides.join('');
-    }
-}
-
-function generateWelcomeSlide(data) {
-    return `
-        <div class="story-slide">
-            <h1>🎉 Unwrap Your Playlist Wrapped!</h1>
-            <p>Get ready to discover the hidden stories in <span class="highlight">${data.playlist.name}</span></p>
-            <div class="story-visual">
-                <img src="${data.playlist.image || '/placeholder-playlist.png'}" 
-                     alt="Playlist cover" 
-                     style="width: 200px; height: 200px; border-radius: 12px; object-fit: cover;">
-            </div>
-        </div>
-    `;
-}
-
-function generateOverviewSlide(data) {
-    const hours = Math.floor(data.playlist.totalTracks * 3.5 / 60); // Approximate duration
-    return `
-        <div class="story-slide">
-            <h2>This playlist has</h2>
-            <span class="big-number">${data.playlist.totalTracks}</span>
-            <p>songs, running approximately <span class="highlight">${hours} hours</span> of music</p>
-            <div class="story-visual">
-                <div style="display: flex; justify-content: space-around; text-align: center;">
-                    <div>
-                        <div style="font-size: 2rem; color: var(--accent-primary);">${data.playlist.totalTracks}</div>
-                        <div style="color: var(--text-secondary);">Tracks</div>
-                    </div>
-                    <div>
-                        <div style="font-size: 2rem; color: var(--accent-primary);">${data.playlist.followers}</div>
-                        <div style="color: var(--text-secondary);">Followers</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
-}
-
-function generateGenreJourneySlide(data) {
-    const genreCount = data.topGenres.length;
-    return `
-        <div class="story-slide">
-            <h2>This playlist traveled through</h2>
-            <span class="big-number">${genreCount}</span>
-            <p>different genres...</p>
-            <div class="story-visual">
-                <div style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;">
-                    ${data.topGenres.slice(0, 8).map(genre => 
-                        `<span style="background: var(--card-bg); padding: 8px 16px; border-radius: 20px; color: var(--text-primary); border: 1px solid var(--card-border);">
-                            ${genre.genre}
-                        </span>`
-                    ).join('')}
-                </div>
-            </div>
-        </div>
-    `;
-}
-
-function generateGenreBreakdownSlide(data) {
-    const topThree = data.topGenres.slice(0, 3);
-    const total = topThree.reduce((sum, g) => sum + g.count, 0);
-    
-    return `
-        <div class="story-slide">
-            <h2>But it found its home in</h2>
-            <div class="story-visual">
-                ${topThree.map((genre, index) => {
-                    const percentage = Math.round((genre.count / total) * 100);
-                    const colors = ['#1db954', '#ff6b6b', '#4ecdc4'];
-                    return `
-                        <div style="display: flex; align-items: center; justify-content: space-between; margin: 16px 0; padding: 12px; background: var(--card-bg); border-radius: 8px;">
-                            <span style="color: ${colors[index]}; font-weight: 600;">${genre.genre}</span>
-                            <span style="color: var(--text-primary); font-weight: 600;">${percentage}%</span>
-                        </div>
-                    `;
-                }).join('')}
-            </div>
-        </div>
-    `;
-}
-
-function generateTopArtistsSlide(data) {
-    return `
-        <div class="story-slide">
-            <h2>These artists made the biggest waves</h2>
-            <div class="story-visual">
-                <div class="story-list">
-                    ${data.topArtists.slice(0, 5).map((artist, index) => `
-                        <div class="story-list-item">
-                            <div>
-                                <span style="color: var(--accent-primary); margin-right: 8px;">#${index + 1}</span>
-                                <span class="name">${artist.name}</span>
-                            </div>
-                            <span class="count">${artist.count} songs</span>
-                        </div>
-                    `).join('')}
-                </div>
-            </div>
-        </div>
-    `;
-}
-
-function generatePopularTrackSlide(data) {
-    if (!data.mostPopular) {
-        return `
-            <div class="story-slide">
-                <h2>No popularity data available</h2>
-                <p>But every song is a hit in our hearts! 💕</p>
-            </div>
-        `;
-    }
-      return `
-        <div class="story-slide">
-            <h2>The crowd favorite was</h2>
-            <div class="track-spotlight">
-                <div class="track-info">
-                    <div class="track-name">"${data.mostPopular.name}"</div>
-                    <div class="track-artist">by ${data.mostPopular.artists}</div>
-                    <div>Popularity Score: <span class="highlight">${data.mostPopular.popularity}/100</span></div>
-                    <div class="popularity-gauge">
-                        <div class="popularity-fill" style="width: ${data.mostPopular.popularity}%"></div>
-                    </div>
-                </div>
-            </div>
-            <p style="margin-top: 20px; color: var(--text-secondary); font-size: 0.9rem;">
-                But what does that number actually mean? 🤔
-            </p>
-        </div>
-    `;
-}
-
-function generatePopularityExplanationSlide(data) {
-    const avgPopularity = data.topContributors && data.topContributors.length > 0 
-        ? Math.round(data.topContributors.reduce((sum, c) => sum + (c.avgPopularity || 0), 0) / data.topContributors.length)
-        : 50;
-    
-    const mostPopular = data.mostPopular ? data.mostPopular.popularity : 0;
-    const leastPopular = data.leastPopular ? data.leastPopular.popularity : 0;
-    
-    return `
-        <div class="story-slide">
-            <h2>Understanding the Popularity Scale</h2>
-            <div class="story-visual">
-                <p style="margin-bottom: 24px; color: var(--text-secondary);">
-                    Spotify's popularity score (0-100) shows how trending a track is right now
-                </p>
-                
-                <div style="display: flex; flex-direction: column; gap: 16px; margin: 20px 0;">
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: rgba(255,107,107,0.1); border-radius: 8px; border-left: 4px solid #ff6b6b;">
-                        <span style="font-weight: 600;">🔥 Viral Hits</span>
-                        <span style="color: var(--text-secondary);">80-100</span>
-                    </div>
-                    
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: rgba(78,205,196,0.1); border-radius: 8px; border-left: 4px solid #4ecdc4;">
-                        <span style="font-weight: 600;">📈 Popular</span>
-                        <span style="color: var(--text-secondary);">60-79</span>
-                    </div>
-                    
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: rgba(69,183,209,0.1); border-radius: 8px; border-left: 4px solid #45b7d1;">
-                        <span style="font-weight: 600;">🎵 Moderate</span>
-                        <span style="color: var(--text-secondary);">40-59</span>
-                    </div>
-                    
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: rgba(249,202,36,0.1); border-radius: 8px; border-left: 4px solid #f9ca24;">
-                        <span style="font-weight: 600;">💎 Underground</span>
-                        <span style="color: var(--text-secondary);">20-39</span>
-                    </div>
-                    
-                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: rgba(165,94,234,0.1); border-radius: 8px; border-left: 4px solid #a55eea;">
-                        <span style="font-weight: 600;">🌚 Deep Cuts</span>
-                        <span style="color: var(--text-secondary);">0-19</span>
-                    </div>
-                </div>
-                
-                <div style="margin-top: 24px; padding: 16px; background: var(--bg-secondary); border-radius: 8px; text-align: center;">
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 16px;">
-                        ${mostPopular > 0 ? `
-                            <div>
-                                <div style="font-size: 1.5rem; color: var(--accent-primary); font-weight: 600;">${mostPopular}</div>
-                                <div style="font-size: 0.9rem; color: var(--text-secondary);">Your Highest</div>
-                            </div>
-                        ` : ''}
-                        ${leastPopular > 0 ? `
-                            <div>
-                                <div style="font-size: 1.5rem; color: var(--accent-secondary); font-weight: 600;">${leastPopular}</div>
-                                <div style="font-size: 0.9rem; color: var(--text-secondary);">Your Lowest</div>
-                            </div>
-                        ` : ''}
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
-}
-
-function generateHiddenGemSlide(data) {
-    if (!data.leastPopular) {
-        return `
-            <div class="story-slide">
-                <h2>Every song here is perfectly curated</h2>
-                <p>No hidden gems needed when everything sparkles! ✨</p>
-            </div>
-        `;
-    }
-    
-    return `
-        <div class="story-slide">
-            <h2>But our biggest hidden gem was</h2>
-            <div class="track-spotlight" style="background: var(--bg-secondary); border: 2px solid var(--accent-secondary);">
-                <div class="track-info">
-                    <div class="track-name">"${data.leastPopular.name}"</div>
-                    <div class="track-artist">by ${data.leastPopular.artists}</div>
-                    <div>The most underrated pick</div>
-                    <div class="popularity-gauge">
-                        <div class="popularity-fill" style="width: ${data.leastPopular.popularity}%; background: var(--accent-secondary);"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
-}
-
-function generateContributorsSlide(data) {
-    return `
-        <div class="story-slide">
-            <h2>Shout-out to our top contributors</h2>
-            <div class="story-visual">
-                <div class="story-list">
-                    ${data.topContributors.slice(0, 5).map((contributor, index) => `
-                        <div class="story-list-item">
-                            <div>
-                                <span style="color: var(--accent-primary); margin-right: 8px;">#${index + 1}</span>
-                                <span class="name">${contributor.displayName}</span>
-                            </div>
-                            <span class="count">${contributor.count} songs</span>
-                        </div>
-                    `).join('')}
-                </div>
-            </div>
-        </div>
-    `;
-}
-
-function generateMoodSlide(data) {
-    const features = data.audioFeatures;
-    const energy = Math.round(features.energy * 100);
-    const danceability = Math.round(features.danceability * 100);
-    const valence = Math.round(features.valence * 100);
-    
-    return `
-        <div class="story-slide">
-            <h2>Overall Vibe Check</h2>
-            <div class="story-visual">
-                <div style="display: grid; gap: 16px; margin: 20px 0;">
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span>Energetic</span>
-                        <div style="flex: 1; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; margin: 0 12px;">
-                            <div style="width: ${energy}%; height: 100%; background: var(--gradient-primary); border-radius: 4px;"></div>
-                        </div>
-                        <span class="highlight">${energy}%</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span>Danceable</span>
-                        <div style="flex: 1; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; margin: 0 12px;">
-                            <div style="width: ${danceability}%; height: 100%; background: var(--gradient-primary); border-radius: 4px;"></div>
-                        </div>
-                        <span class="highlight">${danceability}%</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; align-items: center;">
-                        <span>Happy</span>
-                        <div style="flex: 1; height: 8px; background: rgba(255,255,255,0.1); border-radius: 4px; margin: 0 12px;">
-                            <div style="width: ${valence}%; height: 100%; background: var(--gradient-primary); border-radius: 4px;"></div>
-                        </div>
-                        <span class="highlight">${valence}%</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    `;
-}
-
-function generateTimelineSlide(data) {
-    if (!data.dateRange || !data.dateRange.earliest || !data.dateRange.latest) {
-        return `
-            <div class="story-slide">
-                <h2>This playlist is timeless</h2>
-                <p>Like all great music collections! 🕰️</p>
-            </div>
-        `;
-    }
-    
-    // Ensure dates are Date objects
-    const earliestDate = new Date(data.dateRange.earliest);
-    const latestDate = new Date(data.dateRange.latest);
-    
-    const startYear = earliestDate.getFullYear();
-    const endYear = latestDate.getFullYear();
-    const yearSpan = endYear - startYear;
-    
-    return `
-        <div class="story-slide">
-            <h2>Here's when the magic happened</h2>
-            <div class="story-visual">
-                <div style="text-align: center; padding: 20px;">
-                    <div style="font-size: 1.5rem; color: var(--text-primary); margin-bottom: 16px;">
-                        <span class="highlight">${startYear}</span> → <span class="highlight">${endYear}</span>
-                    </div>
-                    <p>This collection grew over <span class="highlight">${yearSpan || 1} year${yearSpan !== 1 ? 's' : ''}</span></p>
-                    <p style="color: var(--text-secondary); font-size: 0.9rem;">
-                        From ${earliestDate.toLocaleDateString()} to ${latestDate.toLocaleDateString()}
-                    </p>
-                </div>
-            </div>
-        </div>
-    `;
-}
-
-function generateFinalSlide(data) {
-    return `
-        <div class="story-slide">
-            <h1>That's Your Playlist Wrapped! 🎉</h1>
-            <p>You've discovered the musical DNA of <span class="highlight">${data.playlist.name}</span></p>
-            <div class="story-visual">
-                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin: 20px 0; text-align: center;">
-                    <div style="padding: 16px; background: var(--card-bg); border-radius: 8px; border: 1px solid var(--card-border);">
-                        <div style="font-size: 1.5rem; color: var(--accent-primary);">${data.playlist.totalTracks}</div>
-                        <div style="font-size: 0.9rem; color: var(--text-secondary);">Total Tracks</div>
-                    </div>
-                    <div style="padding: 16px; background: var(--card-bg); border-radius: 8px; border: 1px solid var(--card-border);">
-                        <div style="font-size: 1.5rem; color: var(--accent-primary);">${data.topGenres.length}</div>
-                        <div style="font-size: 0.9rem; color: var(--text-secondary);">Genres</div>
-                    </div>                    <div style="padding: 16px; background: var(--card-bg); border-radius: 8px; border: 1px solid var(--card-border);">
-                        <div style="font-size: 1.5rem; color: var(--accent-primary);">${data.totalUniqueArtists || data.topArtists.length}</div>
-                        <div style="font-size: 0.9rem; color: var(--text-secondary);">Artists</div>
-                    </div>
-                    <div style="padding: 16px; background: var(--card-bg); border-radius: 8px; border: 1px solid var(--card-border);">
-                        <div style="font-size: 1.5rem; color: var(--accent-primary);">${data.totalAnalyzedTracks || 0}</div>
-                        <div style="font-size: 0.9rem; color: var(--text-secondary);">Analyzed</div>
-                    </div>
-                </div>
-            </div>
-            <p style="margin-top: 32px;">Ready to share your story?</p>
-        </div>
-    `;
-}
-
-function showSlide(index) {
-    const slides = document.querySelectorAll('.story-slide');
-    slides.forEach((slide, i) => {
-        slide.classList.toggle('active', i === index);
+    const slides = STORY_SLIDES.map((slideType, index) => {
+        return generateStorySlide(slideType, index);
     });
     
-    // Update navigation buttons
-    const prevBtn = document.getElementById('prev-btn');
-    const nextBtn = document.getElementById('next-btn');
-    const shareStoryBtn = document.getElementById('share-story-btn');
+    slidesContainer.innerHTML = slides.join('');
+}
+
+function generateStorySlide(slideType, index) {
+    const slideContent = getSlideContent(slideType);
     
-    if (prevBtn) {
-        prevBtn.disabled = index === 0;
+    return `
+        <div class="story-slide" data-slide="${index}">
+            <div class="story-slide-content">
+                ${slideContent}
+            </div>
+            ${slideType === 'outro' ? generateConfetti() : ''}
+        </div>
+    `;
+}
+
+function getSlideContent(slideType) {
+    switch (slideType) {
+        case 'welcome':
+            return generateWelcomeSlideContent();
+        case 'genre-diversity':
+            return generateGenreDiversitySlideContent();
+        case 'top-artists':
+            return generateTopArtistsSlideContent();
+        case 'most-popular-track':
+            return generateMostPopularTrackSlideContent();
+        case 'hidden-gem':
+            return generateHiddenGemSlideContent();
+        case 'contributions':
+            return generateContributionsSlideContent();
+        case 'genre-champions':
+            return generateGenreChampionsSlideContent();
+        case 'timeline':
+            return generateTimelineSlideContent();
+        case 'vibe-check':
+            return generateVibeCheckSlideContent();
+        case 'music-time-span':
+            return generateMusicTimeSpanSlideContent();
+        case 'summary':
+            return generateSummarySlideContent();
+        case 'outro':
+            return generateOutroSlideContent();
+        default:
+            return '<h2>Coming Soon</h2><p>This slide is being crafted...</p>';
     }
-    if (nextBtn) {
-        nextBtn.style.display = index === totalSlides - 1 ? 'none' : 'flex';
-    }
-    if (shareStoryBtn) {
-        shareStoryBtn.style.display = index === totalSlides - 1 ? 'flex' : 'none';
+}
+
+// Individual Slide Content Generators
+function generateWelcomeSlideContent() {
+    const playlistName = storyData.playlist?.name || 'Your Playlist';
+    const totalTracks = storyData.playlist?.totalTracks || 0;
+    
+    return `
+        <h1>✨ Welcome to the story of</h1>
+        <h2 class="story-highlight">${playlistName}</h2>
+        <p>Where melodies meet memories and beats become stories</p>
+        <div class="story-visual">
+            <div class="story-big-number">${totalTracks}</div>
+            <p>songs waiting to whisper their secrets</p>
+        </div>
+        <p style="font-size: 16px; margin-top: 24px;">Press next to begin the journey ➡️</p>
+    `;
+}
+
+function generateGenreDiversitySlideContent() {
+    const genres = storyData.topGenres || [];
+    const genreCount = storyData.contributors?.[0]?.summary?.totalGenres || genres.length;
+    
+    const topGenres = genres.slice(0, 5);
+    const colors = ['#1db954', '#ff6b6b', '#4ecdc4', '#f093fb', '#667eea'];
+    
+    return `
+        <h1>� A tapestry woven from</h1>
+        <div class="story-big-number">${genreCount}</div>
+        <h2>musical worlds</h2>
+        <p>Where boundaries blur and creativity flows</p>
+        <div class="story-visual">
+            <div class="story-doughnut-chart" id="genre-doughnut">
+                <!-- Chart will be rendered here -->
+            </div>
+            <div class="story-genre-list">
+                ${topGenres.map((genre, index) => `
+                    <div class="story-genre-item">
+                        <div class="story-genre-color" style="background: ${colors[index]}"></div>
+                        <span>${genre.genre}</span>
+                        <small>${genre.count} tracks</small>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+    `;
+}
+
+function generateTopArtistsSlideContent() {
+    const artists = storyData.topArtists || [];
+    const topArtists = artists.slice(0, 5);
+    
+    return `
+        <h1>� These voices painted</h1>
+        <h2>your soundtrack</h2>
+        <p>The storytellers behind every rhythm and rhyme</p>
+        <div class="story-visual">
+            <div class="story-artists-grid">
+                ${topArtists.map((artist, index) => `
+                    <div class="story-artist-card">
+                        <div class="story-artist-rank">#${index + 1}</div>
+                        <div class="story-artist-name">${artist.name}</div>
+                        <div class="story-artist-count">${artist.count} tracks</div>
+                        <div class="story-artist-bar">
+                            <div class="story-artist-fill" style="width: ${(artist.count / topArtists[0].count) * 100}%"></div>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        </div>
+    `;
+}
+
+function generateMostPopularTrackSlideContent() {
+    const mostPopular = storyData.mostPopular;
+    
+    if (!mostPopular) {
+        return `
+            <h1>� Every note here</h1>
+            <h2>shines equally bright</h2>
+            <p>In this collection, there are no favorites—only masterpieces ✨</p>
+            <div class="story-visual">
+                <div class="story-track-spotlight">
+                    <div class="story-equality-message">
+                        <i class="fas fa-heart" style="font-size: 48px; color: var(--story-accent-primary); margin-bottom: 16px;"></i>
+                        <p>All tracks loved equally</p>
+                    </div>
+                </div>
+            </div>
+        `;
     }
     
+    return `
+        <h1>👑 One song captured hearts</h1>
+        <div class="story-visual">
+            <div class="story-track-spotlight">
+                <div class="story-track-info">
+                    <div class="story-track-name">"${mostPopular.name}"</div>
+                    <div class="story-track-artist">by ${mostPopular.artists}</div>
+                    <div class="story-popularity-section">
+                        <div class="story-popularity-bar">
+                            <div class="story-popularity-fill" style="width: ${mostPopular.popularity}%"></div>
+                        </div>
+                        <p class="story-popularity-text">
+                            ${mostPopular.popularity}/100 popularity score
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p>The undisputed champion of this musical realm</p>
+    `;
+}
+
+function generateHiddenGemSlideContent() {
+    const leastPopular = storyData.leastPopular;
+    
+    if (!leastPopular) {
+        return `
+            <h1>💎 This collection</h1>
+            <h2>is pure gold</h2>
+            <p>Every track sparkles—no hidden gems needed when everything shimmers ✨</p>
+        `;
+    }
+    
+    return `
+        <h1>� A treasure waiting</h1>
+        <h2>to be discovered</h2>
+        <div class="story-visual">
+            <div class="story-track-spotlight story-shimmer">
+                <div class="story-track-info">
+                    <div class="story-track-name">"${leastPopular.name}"</div>
+                    <div class="story-track-artist">by ${leastPopular.artists}</div>
+                    <div class="story-gem-badge">
+                        <i class="fas fa-gem"></i>
+                        Hidden Gem
+                    </div>
+                    <div class="story-popularity-section">
+                        <div class="story-popularity-bar">
+                            <div class="story-popularity-fill" style="width: ${Math.max(leastPopular.popularity, 5)}%; background: var(--story-accent-secondary);"></div>
+                        </div>
+                        <p class="story-popularity-text">
+                            The most underrated masterpiece
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <p>Sometimes the most precious gems lie beneath the surface</p>
+    `;
+}
+
+function generateContributionsSlideContent() {
+    const contributorsData = storyData.contributors;
+    const topContributors = contributorsData?.contributors || [];
+    const totalTracks = storyData.playlist?.totalTracks || 0;
+    
+    if (!topContributors || topContributors.length === 0) {
+        return `
+            <h1>👥 A collaborative</h1>
+            <h2>symphony</h2>
+            <p>Where voices unite to craft the perfect playlist</p>
+            <div class="story-visual">
+                <div class="story-collaboration-icon">
+                    <i class="fas fa-users" style="font-size: 64px; color: var(--story-accent-primary);"></i>
+                </div>
+            </div>
+        `;
+    }
+
+    const topContributor = topContributors[0];
+    const contributorCount = topContributors.length;
+    const otherContributors = topContributors.slice(1, 6); // Show up to 5 other curators
+
+    return `
+        <h1>👥 ${contributorCount} curators</h1>
+        <h2>shaped this journey</h2>
+        <p>Each adding their unique musical fingerprint</p>
+        <div class="story-visual">
+            <div class="story-contribution-spotlight">
+                <div class="story-top-contributor">
+                    <div class="story-contributor-crown">👑</div>
+                    <div class="story-big-number">${topContributor.tracksAdded || 0}</div>
+                    <p>tracks by the lead curator</p>
+                </div>
+            </div>
+            ${otherContributors.length > 0 ? `
+                <div class="story-other-curators">
+                    <div class="story-other-curators-title">Other Contributing Curators</div>
+                    <div class="story-curators-list">
+                        ${otherContributors.map((contributor, index) => `
+                            <div class="story-curator-item">
+                                <div class="story-curator-number">${contributor.tracksAdded || 0}</div>
+                                <div class="story-curator-label">Curator ${index + 2}</div>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+            ` : ''}
+        </div>
+    `;
+}
+
+function generateGenreChampionsSlideContent() {
+    const topGenres = storyData.topGenres || [];
+    const topGenre = topGenres[0];
+    
+    if (!topGenre) {
+        return `
+            <h1>🎭 Every genre</h1>
+            <h2>has its moment</h2>
+            <p>A beautiful symphony of musical diversity</p>
+            <div class="story-visual">
+                <div class="story-equality-message">
+                    <i class="fas fa-balance-scale" style="font-size: 48px; color: var(--story-accent-primary);"></i>
+                    <p>Perfect harmony across all styles</p>
+                </div>
+            </div>
+        `;
+    }
+    
+    const genreTitle = getGenreTitle(topGenre.genre);
+    const secondGenre = topGenres[1];
+    const thirdGenre = topGenres[2];
+    
+    return `
+        <h1>🎭 The genre throne belongs to</h1>
+        <h2 class="story-highlight">${topGenre.genre}</h2>
+        <p>Ruling with ${topGenre.count} magnificent tracks</p>
+        <div class="story-visual">
+            <div class="story-genre-podium">
+                <div class="story-podium-place" style="order: 2;">
+                    <div class="story-podium-rank">#1</div>
+                    <div class="story-podium-genre">${topGenre.genre}</div>
+                    <div class="story-podium-count">${topGenre.count}</div>
+                </div>
+                ${secondGenre ? `
+                    <div class="story-podium-place" style="order: 1;">
+                        <div class="story-podium-rank">#2</div>
+                        <div class="story-podium-genre">${secondGenre.genre}</div>
+                        <div class="story-podium-count">${secondGenre.count}</div>
+                    </div>
+                ` : ''}
+                ${thirdGenre ? `
+                    <div class="story-podium-place" style="order: 3;">
+                        <div class="story-podium-rank">#3</div>
+                        <div class="story-podium-genre">${thirdGenre.genre}</div>
+                        <div class="story-podium-count">${thirdGenre.count}</div>
+                    </div>
+                ` : ''}
+            </div>
+        </div>
+    `;
+}
+
+function generateTimelineSlideContent() {
+    const dateRange = storyData.dateRange;
+    
+    if (!dateRange || !dateRange.earliest || !dateRange.latest) {
+        return `
+            <h1>🕰️ This playlist</h1>
+            <h2>transcends time</h2>
+            <p>A timeless collection where every moment matters</p>
+            <div class="story-visual">
+                <div class="story-timeline-info">
+                    <i class="fas fa-infinity" style="font-size: 64px; color: var(--story-accent-primary); margin: 24px 0;"></i>
+                    <p>Infinite musical possibilities</p>
+                </div>
+            </div>
+        `;
+    }
+    
+    const startDate = new Date(dateRange.earliest);
+    const endDate = new Date(dateRange.latest);
+    const startMonth = startDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    const endMonth = endDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    const daysDiff = Math.ceil((endDate - startDate) / (1000 * 60 * 60 * 24));
+    
+    let timeDescription = '';
+    if (daysDiff < 30) {
+        timeDescription = `${daysDiff} days of music curation`;
+    } else if (daysDiff < 365) {
+        const months = Math.floor(daysDiff / 30);
+        timeDescription = `${months} month${months !== 1 ? 's' : ''} of musical evolution`;
+    } else {
+        const years = Math.floor(daysDiff / 365);
+        timeDescription = `${years} year${years !== 1 ? 's' : ''} of sonic adventures`;
+    }
+    
+    return `
+        <h1>🕰️ This playlist grew from</h1>
+        <h2>${startMonth}</h2>
+        <h1>to</h1>
+        <h2>${endMonth}</h2>
+        <div class="story-visual">
+            <div class="story-timeline-visual">
+                <div class="story-timeline-point start">
+                    <div class="story-timeline-dot"></div>
+                    <div class="story-timeline-label">Journey begins</div>
+                </div>
+                <div class="story-timeline-line"></div>
+                <div class="story-timeline-point end">
+                    <div class="story-timeline-dot"></div>
+                    <div class="story-timeline-label">Still growing</div>
+                </div>
+            </div>
+            <div class="story-timeline-summary">
+                <p>${timeDescription}</p>
+            </div>
+        </div>
+    `;
+}
+
+function generateVibeCheckSlideContent() {
+    const audioFeatures = storyData.audioFeatures || {};
+    const energy = Math.round((audioFeatures.energy || 0.5) * 100);
+    const valence = Math.round((audioFeatures.valence || 0.5) * 100);
+    const danceability = Math.round((audioFeatures.danceability || 0.5) * 100);
+    const acousticness = Math.round((audioFeatures.acousticness || 0.5) * 100);
+    
+    // Determine the overall vibe
+    let vibeDescription = '';
+    let vibeEmoji = '�';
+    
+    if (energy >= 70 && valence >= 70) {
+        vibeDescription = 'Pure euphoria flows through every beat';
+        vibeEmoji = '⚡';
+    } else if (energy >= 70 && valence < 50) {
+        vibeDescription = 'Intense emotions burn bright';
+        vibeEmoji = '🔥';
+    } else if (energy < 50 && valence >= 70) {
+        vibeDescription = 'Gentle waves of happiness';
+        vibeEmoji = '🌊';
+    } else if (acousticness >= 60) {
+        vibeDescription = 'Raw, intimate moments captured';
+        vibeEmoji = '🎸';
+    } else {
+        vibeDescription = 'A perfect balance of heart and soul';
+        vibeEmoji = '💫';
+    }
+    
+    return `
+        <h1>${vibeEmoji} The sonic fingerprint</h1>
+        <h2>reveals everything</h2>
+        <p>${vibeDescription}</p>
+        <div class="story-visual">
+            <div class="story-vibe-radar">
+                <div class="story-vibe-bars">
+                    <div class="story-vibe-bar">
+                        <div class="story-vibe-label">Energy</div>
+                        <div class="story-vibe-track">
+                            <div class="story-vibe-fill energy" style="width: ${energy}%"></div>
+                        </div>
+                        <div class="story-vibe-percentage">${energy}%</div>
+                    </div>
+                    <div class="story-vibe-bar">
+                        <div class="story-vibe-label">Happiness</div>
+                        <div class="story-vibe-track">
+                            <div class="story-vibe-fill valence" style="width: ${valence}%"></div>
+                        </div>
+                        <div class="story-vibe-percentage">${valence}%</div>
+                    </div>
+                    <div class="story-vibe-bar">
+                        <div class="story-vibe-label">Danceability</div>
+                        <div class="story-vibe-track">
+                            <div class="story-vibe-fill danceability" style="width: ${danceability}%"></div>
+                        </div>
+                        <div class="story-vibe-percentage">${danceability}%</div>
+                    </div>
+                    <div class="story-vibe-bar">
+                        <div class="story-vibe-label">Acousticness</div>
+                        <div class="story-vibe-track">
+                            <div class="story-vibe-fill acousticness" style="width: ${acousticness}%"></div>
+                        </div>
+                        <div class="story-vibe-percentage">${acousticness}%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+function generateMusicTimeSpanSlideContent() {
+    // Try to find oldest and newest tracks from the data
+    let oldestTrack = null;
+    let newestTrack = null;
+    let oldestYear = null;
+    let newestYear = null;
+    
+    // Check contributors data for track release dates
+    if (storyData.contributors && storyData.contributors.contributors) {
+        storyData.contributors.contributors.forEach(contributor => {
+            if (contributor.tracks) {
+                contributor.tracks.forEach(track => {
+                    if (track.releaseDate) {
+                        const year = new Date(track.releaseDate).getFullYear();
+                        if (!oldestYear || year < oldestYear) {
+                            oldestYear = year;
+                            oldestTrack = track;
+                        }
+                        if (!newestYear || year > newestYear) {
+                            newestYear = year;
+                            newestTrack = track;
+                        }
+                    }
+                });
+            }
+        });
+    }
+    
+    // If we have both oldest and newest tracks
+    if (oldestTrack && newestTrack && oldestYear && newestYear) {
+        const yearSpan = newestYear - oldestYear;
+        let eraDescription = '';
+        
+        if (yearSpan >= 30) {
+            eraDescription = 'spanning generations of music';
+        } else if (yearSpan >= 20) {
+            eraDescription = 'bridging decades of sound';
+        } else if (yearSpan >= 10) {
+            eraDescription = 'crossing musical eras';
+        } else {
+            eraDescription = 'capturing a moment in time';
+        }
+        
+        return `
+            <h1>📅 From ${oldestYear} to ${newestYear}</h1>
+            <h2>A time machine in playlist form</h2>
+            <p>Music ${eraDescription}</p>
+            <div class="story-visual">
+                <div class="story-time-span">
+                    <div class="story-era-track">
+                        <div class="story-era-year">${oldestYear}</div>
+                        <div class="story-era-title">"${oldestTrack.name}"</div>
+                        <div class="story-era-artist">${oldestTrack.artists}</div>
+                        <div class="story-era-label">Oldest Track</div>
+                    </div>
+                    <div class="story-era-bridge">
+                        <div class="story-era-span">${yearSpan} years</div>
+                        <div class="story-era-line"></div>
+                    </div>
+                    <div class="story-era-track">
+                        <div class="story-era-year">${newestYear}</div>
+                        <div class="story-era-title">"${newestTrack.name}"</div>
+                        <div class="story-era-artist">${newestTrack.artists}</div>
+                        <div class="story-era-label">Newest Track</div>
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+    
+    // Fallback to date range if available
+    const dateRange = storyData.dateRange;
+    if (dateRange && dateRange.earliest && dateRange.latest) {
+        const startDate = new Date(dateRange.earliest);
+        const endDate = new Date(dateRange.latest);
+        const startYear = startDate.getFullYear();
+        const endYear = endDate.getFullYear();
+        const yearSpan = endYear - startYear;
+        
+        return `
+            <h1>📅 Curated from ${startYear} to ${endYear}</h1>
+            <h2>A musical timeline</h2>
+            <div class="story-visual">
+                <div class="story-timeline">
+                    <div class="story-timeline-year">${startYear}</div>
+                    <div class="story-timeline-arrow">→</div>
+                    <div class="story-timeline-year">${endYear}</div>
+                </div>
+                <div class="story-timeline-info">
+                    <p>Spanning <strong>${yearSpan > 0 ? yearSpan : 1} year${yearSpan !== 1 ? 's' : ''}</strong> of musical curation</p>
+                </div>
+            </div>
+        `;
+    }
+    
+    // Final fallback
+    return `
+        <h1>📅 A timeless collection</h1>
+        <h2>Where every era shines</h2>
+        <div class="story-visual">
+            <div class="story-timeline-info">
+                <i class="fas fa-clock" style="font-size: 64px; color: var(--story-accent-primary); margin: 24px 0;"></i>
+                <p>Music that transcends time itself</p>
+            </div>
+        </div>
+    `;
+}
+
+function generateSummarySlideContent() {
+    const totalTracks = storyData.playlist?.totalTracks || 0;
+    const totalArtists = storyData.totalUniqueArtists || 0;
+    const totalGenres = storyData.totalGenres || 0;
+    const playlistName = storyData.playlist?.name || 'This Collection';
+    
+    // Get top stats for a more personalized summary
+    const topArtist = storyData.topArtists?.[0];
+    const topGenre = storyData.topGenres?.[0];
+    const energy = storyData.audioFeatures?.energy ? Math.round(storyData.audioFeatures.energy * 100) : null;
+    
+    return `
+        <h1>✨ The story of</h1>
+        <h2 class="story-highlight">${playlistName}</h2>
+        <p>A symphony woven from diversity and passion</p>
+        <div class="story-visual">
+            <div class="story-stats-grid">
+                <div class="story-stat-card">
+                    <div class="story-stat-number">${totalTracks}</div>
+                    <div class="story-stat-label">Songs</div>
+                </div>
+                <div class="story-stat-card">
+                    <div class="story-stat-number">${totalArtists}</div>
+                    <div class="story-stat-label">Artists</div>
+                </div>
+                <div class="story-stat-card">
+                    <div class="story-stat-number">${totalGenres}</div>
+                    <div class="story-stat-label">Genres</div>
+                </div>
+                <div class="story-stat-card">
+                    <div class="story-stat-number">∞</div>
+                    <div class="story-stat-label">Memories</div>
+                </div>
+            </div>
+            <div class="story-summary-highlights">
+                ${topArtist ? `
+                    <div class="story-highlight-item">
+                        <i class="fas fa-crown"></i>
+                        <span>${topArtist.name} leads with ${topArtist.count} tracks</span>
+                    </div>
+                ` : ''}
+                ${topGenre ? `
+                    <div class="story-highlight-item">
+                        <i class="fas fa-music"></i>
+                        <span>${topGenre.genre} sets the mood</span>
+                    </div>
+                ` : ''}
+                ${energy ? `
+                    <div class="story-highlight-item">
+                        <i class="fas fa-bolt"></i>
+                        <span>${energy}% energy flowing through every beat</span>
+                    </div>
+                ` : ''}
+            </div>
+        </div>
+    `;
+}
+
+function generateOutroSlideContent() {
+    const playlistName = storyData.playlist?.name || 'Your Playlist';
+    
+    return `
+        <h1>🚀 Thanks for listening</h1>
+        <h2 class="story-highlight">${playlistName}</h2>
+        <p>Your musical journey continues...</p>
+        <div class="story-visual">
+            <div class="story-navigation" style="position: relative; bottom: auto; left: auto; transform: none; margin-top: 32px;">
+                <button class="story-nav-btn" onclick="showStorySlide(0)">
+                    <i class="fas fa-redo"></i>
+                    <span>Replay</span>
+                </button>
+                <button class="story-nav-btn primary" onclick="exitStory()">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Back to Dashboard</span>
+                </button>
+            </div>
+        </div>
+        <p style="margin-top: 24px;">🎧 Keep discovering, keep vibing</p>
+    `;
+}
+
+// Navigation and UI Functions
+function initializeStoryUI() {
+    // Initialize slide indicators
+    const indicatorsContainer = document.getElementById('story-indicators');
+    if (indicatorsContainer) {
+        const indicators = Array.from({ length: TOTAL_STORY_SLIDES }, (_, i) => 
+            `<div class="story-dot ${i === 0 ? 'active' : ''}" data-slide="${i}"></div>`
+        );
+        indicatorsContainer.innerHTML = indicators.join('');
+    }
+    
+    // Update counter
+    updateStoryCounter();
+    
+    // Update progress bar
     updateStoryProgress();
 }
 
-function nextSlide() {
-    if (currentSlide < totalSlides - 1) {
-        currentSlide++;
-        showSlide(currentSlide);
+function setupStoryNavigation() {
+    const prevBtn = document.getElementById('story-prev-btn');
+    const nextBtn = document.getElementById('story-next-btn');
+    const exitBtn = document.getElementById('story-exit-btn');
+    
+    // Button navigation - use stable event delegation
+    if (prevBtn) {
+        prevBtn.removeEventListener('click', handlePrevClick);
+        prevBtn.addEventListener('click', handlePrevClick);
+    }
+    if (nextBtn) {
+        nextBtn.removeEventListener('click', handleNextClick);
+        nextBtn.addEventListener('click', handleNextClick);
+    }
+    if (exitBtn) {
+        exitBtn.removeEventListener('click', exitStory);
+        exitBtn.addEventListener('click', exitStory);
+    }
+    
+    // Keyboard navigation
+    document.addEventListener('keydown', handleStoryKeyboard);
+    
+    // Swipe functionality removed to enable better scrolling experience
+}
+
+function handlePrevClick() {
+    navigateStory('prev');
+}
+
+function handleNextClick() {
+    // Check if we're on the last slide
+    if (storyCurrentSlide === TOTAL_STORY_SLIDES - 1) {
+        exitStory();
+    } else {
+        navigateStory('next');
     }
 }
 
-function previousSlide() {
-    if (currentSlide > 0) {
-        currentSlide--;
-        showSlide(currentSlide);
+function navigateStory(direction) {
+    console.log(`🧭 Navigate: ${direction}, Current: ${storyCurrentSlide}, Total: ${TOTAL_STORY_SLIDES}`);
+    
+    if (direction === 'next' && storyCurrentSlide < TOTAL_STORY_SLIDES - 1) {
+        const nextSlide = storyCurrentSlide + 1;
+        console.log(`➡️ Moving from ${storyCurrentSlide} to ${nextSlide}`);
+        showStorySlide(nextSlide);
+    } else if (direction === 'prev' && storyCurrentSlide > 0) {
+        const prevSlide = storyCurrentSlide - 1;
+        console.log(`⬅️ Moving from ${storyCurrentSlide} to ${prevSlide}`);
+        showStorySlide(prevSlide);
+    } else {
+        console.log(`🚫 Navigation blocked: ${direction} not allowed from slide ${storyCurrentSlide}`);
+    }
+}
+
+function showStorySlide(slideIndex) {
+    if (slideIndex < 0 || slideIndex >= TOTAL_STORY_SLIDES) {
+        console.log(`🚫 Invalid slide index: ${slideIndex}`);
+        return;
+    }
+    
+    console.log(`📺 Showing slide ${slideIndex} (was ${storyCurrentSlide})`);
+    storyCurrentSlide = slideIndex;
+    
+    // Update slides container with simple calculation
+    const slidesContainer = document.getElementById('story-slides');
+    if (slidesContainer) {
+        // Each slide is 100vw, so move by -100vw * slideIndex
+        const translateX = -slideIndex * 100;
+        console.log(`🔄 Setting transform: translateX(${translateX}vw)`);
+        slidesContainer.style.transform = `translateX(${translateX}vw)`;
+    }
+    
+    // Update indicators
+    updateStoryIndicators();
+    
+    // Update counter
+    updateStoryCounter();
+    
+    // Update progress bar
+    updateStoryProgress();
+    
+    // Update navigation buttons
+    updateStoryNavigation();
+    
+    // Trigger slide animations
+    triggerSlideAnimations(slideIndex);
+}
+
+function updateStoryIndicators() {
+    const dots = document.querySelectorAll('.story-dot');
+    dots.forEach((dot, index) => {
+        dot.classList.toggle('active', index === storyCurrentSlide);
+    });
+}
+
+function updateStoryCounter() {
+    const counter = document.getElementById('story-counter');
+    if (counter) {
+        counter.textContent = `${storyCurrentSlide + 1} / ${TOTAL_STORY_SLIDES}`;
     }
 }
 
 function updateStoryProgress() {
-    const progressFill = document.getElementById('progress-fill');
-    const progressText = document.getElementById('progress-text');
-    
-    const progress = ((currentSlide + 1) / totalSlides) * 100;
-    if (progressFill) {
-        progressFill.style.width = `${progress}%`;
-    }
-    if (progressText) {
-        progressText.textContent = `${currentSlide + 1} / ${totalSlides}`;
+    const progressBar = document.getElementById('story-progress-bar');
+    if (progressBar) {
+        const progress = ((storyCurrentSlide + 1) / TOTAL_STORY_SLIDES) * 100;
+        progressBar.style.width = `${progress}%`;
     }
 }
 
-function shareStory() {
-    if (navigator.share) {
-        navigator.share({
-            title: 'My Playlist Wrapped',
-            text: `Check out my ${currentData.playlist.name} Wrapped! 🎵`,
-            url: window.location.href
-        });
-    } else {
-        // Fallback: copy to clipboard
-        navigator.clipboard.writeText(`Check out my ${currentData.playlist.name} Wrapped! 🎵 ${window.location.href}`);
-        showSuccess('Link copied to clipboard!');
+function updateStoryNavigation() {
+    const prevBtn = document.getElementById('story-prev-btn');
+    const nextBtn = document.getElementById('story-next-btn');
+    
+    if (prevBtn) {
+        prevBtn.disabled = storyCurrentSlide === 0;
+        prevBtn.style.opacity = storyCurrentSlide === 0 ? '0.5' : '1';
     }
+    
+    if (nextBtn) {
+        if (storyCurrentSlide === TOTAL_STORY_SLIDES - 1) {
+            nextBtn.innerHTML = '<span>Finish</span><i class="fas fa-check"></i>';
+        } else {
+            nextBtn.innerHTML = '<span>Next</span><i class="fas fa-chevron-right"></i>';
+        }
+        // Don't rebind onclick - the event listener handles this
+    }
+}
+
+function triggerSlideAnimations(slideIndex) {
+    // Animate progress bars for vibe check slide
+    if (slideIndex === 8) { // vibe-check slide
+        setTimeout(() => {
+            const vibeFills = document.querySelectorAll('.story-vibe-fill');
+            vibeFills.forEach(fill => {
+                const width = fill.style.width;
+                fill.style.width = '0%';
+                requestAnimationFrame(() => {
+                    fill.style.width = width;
+                });
+            });
+        }, 500);
+    }
+    
+    // Render genre doughnut chart for genre diversity slide
+    if (slideIndex === 1) { // genre-diversity slide
+        setTimeout(() => {
+            renderStoryGenreChart();
+        }, 800);
+    }
+    
+    // Animate popularity bars
+    const popularityFills = document.querySelectorAll('.story-popularity-fill');
+    popularityFills.forEach(fill => {
+        const width = fill.style.width;
+        fill.style.width = '0%';
+        setTimeout(() => {
+            fill.style.width = width;
+        }, 800);
+    });
+}
+
+function renderStoryGenreChart() {
+    const canvas = document.getElementById('genre-doughnut');
+    if (!canvas || !storyData.topGenres) return;
+    
+    // Clear any existing chart
+    if (window.storyGenreChart) {
+        window.storyGenreChart.destroy();
+    }
+    
+    // Create a canvas element if the container is a div
+    let chartCanvas = canvas;
+    if (canvas.tagName === 'DIV') {
+        chartCanvas = document.createElement('canvas');
+        chartCanvas.width = 280;
+        chartCanvas.height = 280;
+        canvas.innerHTML = '';
+        canvas.appendChild(chartCanvas);
+    }
+    
+    const ctx = chartCanvas.getContext('2d');
+    const genres = storyData.topGenres.slice(0, 5);
+    const colors = ['#1db954', '#ff6b6b', '#4ecdc4', '#f093fb', '#667eea'];
+    
+    window.storyGenreChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: genres.map(g => g.genre),
+            datasets: [{
+                data: genres.map(g => g.count),
+                backgroundColor: colors,
+                borderWidth: 0,
+                hoverBorderWidth: 4,
+                hoverBorderColor: '#ffffff'
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            cutout: '60%',
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                    titleColor: '#ffffff',
+                    bodyColor: '#ffffff',
+                    borderColor: '#1db954',
+                    borderWidth: 1,
+                    callbacks: {
+                        label: function(context) {
+                            const total = context.dataset.data.reduce((a, b) => a + b, 0);
+                            const percentage = ((context.parsed / total) * 100).toFixed(1);
+                            return `${context.label}: ${percentage}%`;
+                        }
+                    }
+                }
+            },
+            animation: {
+                duration: 2000,
+                easing: 'easeOutQuart'
+            }
+        }
+    });
+}
+
+// Event Handlers
+function handleStoryKeyboard(event) {
+    if (!document.getElementById('story-container').classList.contains('hidden')) {
+        switch (event.key) {
+            case 'ArrowLeft':
+                event.preventDefault();
+                navigateStory('prev');
+                break;
+            case 'ArrowRight':
+                event.preventDefault();
+                navigateStory('next');
+                break;
+            case 'Escape':
+                event.preventDefault();
+                exitStory();
+                break;
+        }
+    }
+}
+
+// Remove touch event handlers since swipe is disabled
+// function handleTouchStart(event) { ... }
+// function handleTouchMove(event) { ... }
+// function handleTouchEnd(event) { ... }
+
+// Helper Functions
+function getGenreTitle(genre) {
+    const titles = {
+        'afrobeats': 'Afrobeats Maestro',
+        'amapiano': 'Amapiano Oracle',
+        'hip hop': 'Hip Hop Head',
+        'pop': 'Pop Pioneer',
+        'rock': 'Rock Legend',
+        'jazz': 'Jazz Connoisseur',
+        'electronic': 'Electronic Explorer',
+        'classical': 'Classical Curator',
+        'country': 'Country Champion',
+        'reggae': 'Reggae Ruler'
+    };
+    
+    return titles[genre.toLowerCase()] || `${genre} Expert`;
+}
+
+function generateConfetti() {
+    const colors = ['#1db954', '#ff6b6b', '#4ecdc4', '#f093fb', '#667eea'];
+    const pieces = Array.from({ length: 50 }, (_, i) => {
+        const color = colors[i % colors.length];
+        const left = Math.random() * 100;
+        const delay = Math.random() * 3;
+        
+        return `<div class="story-confetti-piece" style="left: ${left}%; background: ${color}; animation-delay: ${delay}s;"></div>`;
+    });
+    
+    return `<div class="story-confetti">${pieces.join('')}</div>`;
 }
 
 // Load cached data from public endpoint

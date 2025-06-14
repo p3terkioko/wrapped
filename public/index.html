@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Playlist Wrapped - Spotify Analytics</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="story.css">
     <link href="https://fonts.googleapis.com/css2?family=Circular+Std:wght@300;400;500;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
@@ -83,33 +84,42 @@
                     </div>
                 </div>
             </div>
-        </div>    </div>    <!-- Story Experience -->
-    <div id="story-container" class="story-container hidden">        <div class="story-progress">
-            <div class="progress-bar">
-                <div class="progress-fill" id="progress-fill"></div>
-            </div>
-            <span class="progress-text" id="progress-text">1 / 12</span>
+        </div>    </div>    <!-- Playlist Wrapped Story Mode -->
+    <div id="story-container" class="story-container hidden">
+        <!-- Progress Bar -->
+        <div class="story-progress-container">
+            <div class="story-progress-bar" id="story-progress-bar"></div>
         </div>
         
-        <div class="story-slides" id="story-slides">
-            <!-- Slides will be dynamically generated -->
+        <!-- Slide Indicators -->
+        <div class="story-slide-indicators" id="story-indicators">
+            <!-- Will be generated dynamically -->
         </div>
         
-        <div class="story-navigation">            <button id="prev-btn" class="nav-btn" disabled title="Previous slide">
-                <i class="fas fa-chevron-left"></i>
-            </button>
-            <button id="next-btn" class="nav-btn">
-                <i class="fas fa-chevron-right"></i>
-                <span>Next</span>
-            </button>
-            <button id="share-story-btn" class="share-btn hidden">
-                <i class="fas fa-share"></i>
-                Share Your Wrapped
-            </button>
-        </div>
-          <button id="exit-story-btn" class="exit-btn" title="Exit story mode">
+        <!-- Slide Counter -->
+        <div class="story-counter" id="story-counter">1 / 12</div>
+        
+        <!-- Exit Button -->
+        <button class="story-exit-btn" id="story-exit-btn" title="Exit story mode">
             <i class="fas fa-times"></i>
         </button>
+        
+        <!-- Story Slides Container -->
+        <div class="story-slides" id="story-slides" data-slide="0">
+            <!-- Slides will be generated dynamically -->
+        </div>
+        
+        <!-- Navigation -->
+        <div class="story-navigation">
+            <button class="story-nav-btn" id="story-prev-btn" title="Previous slide">
+                <i class="fas fa-chevron-left"></i>
+                <span>Back</span>
+            </button>
+            <button class="story-nav-btn primary" id="story-next-btn" title="Next slide">
+                <span>Next</span>
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
     </div>
 
     <!-- Dashboard -->
