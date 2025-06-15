@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-06-14T16:59:14.108Z",
+  "lastUpdated": "2025-06-15T20:41:51.584Z",
   "data": {
     "playlist": {
       "id": "1BZY7mhShLhc2fIlI6uIa4",
@@ -90,12 +90,12 @@
         "count": 39
       },
       {
-        "genre": "gengetone",
+        "genre": "afrobeats",
         "count": 31
       },
       {
-        "genre": "afrobeats",
-        "count": 31
+        "genre": "gengetone",
+        "count": 30
       }
     ],
     "mostPopular": {
@@ -164,7 +164,7 @@
           "id": "xua99owgtnso375kz2zz41rtf",
           "name": "Dr. C",
           "tracksAdded": 70,
-          "totalPopularity": 2523,
+          "totalPopularity": 2525,
           "genres": [
             "gengetone",
             "bongo flava",
@@ -396,7 +396,7 @@
             {
               "name": "Asibe Happy",
               "artists": "Kabza De Small, DJ Maphorisa, Ami Faku",
-              "popularity": 59,
+              "popularity": 60,
               "addedAt": "2024-04-05T07:41:26.000Z",
               "releaseDate": "2021-11-12",
               "trackId": "6F70m9aMK4PSJKBfp1H8DZ"
@@ -620,7 +620,7 @@
             {
               "name": "Sinema",
               "artists": "King Kaka, Pascal Tokodi",
-              "popularity": 2,
+              "popularity": 1,
               "addedAt": "2024-04-18T05:59:35.000Z",
               "releaseDate": "2018-11-30",
               "trackId": "50V4squ3Xxmnj0S66UBcn5"
@@ -716,7 +716,7 @@
             {
               "name": "Good Vibes & Inshallah",
               "artists": "Iyanii, Bien",
-              "popularity": 43,
+              "popularity": 44,
               "addedAt": "2024-06-17T12:59:06.000Z",
               "releaseDate": "2022-11-04",
               "trackId": "0WPvYW8CwXnrPi0mpn7uDs"
@@ -772,7 +772,7 @@
             {
               "name": "Kwaze Kwamnandi",
               "artists": "MR BLESSA",
-              "popularity": 6,
+              "popularity": 7,
               "addedAt": "2024-11-06T05:47:47.000Z",
               "releaseDate": "2024-10-26",
               "trackId": "4rdrDAXvlwvH2I3L8EuWKF"
@@ -1026,7 +1026,7 @@
             2022,
             2025
           ],
-          "avgPopularity": 36,
+          "avgPopularity": 36.1,
           "genreDiversity": 43,
           "artistDiversity": 100,
           "avgAudioFeatures": {
@@ -1248,7 +1248,7 @@
             {
               "name": "Wadibusa (feat. Royal MusiQ, OHP Sage, & Pcee)",
               "artists": "Uncle Waffles, Royal MusiQ, OHP Sage, Pcee",
-              "popularity": 58,
+              "popularity": 57,
               "addedAt": "2024-04-18T15:43:52.000Z",
               "releaseDate": "2024-04-17",
               "trackId": "5DqA8IUhk1DQSGmf6XOVrI"
@@ -1352,7 +1352,7 @@
             {
               "name": "Blame It on the Boogie",
               "artists": "The Jacksons",
-              "popularity": 75,
+              "popularity": 76,
               "addedAt": "2025-06-12T12:18:37.000Z",
               "releaseDate": "1978-12-17",
               "trackId": "3qI94hINNNeb4S7xQi18lS"
@@ -1456,7 +1456,7 @@
           "id": "31t76imks5ojgagmhuclld6bvbuq",
           "name": "0xFidel",
           "tracksAdded": 21,
-          "totalPopularity": 1034,
+          "totalPopularity": 1035,
           "genres": [
             "kompa",
             "afrobeats",
@@ -1562,7 +1562,7 @@
             {
               "name": "One Call Away",
               "artists": "Legendury Beatz, Maleek Berry",
-              "popularity": 29,
+              "popularity": 30,
               "addedAt": "2024-04-07T17:43:32.000Z",
               "releaseDate": "2017-02-17",
               "trackId": "6iAqo6JTBkZBt8mrJPJyrT"
@@ -1750,7 +1750,7 @@
             2023,
             2014
           ],
-          "avgPopularity": 49.2,
+          "avgPopularity": 49.3,
           "genreDiversity": 23,
           "artistDiversity": 42,
           "avgAudioFeatures": {
@@ -1847,7 +1847,7 @@
             {
               "name": "Not Like Us",
               "artists": "Kendrick Lamar",
-              "popularity": 94,
+              "popularity": 93,
               "addedAt": "2024-05-10T19:29:07.000Z",
               "releaseDate": "2024-05-04",
               "trackId": "6AI3ezQ4o3HUoP6Dhudph3"
@@ -1855,7 +1855,7 @@
             {
               "name": "Renaissance",
               "artists": "Eminem",
-              "popularity": 64,
+              "popularity": 65,
               "addedAt": "2024-07-18T16:09:17.000Z",
               "releaseDate": "2024-07-12",
               "trackId": "55u5QIlEuzCipJBtZPdJio"
@@ -2841,7 +2841,7 @@
           {
             "name": "Asibe Happy",
             "artists": "Kabza De Small, DJ Maphorisa, Ami Faku",
-            "popularity": 59,
+            "popularity": 60,
             "trackId": "6F70m9aMK4PSJKBfp1H8DZ"
           },
           {
@@ -2858,8 +2858,8 @@
         "contributorId": "xua99owgtnso375kz2zz41rtf",
         "contributorName": "Dr. C",
         "songCount": 17,
-        "totalGenreTracks": 35,
-        "percentage": 49,
+        "totalGenreTracks": 34,
+        "percentage": 50,
         "title": "🎤 Gengetone Guru",
         "tracks": [
           {
@@ -2937,7 +2937,7 @@
           {
             "name": "Good Vibes & Inshallah",
             "artists": "Iyanii, Bien",
-            "popularity": 43,
+            "popularity": 44,
             "trackId": "0WPvYW8CwXnrPi0mpn7uDs"
           }
         ],
@@ -2967,7 +2967,7 @@
           {
             "name": "Good Vibes & Inshallah",
             "artists": "Iyanii, Bien",
-            "popularity": 43,
+            "popularity": 44,
             "trackId": "0WPvYW8CwXnrPi0mpn7uDs"
           }
         ],
@@ -3027,7 +3027,7 @@
           {
             "name": "Good Vibes & Inshallah",
             "artists": "Iyanii, Bien",
-            "popularity": 43,
+            "popularity": 44,
             "trackId": "0WPvYW8CwXnrPi0mpn7uDs"
           }
         ],
@@ -3105,7 +3105,7 @@
           {
             "name": "Not Like Us",
             "artists": "Kendrick Lamar",
-            "popularity": 94,
+            "popularity": 93,
             "trackId": "6AI3ezQ4o3HUoP6Dhudph3"
           },
           {
