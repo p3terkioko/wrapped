@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-06-17T08:40:15.282Z",
+  "lastUpdated": "2025-06-17T10:31:57.487Z",
   "data": {
     "playlist": {
       "id": "1BZY7mhShLhc2fIlI6uIa4",
@@ -7,7 +7,7 @@
       "description": "",
       "image": "https://mosaic.scdn.co/640/ab67616d00001e020d456455c3e249dff59254efab67616d00001e02681265e351fc75e60d0fa50bab67616d00001e02e465904fbcc8de1920c60867ab67616d00001e02fd0184ab3186d02fbd61cce5",
       "owner": "tanuiii",
-      "totalTracks": 225,
+      "totalTracks": 229,
       "followers": 48,
       "public": false
     },
@@ -63,7 +63,7 @@
         "id": "5K4W6rqBFWDnAN6FQUkS6x"
       }
     ],
-    "totalUniqueArtists": 276,
+    "totalUniqueArtists": 280,
     "topGenres": [
       {
         "genre": "afro soul",
@@ -127,13 +127,13 @@
     },
     "dateRange": {
       "earliest": "2024-03-13T10:29:03.000Z",
-      "latest": "2025-06-13T13:49:02.000Z"
+      "latest": "2025-06-17T09:06:14.000Z"
     },
     "totalAnalyzedTracks": 0,
     "topContributors": [
       {
         "userId": "xua99owgtnso375kz2zz41rtf",
-        "count": 70,
+        "count": 74,
         "displayName": "Dr. C"
       },
       {
@@ -163,8 +163,8 @@
         {
           "id": "xua99owgtnso375kz2zz41rtf",
           "name": "Dr. C",
-          "tracksAdded": 70,
-          "totalPopularity": 2528,
+          "tracksAdded": 74,
+          "totalPopularity": 2782,
           "genres": [
             "gengetone",
             "bongo flava",
@@ -310,7 +310,11 @@
             "Wuod Fibi",
             "Danielle Ponder",
             "Tugen Finest Souls",
-            "Tsunami Beiby"
+            "Tsunami Beiby",
+            "Benson Boone",
+            "Sweet Serenades",
+            "Chris Island",
+            "Ciara Bess"
           ],
           "tracks": [
             {
@@ -508,7 +512,7 @@
             {
               "name": "Mwema",
               "artists": "Mercy Masika",
-              "popularity": 29,
+              "popularity": 30,
               "addedAt": "2024-04-05T07:57:13.000Z",
               "releaseDate": "2018-03-04",
               "trackId": "0LkKFTwenA513XXLeF9sVy"
@@ -628,7 +632,7 @@
             {
               "name": "Ateri Dala",
               "artists": "Khaligraph Jones, Prince Indah",
-              "popularity": 15,
+              "popularity": 14,
               "addedAt": "2024-04-18T06:15:33.000Z",
               "releaseDate": "2022-03-14",
               "trackId": "6LRshAws0hdcaNICZACnoR"
@@ -756,7 +760,7 @@
             {
               "name": "Nakei Nairobi",
               "artists": "Mbilia Bel",
-              "popularity": 33,
+              "popularity": 32,
               "addedAt": "2024-07-22T19:12:33.000Z",
               "releaseDate": "2005",
               "trackId": "2IemABs3q1K4zCYLiKc23H"
@@ -820,7 +824,7 @@
             {
               "name": "Could You Be Loved - lofi",
               "artists": "Homson, Nosmoh, l'eupe",
-              "popularity": 56,
+              "popularity": 57,
               "addedAt": "2024-12-18T14:23:45.000Z",
               "releaseDate": "2023-12-22",
               "trackId": "6Oc3udBGFUiHzitNTShtuO"
@@ -872,6 +876,38 @@
               "addedAt": "2025-05-08T14:02:36.000Z",
               "releaseDate": "2025-03-13",
               "trackId": "04ZSrYI4bTCHIccnjSKazz"
+            },
+            {
+              "name": "NIGHTS LIKE THESE",
+              "artists": "Benson Boone",
+              "popularity": 84,
+              "addedAt": "2025-06-17T09:01:14.000Z",
+              "releaseDate": "2022-07-29",
+              "trackId": "33vZRjxJScapmRShRJq8I0"
+            },
+            {
+              "name": "The Scientist",
+              "artists": "Sweet Serenades",
+              "popularity": 51,
+              "addedAt": "2025-06-17T09:04:54.000Z",
+              "releaseDate": "2023-08-29",
+              "trackId": "5LDsRGMtsQOuijZAxUtOAs"
+            },
+            {
+              "name": "Viva La Vida",
+              "artists": "Chris Island",
+              "popularity": 64,
+              "addedAt": "2025-06-17T09:06:01.000Z",
+              "releaseDate": "2023-06-09",
+              "trackId": "7kxKactI72Fl5nZpTpLpJh"
+            },
+            {
+              "name": "How Deep Is Your Love",
+              "artists": "Ciara Bess",
+              "popularity": 55,
+              "addedAt": "2025-06-17T09:06:14.000Z",
+              "releaseDate": "2023-03-24",
+              "trackId": "7fMWxDPD58F8goBvmHheSe"
             }
           ],
           "audioFeatures": {
@@ -952,7 +988,11 @@
             "2025-03-26T14:13:51.000Z",
             "2025-04-24T11:35:35.000Z",
             "2025-04-24T14:31:17.000Z",
-            "2025-05-08T14:02:36.000Z"
+            "2025-05-08T14:02:36.000Z",
+            "2025-06-17T09:01:14.000Z",
+            "2025-06-17T09:04:54.000Z",
+            "2025-06-17T09:06:01.000Z",
+            "2025-06-17T09:06:14.000Z"
           ],
           "releaseYears": [
             2024,
@@ -1024,11 +1064,15 @@
             2024,
             2020,
             2022,
-            2025
+            2025,
+            2022,
+            2023,
+            2023,
+            2023
           ],
-          "avgPopularity": 36.1,
+          "avgPopularity": 37.6,
           "genreDiversity": 43,
-          "artistDiversity": 100,
+          "artistDiversity": 104,
           "avgAudioFeatures": {
             "energy": 0,
             "danceability": 0,
@@ -1042,7 +1086,7 @@
             {
               "id": "top_curator",
               "name": "🔥 Top Curator",
-              "description": "Added the most tracks (70) to this playlist"
+              "description": "Added the most tracks (74) to this playlist"
             },
             {
               "id": "eclectic_ear",
@@ -1052,12 +1096,12 @@
             {
               "id": "genre_guru",
               "name": "🎖️ Genre Guru",
-              "description": "Master of gengetone with 70 tracks"
+              "description": "Master of gengetone with 74 tracks"
             },
             {
               "id": "trendsetter",
               "name": "📈 Trendsetter",
-              "description": "Early adopter with 29 underground picks"
+              "description": "Early adopter with 28 underground picks"
             },
             {
               "id": "old_soul",
@@ -1072,7 +1116,7 @@
             {
               "id": "collector",
               "name": "📀 Collector",
-              "description": "Music explorer with 100 different artists"
+              "description": "Music explorer with 104 different artists"
             }
           ]
         },
@@ -1456,7 +1500,7 @@
           "id": "31t76imks5ojgagmhuclld6bvbuq",
           "name": "0xFidel",
           "tracksAdded": 21,
-          "totalPopularity": 1035,
+          "totalPopularity": 1037,
           "genres": [
             "kompa",
             "afrobeats",
@@ -1562,7 +1606,7 @@
             {
               "name": "One Call Away",
               "artists": "Legendury Beatz, Maleek Berry",
-              "popularity": 30,
+              "popularity": 31,
               "addedAt": "2024-04-07T17:43:32.000Z",
               "releaseDate": "2017-02-17",
               "trackId": "6iAqo6JTBkZBt8mrJPJyrT"
@@ -1594,7 +1638,7 @@
             {
               "name": "Catch & Release - Deepend Remix",
               "artists": "Matt Simons, Deepend",
-              "popularity": 75,
+              "popularity": 76,
               "addedAt": "2024-04-07T18:07:35.000Z",
               "releaseDate": "2015-09-30",
               "trackId": "11BAVEGi1ivJ6JWLqKUNrZ"
@@ -1750,7 +1794,7 @@
             2023,
             2014
           ],
-          "avgPopularity": 49.3,
+          "avgPopularity": 49.4,
           "genreDiversity": 23,
           "artistDiversity": 42,
           "avgAudioFeatures": {
@@ -2819,7 +2863,7 @@
         "mostActive": "Dr. C",
         "avgContribution": 9,
         "totalGenres": 88,
-        "totalArtists": 276
+        "totalArtists": 280
       }
     },
     "genreMaestros": [
@@ -3190,12 +3234,12 @@
       "contributors": [
         {
           "id": "xua99owgtnso375kz2zz41rtf",
-          "tracksAdded": 70,
+          "tracksAdded": 74,
           "role": "🎶 Contributor",
           "isContributor": true,
           "name": "Dr. C",
           "icon": "🎶",
-          "description": "Added 70 tracks"
+          "description": "Added 74 tracks"
         },
         {
           "id": "31gqlwjf2ejtzfcv7yhjgpebhuxa",

@@ -32,6 +32,8 @@
                     <button id="theme-toggle" class="theme-toggle" title="Toggle theme">
                         <i class="fas fa-moon"></i>
                     </button>
+                    
+                    
                 </div>
             </div>
         </div>
@@ -372,6 +374,27 @@
             </div>
         </div>
     </div>
+
+    <header>
+    <div class="header-controls">
+        <button id="themeToggle">Toggle Theme</button>
+        <div class="status-item">
+            <div class="status-value" id="lastUpdatedValue">Loading...</div>
+            <div class="status-label">Last Updated</div>
+        </div>
+    </div>
+</header>
+
+<script src="cache/playlist-data.js"></script>
+<script>
+    // Get timestamp from playlist-data.js
+    const lastUpdatedElement = document.getElementById('lastUpdatedValue');
+    if (typeof playlistData !== 'undefined' && playlistData.lastUpdated) {
+        lastUpdatedElement.textContent = new Date(playlistData.lastUpdated).toLocaleDateString();
+    } else {
+        lastUpdatedElement.textContent = 'Never';
+    }
+</script>
 
     <!-- Chart.js for visualizations -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
