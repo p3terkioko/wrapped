@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-06-15T20:41:51.584Z",
+  "lastUpdated": "2025-06-17T08:40:15.282Z",
   "data": {
     "playlist": {
       "id": "1BZY7mhShLhc2fIlI6uIa4",
@@ -164,7 +164,7 @@
           "id": "xua99owgtnso375kz2zz41rtf",
           "name": "Dr. C",
           "tracksAdded": 70,
-          "totalPopularity": 2525,
+          "totalPopularity": 2528,
           "genres": [
             "gengetone",
             "bongo flava",
@@ -324,7 +324,7 @@
             {
               "name": "Drill Rhumba",
               "artists": "Watendawili, Okello Max",
-              "popularity": 38,
+              "popularity": 39,
               "addedAt": "2024-04-05T07:38:39.000Z",
               "releaseDate": "2022-07-21",
               "trackId": "4Md9JFmayGgn3QIbgqVceS"
@@ -380,7 +380,7 @@
             {
               "name": "Presha",
               "artists": "Mutoriah, SERRO",
-              "popularity": 40,
+              "popularity": 39,
               "addedAt": "2024-04-05T07:40:39.000Z",
               "releaseDate": "2023-03-31",
               "trackId": "1OelLLNoOJNYnukzOPYSct"
@@ -524,7 +524,7 @@
             {
               "name": "Peru",
               "artists": "Fireboy DML, Ed Sheeran",
-              "popularity": 64,
+              "popularity": 65,
               "addedAt": "2024-04-05T07:57:43.000Z",
               "releaseDate": "2021-12-23",
               "trackId": "3s1KwrLP0NlFWiWbjz6bfQ"
@@ -636,7 +636,7 @@
             {
               "name": "Number One / Despacito - Saxophone Cover",
               "artists": "Brendan Ross",
-              "popularity": 29,
+              "popularity": 30,
               "addedAt": "2024-04-25T09:18:52.000Z",
               "releaseDate": "2021-09-02",
               "trackId": "4GdWCynyumxnQMy7f8EmFF"
@@ -836,7 +836,7 @@
             {
               "name": "Tonight",
               "artists": "KODONGKLAN",
-              "popularity": 31,
+              "popularity": 32,
               "addedAt": "2024-12-29T08:09:03.000Z",
               "releaseDate": "2024-12-12",
               "trackId": "6KBQOTi3uKfUZTBFlOa7gc"
@@ -1057,7 +1057,7 @@
             {
               "id": "trendsetter",
               "name": "📈 Trendsetter",
-              "description": "Early adopter with 30 underground picks"
+              "description": "Early adopter with 29 underground picks"
             },
             {
               "id": "old_soul",
@@ -1080,7 +1080,7 @@
           "id": "31gqlwjf2ejtzfcv7yhjgpebhuxa",
           "name": "Pepp🍂",
           "tracksAdded": 27,
-          "totalPopularity": 1667,
+          "totalPopularity": 1668,
           "genres": [
             "new wave",
             "synthpop",
@@ -1320,7 +1320,7 @@
             {
               "name": "The Spins",
               "artists": "Mac Miller, Empire Of The Sun",
-              "popularity": 87,
+              "popularity": 88,
               "addedAt": "2025-04-14T11:50:13.000Z",
               "releaseDate": "2010-08-13",
               "trackId": "7FAFkQQZFeNwOFzTrSDFIh"
@@ -1432,7 +1432,7 @@
             1978,
             2000
           ],
-          "avgPopularity": 61.7,
+          "avgPopularity": 61.8,
           "genreDiversity": 30,
           "artistDiversity": 33,
           "avgAudioFeatures": {
@@ -1774,7 +1774,7 @@
           "id": "31h7e6lwcumgv67635rand65lj6e",
           "name": "Ryan",
           "tracksAdded": 13,
-          "totalPopularity": 967,
+          "totalPopularity": 966,
           "genres": [
             "rap",
             "hip hop",
@@ -1855,7 +1855,7 @@
             {
               "name": "Renaissance",
               "artists": "Eminem",
-              "popularity": 65,
+              "popularity": 64,
               "addedAt": "2024-07-18T16:09:17.000Z",
               "releaseDate": "2024-07-12",
               "trackId": "55u5QIlEuzCipJBtZPdJio"
@@ -1939,7 +1939,7 @@
             1983,
             2001
           ],
-          "avgPopularity": 74.4,
+          "avgPopularity": 74.3,
           "genreDiversity": 7,
           "artistDiversity": 9,
           "avgAudioFeatures": {
@@ -2012,7 +2012,7 @@
             {
               "name": "Rush",
               "artists": "Brendan Ross",
-              "popularity": 35,
+              "popularity": 36,
               "addedAt": "2024-03-13T10:30:34.000Z",
               "releaseDate": "2023-01-18",
               "trackId": "5GofX5zXqntM8tuJuowXas"
@@ -2068,7 +2068,7 @@
             {
               "name": "Soh-Soh",
               "artists": "Odeal",
-              "popularity": 9,
+              "popularity": 8,
               "addedAt": "2024-07-26T08:15:21.000Z",
               "releaseDate": "2024-07-05",
               "trackId": "1I08zQMc1sHy2xwd8itedV"
@@ -2158,7 +2158,7 @@
           "id": "cl4u400dvbwcmn6vkind9twor",
           "name": "Kush",
           "tracksAdded": 10,
-          "totalPopularity": 421,
+          "totalPopularity": 422,
           "genres": [
             "indie folk",
             "rumba congolaise",
@@ -2209,7 +2209,7 @@
             {
               "name": "Fati Mata",
               "artists": "Sam Mangwana",
-              "popularity": 40,
+              "popularity": 41,
               "addedAt": "2024-06-07T19:13:53.000Z",
               "releaseDate": "1994",
               "trackId": "2FC0FejM3C0vYNPb1B36ku"
@@ -2295,7 +2295,7 @@
             2023,
             2024
           ],
-          "avgPopularity": 42.1,
+          "avgPopularity": 42.2,
           "genreDiversity": 7,
           "artistDiversity": 11,
           "avgAudioFeatures": {
@@ -2698,7 +2698,7 @@
           "id": "31lshdib3ipz2tbwbloklk5j4pn4",
           "name": "Kristian",
           "tracksAdded": 6,
-          "totalPopularity": 291,
+          "totalPopularity": 290,
           "genres": [
             "afrobeats",
             "afropop",
@@ -2764,7 +2764,7 @@
             {
               "name": "Champions",
               "artists": "Hornsphere",
-              "popularity": 7,
+              "popularity": 6,
               "addedAt": "2025-05-07T17:54:45.000Z",
               "releaseDate": "2023-08-18",
               "trackId": "0FM3IChRPIqj389NLXBI7e"
@@ -2794,7 +2794,7 @@
             2024,
             2023
           ],
-          "avgPopularity": 48.5,
+          "avgPopularity": 48.3,
           "genreDiversity": 11,
           "artistDiversity": 6,
           "avgAudioFeatures": {
@@ -2835,7 +2835,7 @@
           {
             "name": "Peru",
             "artists": "Fireboy DML, Ed Sheeran",
-            "popularity": 64,
+            "popularity": 65,
             "trackId": "3s1KwrLP0NlFWiWbjz6bfQ"
           },
           {
@@ -2955,7 +2955,7 @@
           {
             "name": "Peru",
             "artists": "Fireboy DML, Ed Sheeran",
-            "popularity": 64,
+            "popularity": 65,
             "trackId": "3s1KwrLP0NlFWiWbjz6bfQ"
           },
           {
@@ -3015,7 +3015,7 @@
           {
             "name": "Peru",
             "artists": "Fireboy DML, Ed Sheeran",
-            "popularity": 64,
+            "popularity": 65,
             "trackId": "3s1KwrLP0NlFWiWbjz6bfQ"
           },
           {
