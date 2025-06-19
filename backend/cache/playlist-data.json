@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-06-17T10:31:57.487Z",
+  "lastUpdated": "2025-06-19T16:56:00.130Z",
   "data": {
     "playlist": {
       "id": "1BZY7mhShLhc2fIlI6uIa4",
@@ -7,7 +7,7 @@
       "description": "",
       "image": "https://mosaic.scdn.co/640/ab67616d00001e020d456455c3e249dff59254efab67616d00001e02681265e351fc75e60d0fa50bab67616d00001e02e465904fbcc8de1920c60867ab67616d00001e02fd0184ab3186d02fbd61cce5",
       "owner": "tanuiii",
-      "totalTracks": 229,
+      "totalTracks": 230,
       "followers": 48,
       "public": false
     },
@@ -63,7 +63,7 @@
         "id": "5K4W6rqBFWDnAN6FQUkS6x"
       }
     ],
-    "totalUniqueArtists": 280,
+    "totalUniqueArtists": 282,
     "topGenres": [
       {
         "genre": "afro soul",
@@ -82,12 +82,12 @@
         "count": 41
       },
       {
-        "genre": "afropiano",
+        "genre": "afro r&b",
         "count": 40
       },
       {
-        "genre": "afro r&b",
-        "count": 39
+        "genre": "afropiano",
+        "count": 40
       },
       {
         "genre": "afrobeats",
@@ -127,13 +127,13 @@
     },
     "dateRange": {
       "earliest": "2024-03-13T10:29:03.000Z",
-      "latest": "2025-06-17T09:06:14.000Z"
+      "latest": "2025-06-19T05:18:47.000Z"
     },
     "totalAnalyzedTracks": 0,
     "topContributors": [
       {
         "userId": "xua99owgtnso375kz2zz41rtf",
-        "count": 74,
+        "count": 75,
         "displayName": "Dr. C"
       },
       {
@@ -163,8 +163,8 @@
         {
           "id": "xua99owgtnso375kz2zz41rtf",
           "name": "Dr. C",
-          "tracksAdded": 74,
-          "totalPopularity": 2782,
+          "tracksAdded": 75,
+          "totalPopularity": 2801,
           "genres": [
             "gengetone",
             "bongo flava",
@@ -208,7 +208,9 @@
             "lo-fi",
             "lo-fi beats",
             "jazz beats",
-            "retro soul"
+            "retro soul",
+            "uk funky",
+            "jazz house"
           ],
           "artists": [
             "Nyashinski",
@@ -314,7 +316,9 @@
             "Benson Boone",
             "Sweet Serenades",
             "Chris Island",
-            "Ciara Bess"
+            "Ciara Bess",
+            "Mansa",
+            "Tusabe"
           ],
           "tracks": [
             {
@@ -384,7 +388,7 @@
             {
               "name": "Presha",
               "artists": "Mutoriah, SERRO",
-              "popularity": 39,
+              "popularity": 40,
               "addedAt": "2024-04-05T07:40:39.000Z",
               "releaseDate": "2023-03-31",
               "trackId": "1OelLLNoOJNYnukzOPYSct"
@@ -512,7 +516,7 @@
             {
               "name": "Mwema",
               "artists": "Mercy Masika",
-              "popularity": 30,
+              "popularity": 29,
               "addedAt": "2024-04-05T07:57:13.000Z",
               "releaseDate": "2018-03-04",
               "trackId": "0LkKFTwenA513XXLeF9sVy"
@@ -888,7 +892,7 @@
             {
               "name": "The Scientist",
               "artists": "Sweet Serenades",
-              "popularity": 51,
+              "popularity": 52,
               "addedAt": "2025-06-17T09:04:54.000Z",
               "releaseDate": "2023-08-29",
               "trackId": "5LDsRGMtsQOuijZAxUtOAs"
@@ -908,6 +912,14 @@
               "addedAt": "2025-06-17T09:06:14.000Z",
               "releaseDate": "2023-03-24",
               "trackId": "7fMWxDPD58F8goBvmHheSe"
+            },
+            {
+              "name": "Kwaito Nite",
+              "artists": "Mansa, Tusabe",
+              "popularity": 18,
+              "addedAt": "2025-06-19T05:18:47.000Z",
+              "releaseDate": "2025-05-06",
+              "trackId": "3tfbRsBFG5nAy3JTKE9q4g"
             }
           ],
           "audioFeatures": {
@@ -992,7 +1004,8 @@
             "2025-06-17T09:01:14.000Z",
             "2025-06-17T09:04:54.000Z",
             "2025-06-17T09:06:01.000Z",
-            "2025-06-17T09:06:14.000Z"
+            "2025-06-17T09:06:14.000Z",
+            "2025-06-19T05:18:47.000Z"
           ],
           "releaseYears": [
             2024,
@@ -1068,11 +1081,12 @@
             2022,
             2023,
             2023,
-            2023
+            2023,
+            2025
           ],
-          "avgPopularity": 37.6,
-          "genreDiversity": 43,
-          "artistDiversity": 104,
+          "avgPopularity": 37.3,
+          "genreDiversity": 45,
+          "artistDiversity": 106,
           "avgAudioFeatures": {
             "energy": 0,
             "danceability": 0,
@@ -1086,22 +1100,22 @@
             {
               "id": "top_curator",
               "name": "🔥 Top Curator",
-              "description": "Added the most tracks (74) to this playlist"
+              "description": "Added the most tracks (75) to this playlist"
             },
             {
               "id": "eclectic_ear",
               "name": "🧠 Eclectic Ear",
-              "description": "Most diverse taste with 43 different genres"
+              "description": "Most diverse taste with 45 different genres"
             },
             {
               "id": "genre_guru",
               "name": "🎖️ Genre Guru",
-              "description": "Master of gengetone with 74 tracks"
+              "description": "Master of gengetone with 75 tracks"
             },
             {
               "id": "trendsetter",
               "name": "📈 Trendsetter",
-              "description": "Early adopter with 28 underground picks"
+              "description": "Early adopter with 30 underground picks"
             },
             {
               "id": "old_soul",
@@ -1111,12 +1125,12 @@
             {
               "id": "fresh_dropper",
               "name": "🆕 Fresh Dropper",
-              "description": "Added newest track: \"Mi Nataka Tu Mkale\" (2025)"
+              "description": "Added newest track: \"Kwaito Nite\" (2025)"
             },
             {
               "id": "collector",
               "name": "📀 Collector",
-              "description": "Music explorer with 104 different artists"
+              "description": "Music explorer with 106 different artists"
             }
           ]
         },
@@ -1124,7 +1138,7 @@
           "id": "31gqlwjf2ejtzfcv7yhjgpebhuxa",
           "name": "Pepp🍂",
           "tracksAdded": 27,
-          "totalPopularity": 1668,
+          "totalPopularity": 1667,
           "genres": [
             "new wave",
             "synthpop",
@@ -1292,7 +1306,7 @@
             {
               "name": "Wadibusa (feat. Royal MusiQ, OHP Sage, & Pcee)",
               "artists": "Uncle Waffles, Royal MusiQ, OHP Sage, Pcee",
-              "popularity": 57,
+              "popularity": 56,
               "addedAt": "2024-04-18T15:43:52.000Z",
               "releaseDate": "2024-04-17",
               "trackId": "5DqA8IUhk1DQSGmf6XOVrI"
@@ -1476,7 +1490,7 @@
             1978,
             2000
           ],
-          "avgPopularity": 61.8,
+          "avgPopularity": 61.7,
           "genreDiversity": 30,
           "artistDiversity": 33,
           "avgAudioFeatures": {
@@ -1500,7 +1514,7 @@
           "id": "31t76imks5ojgagmhuclld6bvbuq",
           "name": "0xFidel",
           "tracksAdded": 21,
-          "totalPopularity": 1037,
+          "totalPopularity": 1036,
           "genres": [
             "kompa",
             "afrobeats",
@@ -1510,8 +1524,8 @@
             "alté",
             "afroswing",
             "dancehall",
-            "afropiano",
             "afro r&b",
+            "afropiano",
             "afro soul",
             "tropical house",
             "deep house",
@@ -1606,7 +1620,7 @@
             {
               "name": "One Call Away",
               "artists": "Legendury Beatz, Maleek Berry",
-              "popularity": 31,
+              "popularity": 30,
               "addedAt": "2024-04-07T17:43:32.000Z",
               "releaseDate": "2017-02-17",
               "trackId": "6iAqo6JTBkZBt8mrJPJyrT"
@@ -1614,7 +1628,7 @@
             {
               "name": "Comet 2",
               "artists": "Omid Shabani",
-              "popularity": 36,
+              "popularity": 37,
               "addedAt": "2024-04-07T17:47:33.000Z",
               "releaseDate": "2019-08-05",
               "trackId": "17Z3QuL3LPxUrMzsvzzKvF"
@@ -1718,7 +1732,7 @@
             {
               "name": "Maphupho",
               "artists": "Zandimaz, Zee Nxumalo",
-              "popularity": 9,
+              "popularity": 8,
               "addedAt": "2024-06-24T11:19:27.000Z",
               "releaseDate": "2022-04-29",
               "trackId": "1Ep2a5ZVISWO5OnXD5JrXo"
@@ -1794,7 +1808,7 @@
             2023,
             2014
           ],
-          "avgPopularity": 49.4,
+          "avgPopularity": 49.3,
           "genreDiversity": 23,
           "artistDiversity": 42,
           "avgAudioFeatures": {
@@ -1818,7 +1832,7 @@
           "id": "31h7e6lwcumgv67635rand65lj6e",
           "name": "Ryan",
           "tracksAdded": 13,
-          "totalPopularity": 966,
+          "totalPopularity": 967,
           "genres": [
             "rap",
             "hip hop",
@@ -1899,7 +1913,7 @@
             {
               "name": "Renaissance",
               "artists": "Eminem",
-              "popularity": 64,
+              "popularity": 65,
               "addedAt": "2024-07-18T16:09:17.000Z",
               "releaseDate": "2024-07-12",
               "trackId": "55u5QIlEuzCipJBtZPdJio"
@@ -1983,7 +1997,7 @@
             1983,
             2001
           ],
-          "avgPopularity": 74.3,
+          "avgPopularity": 74.4,
           "genreDiversity": 7,
           "artistDiversity": 9,
           "avgAudioFeatures": {
@@ -2742,7 +2756,7 @@
           "id": "31lshdib3ipz2tbwbloklk5j4pn4",
           "name": "Kristian",
           "tracksAdded": 6,
-          "totalPopularity": 290,
+          "totalPopularity": 291,
           "genres": [
             "afrobeats",
             "afropop",
@@ -2776,7 +2790,7 @@
             {
               "name": "Wait for Me",
               "artists": "Johnny Drille",
-              "popularity": 47,
+              "popularity": 48,
               "addedAt": "2024-10-23T19:01:28.000Z",
               "releaseDate": "2015-08-20",
               "trackId": "2Qs1xkhg3QyeGyh6UwcycC"
@@ -2838,7 +2852,7 @@
             2024,
             2023
           ],
-          "avgPopularity": 48.3,
+          "avgPopularity": 48.5,
           "genreDiversity": 11,
           "artistDiversity": 6,
           "avgAudioFeatures": {
@@ -2862,8 +2876,8 @@
       "summary": {
         "mostActive": "Dr. C",
         "avgContribution": 9,
-        "totalGenres": 88,
-        "totalArtists": 280
+        "totalGenres": 90,
+        "totalArtists": 282
       }
     },
     "genreMaestros": [
@@ -2992,8 +3006,8 @@
         "contributorId": "xua99owgtnso375kz2zz41rtf",
         "contributorName": "Dr. C",
         "songCount": 11,
-        "totalGenreTracks": 44,
-        "percentage": 25,
+        "totalGenreTracks": 45,
+        "percentage": 24,
         "title": "💫 Afro R&B Royalty",
         "tracks": [
           {
@@ -3234,12 +3248,12 @@
       "contributors": [
         {
           "id": "xua99owgtnso375kz2zz41rtf",
-          "tracksAdded": 74,
+          "tracksAdded": 75,
           "role": "🎶 Contributor",
           "isContributor": true,
           "name": "Dr. C",
           "icon": "🎶",
-          "description": "Added 74 tracks"
+          "description": "Added 75 tracks"
         },
         {
           "id": "31gqlwjf2ejtzfcv7yhjgpebhuxa",
