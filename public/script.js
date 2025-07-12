@@ -1613,7 +1613,7 @@ function setupStoryNavigation() {
         prevBtn.removeEventListener('click', handlePrevClick);
         prevBtn.addEventListener('click', handlePrevClick);
     }
-    if (nextBtn) {
+    if (nextBtn) {n
         nextBtn.removeEventListener('click', handleNextClick);
         nextBtn.addEventListener('click', handleNextClick);
     }
