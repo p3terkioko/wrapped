@@ -1,5 +1,5 @@
 {
-  "lastUpdated": "2025-07-12T18:38:42.278Z",
+  "lastUpdated": "2025-08-04T10:32:17.654Z",
   "data": {
     "playlist": {
       "id": "1BZY7mhShLhc2fIlI6uIa4",
@@ -7,7 +7,7 @@
       "description": "",
       "image": "https://mosaic.scdn.co/640/ab67616d00001e020d456455c3e249dff59254efab67616d00001e02681265e351fc75e60d0fa50bab67616d00001e02e465904fbcc8de1920c60867ab67616d00001e02fd0184ab3186d02fbd61cce5",
       "owner": "tanuiii",
-      "totalTracks": 242,
+      "totalTracks": 253,
       "followers": 48,
       "public": false
     },
@@ -23,6 +23,16 @@
         "id": "7dGJo4pcD2V6oG8kP0tJRR"
       },
       {
+        "name": "Dominic Fike",
+        "count": 6,
+        "id": "6USv9qhCn6zfxlBQIYJ9qs"
+      },
+      {
+        "name": "Bien",
+        "count": 5,
+        "id": "2zhossaaVN2pXg5p8o101X"
+      },
+      {
         "name": "Nyashinski",
         "count": 5,
         "id": "7KY9NaOVRmptl8vlpVomi6"
@@ -31,11 +41,6 @@
         "name": "Mutoriah",
         "count": 5,
         "id": "23fYD3tClohzF1Afng7tPJ"
-      },
-      {
-        "name": "Bien",
-        "count": 4,
-        "id": "2zhossaaVN2pXg5p8o101X"
       },
       {
         "name": "J. Cole",
@@ -53,21 +58,16 @@
         "id": "4gzpq5DPGxSnKTe4SA8HAU"
       },
       {
-        "name": "Watendawili",
+        "name": "Sauti Sol",
         "count": 3,
-        "id": "0q5lwUUiJEjoNVtHQv1jdn"
-      },
-      {
-        "name": "Hozier",
-        "count": 3,
-        "id": "2FXC3k01G6Gw61bmprjgqS"
+        "id": "4Rj9lQm9oSiMlirgpsM6eo"
       }
     ],
-    "totalUniqueArtists": 291,
+    "totalUniqueArtists": 296,
     "topGenres": [
       {
         "genre": "afro soul",
-        "count": 52
+        "count": 53
       },
       {
         "genre": "amapiano",
@@ -82,12 +82,12 @@
         "count": 41
       },
       {
-        "genre": "afro r&b",
+        "genre": "afropiano",
         "count": 41
       },
       {
-        "genre": "afropiano",
-        "count": 41
+        "genre": "afro r&b",
+        "count": 39
       },
       {
         "genre": "gengetone",
@@ -101,7 +101,7 @@
     "mostPopular": {
       "name": "That’s So True",
       "artists": "Gracie Abrams",
-      "popularity": 96,
+      "popularity": 93,
       "id": "7ne4VBA60CxGM75vw0EYad",
       "external_urls": {
         "spotify": "https://open.spotify.com/track/7ne4VBA60CxGM75vw0EYad"
@@ -127,13 +127,13 @@
     },
     "dateRange": {
       "earliest": "2024-03-13T10:29:03.000Z",
-      "latest": "2025-07-12T13:39:31.000Z"
+      "latest": "2025-07-29T18:33:35.000Z"
     },
     "totalAnalyzedTracks": 0,
     "topContributors": [
       {
         "userId": "xua99owgtnso375kz2zz41rtf",
-        "count": 78,
+        "count": 82,
         "displayName": "Dr. C"
       },
       {
@@ -163,8 +163,8 @@
         {
           "id": "xua99owgtnso375kz2zz41rtf",
           "name": "Dr. C",
-          "tracksAdded": 78,
-          "totalPopularity": 3008,
+          "tracksAdded": 82,
+          "totalPopularity": 3038,
           "genres": [
             "gengetone",
             "bongo flava",
@@ -323,7 +323,10 @@
             "Ehis 'D' Greatest",
             "Goon Flavour",
             "Eemoh",
-            "Meghan Trainor"
+            "Meghan Trainor",
+            "Putumayo",
+            "Nina Ogot",
+            "Winyo"
           ],
           "tracks": [
             {
@@ -337,7 +340,7 @@
             {
               "name": "Drill Rhumba",
               "artists": "Watendawili, Okello Max",
-              "popularity": 38,
+              "popularity": 37,
               "addedAt": "2024-04-05T07:38:39.000Z",
               "releaseDate": "2022-07-21",
               "trackId": "4Md9JFmayGgn3QIbgqVceS"
@@ -345,7 +348,7 @@
             {
               "name": "ManyoPesa",
               "artists": "Coster Ojwang, Watendawili",
-              "popularity": 45,
+              "popularity": 43,
               "addedAt": "2024-04-05T07:39:15.000Z",
               "releaseDate": "2022-12-15",
               "trackId": "0CE53lBoWtLoHkn5v0hSTK"
@@ -353,7 +356,7 @@
             {
               "name": "Gangsta's Paradise",
               "artists": "Coolio, L.V.",
-              "popularity": 89,
+              "popularity": 87,
               "addedAt": "2024-04-05T07:39:50.000Z",
               "releaseDate": "1995-11-07",
               "trackId": "1DIXPcTDzTj8ZMHt3PDt8p"
@@ -361,7 +364,7 @@
             {
               "name": "Where Is The Love?",
               "artists": "Black Eyed Peas",
-              "popularity": 4,
+              "popularity": 3,
               "addedAt": "2024-04-05T07:39:57.000Z",
               "releaseDate": "2003-01-01",
               "trackId": "1FreAz1lmnDi5aKLB6GdFM"
@@ -377,7 +380,7 @@
             {
               "name": "Hall of Fame (feat. will.i.am)",
               "artists": "The Script, will.i.am",
-              "popularity": 85,
+              "popularity": 83,
               "addedAt": "2024-04-05T07:40:12.000Z",
               "releaseDate": "2012-09-10",
               "trackId": "7wMq5n8mYSKlQIGECKUgTX"
@@ -385,7 +388,7 @@
             {
               "name": "Beta",
               "artists": "Mutoriah",
-              "popularity": 57,
+              "popularity": 55,
               "addedAt": "2024-04-05T07:40:32.000Z",
               "releaseDate": "2023-09-01",
               "trackId": "7xO9Xzb6UqP2bFmCUYTAI2"
@@ -393,7 +396,7 @@
             {
               "name": "Presha",
               "artists": "Mutoriah, SERRO",
-              "popularity": 40,
+              "popularity": 39,
               "addedAt": "2024-04-05T07:40:39.000Z",
               "releaseDate": "2023-03-31",
               "trackId": "1OelLLNoOJNYnukzOPYSct"
@@ -401,7 +404,7 @@
             {
               "name": "Bambelela",
               "artists": "Caltonic SA, Sje Konka",
-              "popularity": 42,
+              "popularity": 40,
               "addedAt": "2024-04-05T07:41:00.000Z",
               "releaseDate": "2020-04-25",
               "trackId": "6FJOlQk0XSCWRs8NorJik1"
@@ -409,7 +412,7 @@
             {
               "name": "Asibe Happy",
               "artists": "Kabza De Small, DJ Maphorisa, Ami Faku",
-              "popularity": 60,
+              "popularity": 58,
               "addedAt": "2024-04-05T07:41:26.000Z",
               "releaseDate": "2021-11-12",
               "trackId": "6F70m9aMK4PSJKBfp1H8DZ"
@@ -441,7 +444,7 @@
             {
               "name": "Find A Way - Lemon & Herb Remix",
               "artists": "Citizen Deep, Azola, Lemon & Herb",
-              "popularity": 12,
+              "popularity": 11,
               "addedAt": "2024-04-05T07:48:49.000Z",
               "releaseDate": "2022-04-29",
               "trackId": "6kCi0Go8eusQNWUOs5Q1Et"
@@ -449,7 +452,7 @@
             {
               "name": "Three Little Birds",
               "artists": "Bob Marley & The Wailers",
-              "popularity": 67,
+              "popularity": 66,
               "addedAt": "2024-04-05T07:54:10.000Z",
               "releaseDate": "2024-02-09",
               "trackId": "6Z83ioKXGsAxOo2DkwiOcH"
@@ -457,7 +460,7 @@
             {
               "name": "Jamming",
               "artists": "Bob Marley & The Wailers",
-              "popularity": 70,
+              "popularity": 68,
               "addedAt": "2024-04-05T07:54:21.000Z",
               "releaseDate": "2002-01-01",
               "trackId": "4aUCPal9bxTnQkEfdIY6sG"
@@ -465,7 +468,7 @@
             {
               "name": "War",
               "artists": "Bob Marley & The Wailers",
-              "popularity": 63,
+              "popularity": 62,
               "addedAt": "2024-04-05T07:54:47.000Z",
               "releaseDate": "1976",
               "trackId": "1TLTUhEUYOyORxufZlCOWj"
@@ -473,7 +476,7 @@
             {
               "name": "No Way No",
               "artists": "MAGIC!",
-              "popularity": 60,
+              "popularity": 59,
               "addedAt": "2024-04-05T07:55:16.000Z",
               "releaseDate": "2014-06-25",
               "trackId": "5xHooj89TQoQHj3dALvSh1"
@@ -481,7 +484,7 @@
             {
               "name": "Rude",
               "artists": "MAGIC!",
-              "popularity": 87,
+              "popularity": 85,
               "addedAt": "2024-04-05T07:55:20.000Z",
               "releaseDate": "2014-06-25",
               "trackId": "6RtPijgfPKROxEzTHNRiDp"
@@ -489,7 +492,7 @@
             {
               "name": "Jericho",
               "artists": "Iniko",
-              "popularity": 69,
+              "popularity": 68,
               "addedAt": "2024-04-05T07:55:37.000Z",
               "releaseDate": "2023-04-15",
               "trackId": "4ztdjZ2t7BVo5DLIFQBdJh"
@@ -497,7 +500,7 @@
             {
               "name": "Jadala",
               "artists": "Lisa Oduor-Noah",
-              "popularity": 24,
+              "popularity": 22,
               "addedAt": "2024-04-05T07:56:03.000Z",
               "releaseDate": "2023-07-03",
               "trackId": "0eOX0W5AKuaxOy6gZbEBPI"
@@ -505,7 +508,7 @@
             {
               "name": "Tucheze Rhumba",
               "artists": "Kidum Kibido",
-              "popularity": 9,
+              "popularity": 7,
               "addedAt": "2024-04-05T07:56:17.000Z",
               "releaseDate": "2022-11-21",
               "trackId": "2vxbi34yBTrKH94elRtRRh"
@@ -513,7 +516,7 @@
             {
               "name": "Kuja Utanipata",
               "artists": "Msaki, Sun-El Musician",
-              "popularity": 46,
+              "popularity": 44,
               "addedAt": "2024-04-05T07:56:35.000Z",
               "releaseDate": "2021-11-19",
               "trackId": "1HmHW1KrJVXauYmK8jyL5k"
@@ -521,7 +524,7 @@
             {
               "name": "Mwema",
               "artists": "Mercy Masika",
-              "popularity": 29,
+              "popularity": 28,
               "addedAt": "2024-04-05T07:57:13.000Z",
               "releaseDate": "2018-03-04",
               "trackId": "0LkKFTwenA513XXLeF9sVy"
@@ -537,7 +540,7 @@
             {
               "name": "Peru",
               "artists": "Fireboy DML, Ed Sheeran",
-              "popularity": 65,
+              "popularity": 63,
               "addedAt": "2024-04-05T07:57:43.000Z",
               "releaseDate": "2021-12-23",
               "trackId": "3s1KwrLP0NlFWiWbjz6bfQ"
@@ -553,7 +556,7 @@
             {
               "name": "MAD",
               "artists": "Sarz, WurlD",
-              "popularity": 47,
+              "popularity": 46,
               "addedAt": "2024-04-05T07:58:15.000Z",
               "releaseDate": "2019-11-01",
               "trackId": "6mGUY6CaFbnK9a6YxV5lpJ"
@@ -585,7 +588,7 @@
             {
               "name": "U Move, I Move (feat. Jhene Aiko)",
               "artists": "John Legend, Jhené Aiko",
-              "popularity": 56,
+              "popularity": 55,
               "addedAt": "2024-04-17T15:44:25.000Z",
               "releaseDate": "2020-06-19",
               "trackId": "7wfDCDfhVe2tFxIkQEJp35"
@@ -593,7 +596,7 @@
             {
               "name": "Watu Wangu",
               "artists": "Xenia Manasseh",
-              "popularity": 20,
+              "popularity": 18,
               "addedAt": "2024-04-17T15:46:49.000Z",
               "releaseDate": "2019-12-27",
               "trackId": "28hiVjAfWP9IWY2bCIJxzN"
@@ -601,7 +604,7 @@
             {
               "name": "Mungu Halali",
               "artists": "Blinky Bill, Chemutai Sage, Sarah Mitaru, Wambura Mitaru, Lisa Oduor-Noah",
-              "popularity": 22,
+              "popularity": 21,
               "addedAt": "2024-04-17T15:47:00.000Z",
               "releaseDate": "2018-10-19",
               "trackId": "5IhAjDjgfXl5hxuBc0pkdA"
@@ -609,7 +612,7 @@
             {
               "name": "Mon amour (with Camila Cabello)",
               "artists": "Stromae, Camila Cabello",
-              "popularity": 51,
+              "popularity": 49,
               "addedAt": "2024-04-17T15:47:24.000Z",
               "releaseDate": "2022-07-27",
               "trackId": "1lLh3yUgjjt7GrtGgFdA11"
@@ -617,7 +620,7 @@
             {
               "name": "Nimependa - Remix",
               "artists": "Guardian Angel, Deus Derrick, Sammy G",
-              "popularity": 38,
+              "popularity": 37,
               "addedAt": "2024-04-17T15:47:42.000Z",
               "releaseDate": "2023-10-06",
               "trackId": "1A5ghucjHgBAW4tMRNld6T"
@@ -625,7 +628,7 @@
             {
               "name": "Dundaing",
               "artists": "King Kaka, Kristoff, Magix Enga",
-              "popularity": 19,
+              "popularity": 17,
               "addedAt": "2024-04-18T05:49:18.000Z",
               "releaseDate": "2018-12-01",
               "trackId": "3C3lKgkBkTfXdYKpcgWhQX"
@@ -633,7 +636,7 @@
             {
               "name": "Sinema",
               "artists": "King Kaka, Pascal Tokodi",
-              "popularity": 1,
+              "popularity": 2,
               "addedAt": "2024-04-18T05:59:35.000Z",
               "releaseDate": "2018-11-30",
               "trackId": "50V4squ3Xxmnj0S66UBcn5"
@@ -641,7 +644,7 @@
             {
               "name": "Ateri Dala",
               "artists": "Khaligraph Jones, Prince Indah",
-              "popularity": 15,
+              "popularity": 14,
               "addedAt": "2024-04-18T06:15:33.000Z",
               "releaseDate": "2022-03-14",
               "trackId": "6LRshAws0hdcaNICZACnoR"
@@ -649,7 +652,7 @@
             {
               "name": "Number One / Despacito - Saxophone Cover",
               "artists": "Brendan Ross",
-              "popularity": 30,
+              "popularity": 29,
               "addedAt": "2024-04-25T09:18:52.000Z",
               "releaseDate": "2021-09-02",
               "trackId": "4GdWCynyumxnQMy7f8EmFF"
@@ -657,7 +660,7 @@
             {
               "name": "Peru - Saxophone Version",
               "artists": "Brendan Ross",
-              "popularity": 34,
+              "popularity": 33,
               "addedAt": "2024-04-25T09:19:12.000Z",
               "releaseDate": "2021-12-27",
               "trackId": "3vbnrNQ3gO4DYTVq52IVj2"
@@ -665,7 +668,7 @@
             {
               "name": "Emiliana",
               "artists": "Brendan Ross",
-              "popularity": 33,
+              "popularity": 32,
               "addedAt": "2024-04-25T09:19:36.000Z",
               "releaseDate": "2022-04-12",
               "trackId": "1XQRCA7QxWeGOlF6B0tGtE"
@@ -673,7 +676,7 @@
             {
               "name": "Soso",
               "artists": "Brendan Ross",
-              "popularity": 33,
+              "popularity": 32,
               "addedAt": "2024-04-25T09:19:54.000Z",
               "releaseDate": "2023-06-01",
               "trackId": "6kaNI8SkZwSyxzBtvZWqgk"
@@ -681,7 +684,7 @@
             {
               "name": "Tetema - Saxophone Cover",
               "artists": "Brendan Ross",
-              "popularity": 30,
+              "popularity": 29,
               "addedAt": "2024-04-25T09:32:45.000Z",
               "releaseDate": "2021-09-02",
               "trackId": "5zR85Kv3gHNij9wCCNS7Tm"
@@ -689,7 +692,7 @@
             {
               "name": "Monalisa",
               "artists": "Brendan Ross",
-              "popularity": 28,
+              "popularity": 27,
               "addedAt": "2024-04-25T09:32:55.000Z",
               "releaseDate": "2023-09-08",
               "trackId": "1N26FYH3eEpD9k00ffxqFM"
@@ -697,7 +700,7 @@
             {
               "name": "Woman",
               "artists": "Brendan Ross",
-              "popularity": 25,
+              "popularity": 24,
               "addedAt": "2024-04-25T09:33:13.000Z",
               "releaseDate": "2023-08-17",
               "trackId": "1EnUrGLxtwhKiaPeo8jsUq"
@@ -705,7 +708,7 @@
             {
               "name": "Moves Like Jagger - Studio Recording From \"The Voice\" Performance",
               "artists": "Maroon 5, Christina Aguilera",
-              "popularity": 84,
+              "popularity": 83,
               "addedAt": "2024-05-05T13:47:23.000Z",
               "releaseDate": "2010",
               "trackId": "7pYfyrMNPn3wtoCyqcTVoI"
@@ -713,7 +716,7 @@
             {
               "name": "Let It Be Hope",
               "artists": "Lxandra",
-              "popularity": 32,
+              "popularity": 30,
               "addedAt": "2024-05-27T12:24:36.000Z",
               "releaseDate": "2023-05-04",
               "trackId": "790JK0DdLivzoKY4LXd64F"
@@ -721,7 +724,7 @@
             {
               "name": "Sweetie Sweetie",
               "artists": "Zabron Singers",
-              "popularity": 38,
+              "popularity": 37,
               "addedAt": "2024-06-04T05:20:46.000Z",
               "releaseDate": "2020-11-13",
               "trackId": "3mnMhG3NCpHuWixUJSZADP"
@@ -729,7 +732,7 @@
             {
               "name": "Good Vibes & Inshallah",
               "artists": "Iyanii, Bien",
-              "popularity": 44,
+              "popularity": 43,
               "addedAt": "2024-06-17T12:59:06.000Z",
               "releaseDate": "2022-11-04",
               "trackId": "0WPvYW8CwXnrPi0mpn7uDs"
@@ -745,7 +748,7 @@
             {
               "name": "Diamonds on the Soles of Her Shoes",
               "artists": "Paul Simon",
-              "popularity": 64,
+              "popularity": 63,
               "addedAt": "2024-07-07T12:46:13.000Z",
               "releaseDate": "1986-08-12",
               "trackId": "71GvlH0VdeClloLIkHrAVu"
@@ -753,7 +756,7 @@
             {
               "name": "ANGUKA NAYO",
               "artists": "From The Hood Music, Wadaglizke",
-              "popularity": 49,
+              "popularity": 47,
               "addedAt": "2024-07-20T05:58:09.000Z",
               "releaseDate": "2024-06-21",
               "trackId": "4WuxxGa7qAMBpNFFyHsLlE"
@@ -769,7 +772,7 @@
             {
               "name": "Nakei Nairobi",
               "artists": "Mbilia Bel",
-              "popularity": 24,
+              "popularity": 15,
               "addedAt": "2024-07-22T19:12:33.000Z",
               "releaseDate": "2005",
               "trackId": "2IemABs3q1K4zCYLiKc23H"
@@ -777,7 +780,7 @@
             {
               "name": "Okaman",
               "artists": "Monique Séka",
-              "popularity": 47,
+              "popularity": 46,
               "addedAt": "2024-07-22T19:12:43.000Z",
               "releaseDate": "1995-01-30",
               "trackId": "0EiFKLfPN0XfZ9izkvYAJh"
@@ -785,7 +788,7 @@
             {
               "name": "Kwaze Kwamnandi",
               "artists": "MR BLESSA",
-              "popularity": 7,
+              "popularity": 6,
               "addedAt": "2024-11-06T05:47:47.000Z",
               "releaseDate": "2024-10-26",
               "trackId": "4rdrDAXvlwvH2I3L8EuWKF"
@@ -793,7 +796,7 @@
             {
               "name": "A Bar Song (Tipsy)",
               "artists": "Shaboozey",
-              "popularity": 86,
+              "popularity": 84,
               "addedAt": "2024-11-23T05:48:58.000Z",
               "releaseDate": "2024-05-31",
               "trackId": "5fZJQrFKWQLb7FpJXZ1g7K"
@@ -801,7 +804,7 @@
             {
               "name": "Dear Me (You've Got This)",
               "artists": "David Onka, Lorie Ladd, Reels Choir",
-              "popularity": 34,
+              "popularity": 37,
               "addedAt": "2024-11-23T09:31:08.000Z",
               "releaseDate": "2024-09-26",
               "trackId": "1ZVtljC1qb6FnmW9ri7PtB"
@@ -809,7 +812,7 @@
             {
               "name": "Apologize",
               "artists": "Timbaland, OneRepublic",
-              "popularity": 77,
+              "popularity": 75,
               "addedAt": "2024-11-29T12:01:23.000Z",
               "releaseDate": "2007-01-01",
               "trackId": "6q3zC9dDD4lUNk8nfUztXy"
@@ -817,7 +820,7 @@
             {
               "name": "Friends We Wont Forget",
               "artists": "Brent Morgan",
-              "popularity": 57,
+              "popularity": 55,
               "addedAt": "2024-12-14T11:11:28.000Z",
               "releaseDate": "2024-09-25",
               "trackId": "7wTEonuJ2TUi6nyKGseEZv"
@@ -825,7 +828,7 @@
             {
               "name": "Ain't Nobody",
               "artists": "Rufus, Chaka Khan",
-              "popularity": 72,
+              "popularity": 70,
               "addedAt": "2024-12-18T14:23:31.000Z",
               "releaseDate": "1983",
               "trackId": "53Za5vyGc1x7GxgJVRjRKc"
@@ -833,7 +836,7 @@
             {
               "name": "Could You Be Loved - lofi",
               "artists": "Homson, Nosmoh, l'eupe",
-              "popularity": 57,
+              "popularity": 55,
               "addedAt": "2024-12-18T14:23:45.000Z",
               "releaseDate": "2023-12-22",
               "trackId": "6Oc3udBGFUiHzitNTShtuO"
@@ -841,7 +844,7 @@
             {
               "name": "Take A Minute",
               "artists": "Elderbrook",
-              "popularity": 46,
+              "popularity": 44,
               "addedAt": "2024-12-19T13:43:52.000Z",
               "releaseDate": "2020-09-18",
               "trackId": "4Gca42tASQCRYpBE70NtkB"
@@ -849,7 +852,7 @@
             {
               "name": "Tonight",
               "artists": "KODONGKLAN",
-              "popularity": 32,
+              "popularity": 31,
               "addedAt": "2024-12-29T08:09:03.000Z",
               "releaseDate": "2024-12-12",
               "trackId": "6KBQOTi3uKfUZTBFlOa7gc"
@@ -857,7 +860,7 @@
             {
               "name": "Cup of Tea",
               "artists": "Bridget Blue",
-              "popularity": 21,
+              "popularity": 19,
               "addedAt": "2025-03-26T14:13:51.000Z",
               "releaseDate": "2024-06-28",
               "trackId": "3X9wpDXE32ZXThM7DcaLEX"
@@ -865,7 +868,7 @@
             {
               "name": "Cham Gi Wang'i",
               "artists": "Wuod Fibi",
-              "popularity": 20,
+              "popularity": 19,
               "addedAt": "2025-04-24T11:35:35.000Z",
               "releaseDate": "2020-01-01",
               "trackId": "1AKz1uCdi8ZnGselfpUkHc"
@@ -873,7 +876,7 @@
             {
               "name": "Some Of Us Are Brave",
               "artists": "Danielle Ponder",
-              "popularity": 54,
+              "popularity": 53,
               "addedAt": "2025-04-24T14:31:17.000Z",
               "releaseDate": "2022-09-16",
               "trackId": "4Tr04LzFeZEYgcF7vKN1NN"
@@ -881,7 +884,7 @@
             {
               "name": "Mi Nataka Tu Mkale",
               "artists": "Tugen Finest Souls, Tsunami Beiby",
-              "popularity": 20,
+              "popularity": 12,
               "addedAt": "2025-05-08T14:02:36.000Z",
               "releaseDate": "2025-03-13",
               "trackId": "04ZSrYI4bTCHIccnjSKazz"
@@ -889,7 +892,7 @@
             {
               "name": "NIGHTS LIKE THESE",
               "artists": "Benson Boone",
-              "popularity": 84,
+              "popularity": 82,
               "addedAt": "2025-06-17T09:01:14.000Z",
               "releaseDate": "2022-07-29",
               "trackId": "33vZRjxJScapmRShRJq8I0"
@@ -905,7 +908,7 @@
             {
               "name": "Viva La Vida",
               "artists": "Chris Island",
-              "popularity": 64,
+              "popularity": 62,
               "addedAt": "2025-06-17T09:06:01.000Z",
               "releaseDate": "2023-06-09",
               "trackId": "7kxKactI72Fl5nZpTpLpJh"
@@ -913,7 +916,7 @@
             {
               "name": "How Deep Is Your Love",
               "artists": "Ciara Bess",
-              "popularity": 55,
+              "popularity": 54,
               "addedAt": "2025-06-17T09:06:14.000Z",
               "releaseDate": "2023-03-24",
               "trackId": "7fMWxDPD58F8goBvmHheSe"
@@ -921,7 +924,7 @@
             {
               "name": "Kwaito Nite",
               "artists": "Mansa, Tusabe",
-              "popularity": 18,
+              "popularity": 17,
               "addedAt": "2025-06-19T05:18:47.000Z",
               "releaseDate": "2025-05-06",
               "trackId": "3tfbRsBFG5nAy3JTKE9q4g"
@@ -929,7 +932,7 @@
             {
               "name": "THIS YEAR (Blessings)",
               "artists": "Victor Thompson, Ehis 'D' Greatest",
-              "popularity": 67,
+              "popularity": 65,
               "addedAt": "2025-07-12T05:51:43.000Z",
               "releaseDate": "2023-01-04",
               "trackId": "2VGGQdroduj4dIMGPsBzDG"
@@ -937,7 +940,7 @@
             {
               "name": "Ngishutheni",
               "artists": "Goon Flavour, Master KG, Eemoh",
-              "popularity": 73,
+              "popularity": 71,
               "addedAt": "2025-07-12T05:51:48.000Z",
               "releaseDate": "2025-04-23",
               "trackId": "3JW9hNUjUN51X9jZyn2HVV"
@@ -945,10 +948,42 @@
             {
               "name": "Criminals",
               "artists": "Meghan Trainor",
-              "popularity": 70,
+              "popularity": 67,
               "addedAt": "2025-07-12T13:39:31.000Z",
               "releaseDate": "2024-08-16",
               "trackId": "1gMFAi2auKTgHsYH7nIBhv"
+            },
+            {
+              "name": "All My Enemies Are Suffering",
+              "artists": "Bien",
+              "popularity": 53,
+              "addedAt": "2025-07-25T07:04:33.000Z",
+              "releaseDate": "2025-07-18",
+              "trackId": "2KtuNqz9wE23Uy0VVS8izJ"
+            },
+            {
+              "name": "Find a Feeling",
+              "artists": "SERRO, Coster Ojwang",
+              "popularity": 31,
+              "addedAt": "2025-07-29T18:20:15.000Z",
+              "releaseDate": "2025-07-25",
+              "trackId": "58AQLwW1ig9sLuV0qBn6q6"
+            },
+            {
+              "name": "Ningojee",
+              "artists": "Putumayo, Nina Ogot",
+              "popularity": 22,
+              "addedAt": "2025-07-29T18:24:39.000Z",
+              "releaseDate": "2024-03-08",
+              "trackId": "5fXGALwppyLxTMyRUYtmuJ"
+            },
+            {
+              "name": "Yote Yote",
+              "artists": "Winyo, Nina Ogot",
+              "popularity": 28,
+              "addedAt": "2025-07-29T18:33:35.000Z",
+              "releaseDate": "2014-12-18",
+              "trackId": "17bKimjkfYmDvHU2getgpZ"
             }
           ],
           "audioFeatures": {
@@ -1037,7 +1072,11 @@
             "2025-06-19T05:18:47.000Z",
             "2025-07-12T05:51:43.000Z",
             "2025-07-12T05:51:48.000Z",
-            "2025-07-12T13:39:31.000Z"
+            "2025-07-12T13:39:31.000Z",
+            "2025-07-25T07:04:33.000Z",
+            "2025-07-29T18:20:15.000Z",
+            "2025-07-29T18:24:39.000Z",
+            "2025-07-29T18:33:35.000Z"
           ],
           "releaseYears": [
             2024,
@@ -1117,11 +1156,15 @@
             2025,
             2023,
             2025,
-            2024
+            2024,
+            2025,
+            2025,
+            2024,
+            2014
           ],
-          "avgPopularity": 38.6,
+          "avgPopularity": 37,
           "genreDiversity": 45,
-          "artistDiversity": 111,
+          "artistDiversity": 114,
           "avgAudioFeatures": {
             "energy": 0,
             "danceability": 0,
@@ -1135,7 +1178,7 @@
             {
               "id": "top_curator",
               "name": "🔥 Top Curator",
-              "description": "Added the most tracks (78) to this playlist"
+              "description": "Added the most tracks (82) to this playlist"
             },
             {
               "id": "eclectic_ear",
@@ -1145,12 +1188,12 @@
             {
               "id": "genre_guru",
               "name": "🎖️ Genre Guru",
-              "description": "Master of gengetone with 78 tracks"
+              "description": "Master of gengetone with 82 tracks"
             },
             {
               "id": "trendsetter",
               "name": "📈 Trendsetter",
-              "description": "Early adopter with 30 underground picks"
+              "description": "Early adopter with 34 underground picks"
             },
             {
               "id": "old_soul",
@@ -1160,12 +1203,12 @@
             {
               "id": "fresh_dropper",
               "name": "🆕 Fresh Dropper",
-              "description": "Added newest track: \"Kwaito Nite\" (2025)"
+              "description": "Added newest track: \"Find a Feeling\" (2025)"
             },
             {
               "id": "collector",
               "name": "📀 Collector",
-              "description": "Music explorer with 111 different artists"
+              "description": "Music explorer with 114 different artists"
             }
           ]
         },
@@ -1173,7 +1216,7 @@
           "id": "31gqlwjf2ejtzfcv7yhjgpebhuxa",
           "name": "Pepp🍂",
           "tracksAdded": 30,
-          "totalPopularity": 1702,
+          "totalPopularity": 1652,
           "genres": [
             "new wave",
             "synthpop",
@@ -1249,7 +1292,7 @@
             {
               "name": "Viva La Vida",
               "artists": "Coldplay",
-              "popularity": 90,
+              "popularity": 89,
               "addedAt": "2024-03-14T10:07:56.000Z",
               "releaseDate": "2008-06-06",
               "trackId": "1mea3bSkSGXuIRvnydlB5b"
@@ -1257,7 +1300,7 @@
             {
               "name": "Take on Me",
               "artists": "a-ha",
-              "popularity": 90,
+              "popularity": 89,
               "addedAt": "2024-03-14T10:08:45.000Z",
               "releaseDate": "1985-06-01",
               "trackId": "2WfaOiMkCvy7F5fcp2zZ8L"
@@ -1265,7 +1308,7 @@
             {
               "name": "A Sky Full of Stars",
               "artists": "Coldplay",
-              "popularity": 90,
+              "popularity": 89,
               "addedAt": "2024-03-14T10:10:19.000Z",
               "releaseDate": "2014-05-16",
               "trackId": "0FDzzruyVECATHXKHFs9eJ"
@@ -1273,7 +1316,7 @@
             {
               "name": "I Lived",
               "artists": "OneRepublic",
-              "popularity": 81,
+              "popularity": 79,
               "addedAt": "2024-03-14T10:10:58.000Z",
               "releaseDate": "2013-01-01",
               "trackId": "3IQF4xCQUPicbA4hWfTxPo"
@@ -1281,7 +1324,7 @@
             {
               "name": "Riptide",
               "artists": "Vance Joy",
-              "popularity": 85,
+              "popularity": 83,
               "addedAt": "2024-03-14T10:20:57.000Z",
               "releaseDate": "2014-09-08",
               "trackId": "7yq4Qj7cqayVTp3FF9CWbm"
@@ -1289,7 +1332,7 @@
             {
               "name": "Lost & Found",
               "artists": "Bien",
-              "popularity": 52,
+              "popularity": 51,
               "addedAt": "2024-03-14T10:47:36.000Z",
               "releaseDate": "2023-11-17",
               "trackId": "3wYgpYQX97F8p5XP4Yz2XJ"
@@ -1305,7 +1348,7 @@
             {
               "name": "Suzanna",
               "artists": "Sauti Sol",
-              "popularity": 51,
+              "popularity": 49,
               "addedAt": "2024-03-14T10:49:14.000Z",
               "releaseDate": "2020-06-05",
               "trackId": "4CpkKi23V5U6fd419XNQnG"
@@ -1313,7 +1356,7 @@
             {
               "name": "American Boy",
               "artists": "Estelle, Kanye West",
-              "popularity": 82,
+              "popularity": 80,
               "addedAt": "2024-03-14T14:31:30.000Z",
               "releaseDate": "2008-03-28",
               "trackId": "6etwirSInfuJrSOlogS6Sh"
@@ -1321,7 +1364,7 @@
             {
               "name": "Brazil",
               "artists": "Declan McKenna",
-              "popularity": 86,
+              "popularity": 83,
               "addedAt": "2024-03-15T15:08:10.000Z",
               "releaseDate": "2017-04-13",
               "trackId": "4sNG6zQBmtq7M8aeeKJRMQ"
@@ -1329,7 +1372,7 @@
             {
               "name": "We were here",
               "artists": "Simmy",
-              "popularity": 51,
+              "popularity": 50,
               "addedAt": "2024-04-05T08:12:48.000Z",
               "releaseDate": "2020-11-06",
               "trackId": "1ve9oADAGAPzeaeOVv5CTg"
@@ -1337,7 +1380,7 @@
             {
               "name": "LEVII'S JEANS",
               "artists": "Beyoncé, Post Malone",
-              "popularity": 72,
+              "popularity": 70,
               "addedAt": "2024-04-15T05:05:33.000Z",
               "releaseDate": "2024-03-29",
               "trackId": "2UDARQiksl207HcSduDpov"
@@ -1345,7 +1388,7 @@
             {
               "name": "Wadibusa (feat. Royal MusiQ, OHP Sage, & Pcee)",
               "artists": "Uncle Waffles, Royal MusiQ, OHP Sage, Pcee",
-              "popularity": 48,
+              "popularity": 39,
               "addedAt": "2024-04-18T15:43:52.000Z",
               "releaseDate": "2024-04-17",
               "trackId": "5DqA8IUhk1DQSGmf6XOVrI"
@@ -1353,7 +1396,7 @@
             {
               "name": "Here With Me",
               "artists": "Karun, Higo",
-              "popularity": 36,
+              "popularity": 34,
               "addedAt": "2024-04-26T09:24:31.000Z",
               "releaseDate": "2021-03-26",
               "trackId": "3zTObKcN6vfo9teWsKCU34"
@@ -1361,7 +1404,7 @@
             {
               "name": "Digane",
               "artists": "Bob Sinclar, Sofiya Nzau",
-              "popularity": 47,
+              "popularity": 45,
               "addedAt": "2024-06-16T07:38:32.000Z",
               "releaseDate": "2024-05-10",
               "trackId": "2jRH7jNpx7kqTHLyay4Fhe"
@@ -1369,7 +1412,7 @@
             {
               "name": "Bandana",
               "artists": "Fireboy DML, Asake",
-              "popularity": 72,
+              "popularity": 71,
               "addedAt": "2024-07-23T08:49:04.000Z",
               "releaseDate": "2022-08-04",
               "trackId": "2qWwuCVeMjF9mUT0S5Iqvl"
@@ -1377,7 +1420,7 @@
             {
               "name": "CHANGES",
               "artists": "Savara",
-              "popularity": 41,
+              "popularity": 40,
               "addedAt": "2024-07-23T08:49:25.000Z",
               "releaseDate": "2022-02-25",
               "trackId": "7zbnpZxFc5xlqHvDr7bZE0"
@@ -1385,7 +1428,7 @@
             {
               "name": "Unwritten",
               "artists": "Natasha Bedingfield",
-              "popularity": 90,
+              "popularity": 89,
               "addedAt": "2024-07-23T08:50:00.000Z",
               "releaseDate": "2004-08-30",
               "trackId": "3U5JVgI2x4rDyHGObzJfNf"
@@ -1393,7 +1436,7 @@
             {
               "name": "Wahala",
               "artists": "Bien, Adekunle Gold, Shine TTW",
-              "popularity": 45,
+              "popularity": 44,
               "addedAt": "2024-07-23T14:11:16.000Z",
               "releaseDate": "2024-07-19",
               "trackId": "0V4ie5PXFiWXEd2XldImGr"
@@ -1401,7 +1444,7 @@
             {
               "name": "NO CONSEQUENCES",
               "artists": "TheOnlyRosa",
-              "popularity": 25,
+              "popularity": 24,
               "addedAt": "2024-09-02T10:55:18.000Z",
               "releaseDate": "2020-08-31",
               "trackId": "71As1EopfjCu1vjFsx03mn"
@@ -1409,7 +1452,7 @@
             {
               "name": "SUNSHINE",
               "artists": "TheOnlyRosa",
-              "popularity": 6,
+              "popularity": 5,
               "addedAt": "2024-09-04T11:36:45.000Z",
               "releaseDate": "2020-08-31",
               "trackId": "5gsCW6eqQIW2qlSGa1A1Qs"
@@ -1417,7 +1460,7 @@
             {
               "name": "The Spins",
               "artists": "Mac Miller, Empire Of The Sun",
-              "popularity": 87,
+              "popularity": 85,
               "addedAt": "2025-04-14T11:50:13.000Z",
               "releaseDate": "2010-08-13",
               "trackId": "7FAFkQQZFeNwOFzTrSDFIh"
@@ -1425,7 +1468,7 @@
             {
               "name": "Ngiyesaba",
               "artists": "Simmy",
-              "popularity": 50,
+              "popularity": 48,
               "addedAt": "2025-04-27T07:14:09.000Z",
               "releaseDate": "2018-11-16",
               "trackId": "1D14RwB016FytyVqhAyh7v"
@@ -1433,7 +1476,7 @@
             {
               "name": "Don't Stop The Music",
               "artists": "Rihanna",
-              "popularity": 86,
+              "popularity": 85,
               "addedAt": "2025-06-09T04:50:12.000Z",
               "releaseDate": "2008-06-02",
               "trackId": "0ByMNEPAPpOR5H69DVrTNy"
@@ -1441,7 +1484,7 @@
             {
               "name": "MY ROSE",
               "artists": "Beyoncé",
-              "popularity": 66,
+              "popularity": 63,
               "addedAt": "2025-06-11T10:42:13.000Z",
               "releaseDate": "2024-03-29",
               "trackId": "486YUqcmF9IWPkreU0THcQ"
@@ -1449,7 +1492,7 @@
             {
               "name": "Blame It on the Boogie",
               "artists": "The Jacksons",
-              "popularity": 76,
+              "popularity": 74,
               "addedAt": "2025-06-12T12:18:37.000Z",
               "releaseDate": "1978-12-17",
               "trackId": "3qI94hINNNeb4S7xQi18lS"
@@ -1457,7 +1500,7 @@
             {
               "name": "Bamboleo",
               "artists": "Gipsy Kings",
-              "popularity": 52,
+              "popularity": 51,
               "addedAt": "2025-06-12T12:20:19.000Z",
               "releaseDate": "2000-09-05",
               "trackId": "4EveU9Zb50mjgi5avDNqlK"
@@ -1465,7 +1508,7 @@
             {
               "name": "Weka Weka",
               "artists": "P-Unit",
-              "popularity": 16,
+              "popularity": 15,
               "addedAt": "2025-06-23T14:03:41.000Z",
               "releaseDate": "2010",
               "trackId": "1AIJri1LwDMMXQwUalumWr"
@@ -1481,7 +1524,7 @@
             {
               "name": "Dundaing",
               "artists": "King Kaka, Kristoff",
-              "popularity": 29,
+              "popularity": 28,
               "addedAt": "2025-06-23T14:08:47.000Z",
               "releaseDate": "2018-11-30",
               "trackId": "6mcmKco5obfTkhNsCghgeq"
@@ -1559,7 +1602,7 @@
             2018,
             2018
           ],
-          "avgPopularity": 56.7,
+          "avgPopularity": 55.1,
           "genreDiversity": 30,
           "artistDiversity": 37,
           "avgAudioFeatures": {
@@ -1583,7 +1626,7 @@
           "id": "31t76imks5ojgagmhuclld6bvbuq",
           "name": "0xFidel",
           "tracksAdded": 21,
-          "totalPopularity": 1017,
+          "totalPopularity": 968,
           "genres": [
             "kompa",
             "afrobeats",
@@ -1657,7 +1700,7 @@
             {
               "name": "Leave a Light On",
               "artists": "Tom Walker",
-              "popularity": 71,
+              "popularity": 69,
               "addedAt": "2024-04-07T17:35:30.000Z",
               "releaseDate": "2017-10-13",
               "trackId": "6lOWoTqVnAWXchddtTH31W"
@@ -1665,7 +1708,7 @@
             {
               "name": "Escape",
               "artists": "ManitoNation, Radyo",
-              "popularity": 17,
+              "popularity": 15,
               "addedAt": "2024-04-07T17:38:55.000Z",
               "releaseDate": "2018-12-16",
               "trackId": "0iSLPHJlSlAfQYmP5Ollaw"
@@ -1673,7 +1716,7 @@
             {
               "name": "Runaway (U & I)",
               "artists": "Galantis",
-              "popularity": 82,
+              "popularity": 80,
               "addedAt": "2024-04-07T17:39:30.000Z",
               "releaseDate": "2015-06-05",
               "trackId": "46lFttIf5hnUZMGvjK0Wxo"
@@ -1681,7 +1724,7 @@
             {
               "name": "I Gotta Feeling",
               "artists": "Black Eyed Peas",
-              "popularity": 87,
+              "popularity": 85,
               "addedAt": "2024-04-07T17:40:37.000Z",
               "releaseDate": "2009-01-01",
               "trackId": "4kLLWz7srcuLKA7Et40PQR"
@@ -1689,7 +1732,7 @@
             {
               "name": "One Call Away",
               "artists": "Legendury Beatz, Maleek Berry",
-              "popularity": 29,
+              "popularity": 27,
               "addedAt": "2024-04-07T17:43:32.000Z",
               "releaseDate": "2017-02-17",
               "trackId": "6iAqo6JTBkZBt8mrJPJyrT"
@@ -1697,7 +1740,7 @@
             {
               "name": "Comet 2",
               "artists": "Omid Shabani",
-              "popularity": 36,
+              "popularity": 34,
               "addedAt": "2024-04-07T17:47:33.000Z",
               "releaseDate": "2019-08-05",
               "trackId": "17Z3QuL3LPxUrMzsvzzKvF"
@@ -1713,7 +1756,7 @@
             {
               "name": "1-800-273-8255",
               "artists": "Logic, Alessia Cara, Khalid",
-              "popularity": 79,
+              "popularity": 77,
               "addedAt": "2024-04-07T17:55:18.000Z",
               "releaseDate": "2017-05-05",
               "trackId": "5tz69p7tJuGPeMGwNTxYuV"
@@ -1721,7 +1764,7 @@
             {
               "name": "Catch & Release - Deepend Remix",
               "artists": "Matt Simons, Deepend",
-              "popularity": 76,
+              "popularity": 75,
               "addedAt": "2024-04-07T18:07:35.000Z",
               "releaseDate": "2015-09-30",
               "trackId": "11BAVEGi1ivJ6JWLqKUNrZ"
@@ -1729,7 +1772,7 @@
             {
               "name": "Hamba Juba",
               "artists": "Lady Amar, JL SA, Cici, Murumba Pitch",
-              "popularity": 56,
+              "popularity": 54,
               "addedAt": "2024-04-11T07:00:56.000Z",
               "releaseDate": "2023-02-17",
               "trackId": "4k5FlWz3dfhyQzmRpVPZsW"
@@ -1737,7 +1780,7 @@
             {
               "name": "SETE (feat. Young Stunna & Blxckie)",
               "artists": "K.O, Young Stunna, Blxckie",
-              "popularity": 51,
+              "popularity": 49,
               "addedAt": "2024-04-11T07:08:43.000Z",
               "releaseDate": "2022-09-16",
               "trackId": "65NAMIdsZkxYIM5ui8SJSw"
@@ -1745,7 +1788,7 @@
             {
               "name": "Hello Summer",
               "artists": "KayGee DaKing, Bizizi, DJ Taptobetsa, Mphow69",
-              "popularity": 35,
+              "popularity": 26,
               "addedAt": "2024-04-11T08:06:40.000Z",
               "releaseDate": "2020-08-07",
               "trackId": "1HpCIrGu9YUmNzVaGqumJ0"
@@ -1753,7 +1796,7 @@
             {
               "name": "Umshayeli",
               "artists": "KayGee DaKing, Bizizi, DJ Taptobetsa",
-              "popularity": 10,
+              "popularity": 4,
               "addedAt": "2024-04-11T08:39:07.000Z",
               "releaseDate": "2020-08-07",
               "trackId": "2CG8Ts5QYoGeAwg9k7tvKN"
@@ -1769,7 +1812,7 @@
             {
               "name": "yey",
               "artists": "uLazi, Infinity MusiQ",
-              "popularity": 54,
+              "popularity": 52,
               "addedAt": "2024-04-11T09:09:01.000Z",
               "releaseDate": "2023-01-27",
               "trackId": "37ISMEYWqhRHcPEitHn8Er"
@@ -1777,7 +1820,7 @@
             {
               "name": "Egwu",
               "artists": "Chike, Mohbad",
-              "popularity": 60,
+              "popularity": 58,
               "addedAt": "2024-06-23T15:59:54.000Z",
               "releaseDate": "2023-12-15",
               "trackId": "1IMRi5UVOV77PsAgdWDvzh"
@@ -1785,7 +1828,7 @@
             {
               "name": "Sgudi Snyc",
               "artists": "De Mthuda, Da Muziqal Chef, Eemoh",
-              "popularity": 55,
+              "popularity": 53,
               "addedAt": "2024-06-24T09:59:31.000Z",
               "releaseDate": "2023-05-19",
               "trackId": "0XSYoJ0MJpMB2tddyRcBEC"
@@ -1793,7 +1836,7 @@
             {
               "name": "Lento",
               "artists": "Professor, Speedy",
-              "popularity": 51,
+              "popularity": 48,
               "addedAt": "2024-06-24T11:05:33.000Z",
               "releaseDate": "2010-10-08",
               "trackId": "1uFl6vjBgEuSUlT00uHdJ8"
@@ -1801,7 +1844,7 @@
             {
               "name": "Maphupho",
               "artists": "Zandimaz, Zee Nxumalo",
-              "popularity": 4,
+              "popularity": 1,
               "addedAt": "2024-06-24T11:19:27.000Z",
               "releaseDate": "2022-04-29",
               "trackId": "1Ep2a5ZVISWO5OnXD5JrXo"
@@ -1809,7 +1852,7 @@
             {
               "name": "iMpumelelo",
               "artists": "Sam Deep, Eemoh, Da Muziqal Chef",
-              "popularity": 49,
+              "popularity": 48,
               "addedAt": "2024-06-25T08:11:41.000Z",
               "releaseDate": "2023-10-13",
               "trackId": "1djewwWkOaJGFtPaQc2MU6"
@@ -1817,7 +1860,7 @@
             {
               "name": "Under Control (feat. Hurts)",
               "artists": "Calvin Harris, Alesso, Hurts",
-              "popularity": 78,
+              "popularity": 76,
               "addedAt": "2024-06-26T18:15:56.000Z",
               "releaseDate": "2014-10-31",
               "trackId": "4J7CKHCF3mdL4diUsmW8lq"
@@ -1877,7 +1920,7 @@
             2023,
             2014
           ],
-          "avgPopularity": 48.4,
+          "avgPopularity": 46.1,
           "genreDiversity": 23,
           "artistDiversity": 42,
           "avgAudioFeatures": {
@@ -1901,7 +1944,7 @@
           "id": "31h7e6lwcumgv67635rand65lj6e",
           "name": "Ryan",
           "tracksAdded": 13,
-          "totalPopularity": 964,
+          "totalPopularity": 941,
           "genres": [
             "rap",
             "hip hop",
@@ -1926,7 +1969,7 @@
             {
               "name": "Crooked Smile (feat. TLC)",
               "artists": "J. Cole, TLC",
-              "popularity": 70,
+              "popularity": 69,
               "addedAt": "2024-03-16T17:37:38.000Z",
               "releaseDate": "2013-06-18",
               "trackId": "5gFoAVTN9YlM9uJCrFZtgl"
@@ -1934,7 +1977,7 @@
             {
               "name": "The Art of Peer Pressure",
               "artists": "Kendrick Lamar",
-              "popularity": 58,
+              "popularity": 56,
               "addedAt": "2024-03-16T17:37:55.000Z",
               "releaseDate": "2012-10-22",
               "trackId": "4F8rYEoiBjPaRgQXLVtN5a"
@@ -1942,7 +1985,7 @@
             {
               "name": "PRIDE.",
               "artists": "Kendrick Lamar",
-              "popularity": 86,
+              "popularity": 84,
               "addedAt": "2024-03-16T17:38:09.000Z",
               "releaseDate": "2017-04-14",
               "trackId": "6IZvVAP7VPPnsGX6bvgkqg"
@@ -1950,7 +1993,7 @@
             {
               "name": "4 Your Eyez Only",
               "artists": "J. Cole",
-              "popularity": 68,
+              "popularity": 66,
               "addedAt": "2024-03-16T17:38:37.000Z",
               "releaseDate": "2016-12-09",
               "trackId": "1vvnYpYEMVB4aq9I6tHIEB"
@@ -1958,7 +2001,7 @@
             {
               "name": "Stan",
               "artists": "Eminem, Dido",
-              "popularity": 83,
+              "popularity": 82,
               "addedAt": "2024-03-16T17:39:10.000Z",
               "releaseDate": "2000-05-23",
               "trackId": "3UmaczJpikHgJFyBTAJVoz"
@@ -1966,7 +2009,7 @@
             {
               "name": "Hailie's Song",
               "artists": "Eminem",
-              "popularity": 67,
+              "popularity": 65,
               "addedAt": "2024-03-16T17:39:20.000Z",
               "releaseDate": "2002-05-26",
               "trackId": "6Db8IlZ7YY1pfIjJllejyH"
@@ -1974,7 +2017,7 @@
             {
               "name": "Not Like Us",
               "artists": "Kendrick Lamar",
-              "popularity": 93,
+              "popularity": 90,
               "addedAt": "2024-05-10T19:29:07.000Z",
               "releaseDate": "2024-05-04",
               "trackId": "6AI3ezQ4o3HUoP6Dhudph3"
@@ -1982,7 +2025,7 @@
             {
               "name": "Renaissance",
               "artists": "Eminem",
-              "popularity": 64,
+              "popularity": 62,
               "addedAt": "2024-07-18T16:09:17.000Z",
               "releaseDate": "2024-07-12",
               "trackId": "55u5QIlEuzCipJBtZPdJio"
@@ -1990,7 +2033,7 @@
             {
               "name": "Guilty Conscience 2",
               "artists": "Eminem",
-              "popularity": 61,
+              "popularity": 60,
               "addedAt": "2024-07-18T16:09:27.000Z",
               "releaseDate": "2024-07-12",
               "trackId": "3LkXOTWDwskwciQoARFDzu"
@@ -1998,7 +2041,7 @@
             {
               "name": "Temporary",
               "artists": "Eminem, Skylar Grey",
-              "popularity": 65,
+              "popularity": 63,
               "addedAt": "2024-07-18T16:09:28.000Z",
               "releaseDate": "2024-07-12",
               "trackId": "6uMGHQvhZq8YyT4kdnG1L3"
@@ -2006,7 +2049,7 @@
             {
               "name": "Somebody Save Me",
               "artists": "Eminem, Jelly Roll",
-              "popularity": 75,
+              "popularity": 73,
               "addedAt": "2024-07-18T16:09:41.000Z",
               "releaseDate": "2024-07-12",
               "trackId": "4HMUrFl8y6rQCzEbaGEkcj"
@@ -2014,7 +2057,7 @@
             {
               "name": "I'm Still Standing",
               "artists": "Elton John",
-              "popularity": 86,
+              "popularity": 84,
               "addedAt": "2025-06-10T00:05:08.000Z",
               "releaseDate": "1983-05-30",
               "trackId": "1jDJFeK9x3OZboIAHsY9k2"
@@ -2022,7 +2065,7 @@
             {
               "name": "How You Remind Me",
               "artists": "Nickelback",
-              "popularity": 88,
+              "popularity": 87,
               "addedAt": "2025-06-13T13:49:02.000Z",
               "releaseDate": "2001-09-11",
               "trackId": "0gmbgwZ8iqyMPmXefof8Yf"
@@ -2066,7 +2109,7 @@
             1983,
             2001
           ],
-          "avgPopularity": 74.2,
+          "avgPopularity": 72.4,
           "genreDiversity": 7,
           "artistDiversity": 9,
           "avgAudioFeatures": {
@@ -2090,7 +2133,7 @@
           "id": "a3a3hg4jr1ezhnww7u2pck6vi",
           "name": "tanuiii",
           "tracksAdded": 12,
-          "totalPopularity": 648,
+          "totalPopularity": 629,
           "genres": [
             "afrobeat",
             "gengetone",
@@ -2131,7 +2174,7 @@
             {
               "name": "Radio Up",
               "artists": "Paper Planes",
-              "popularity": 52,
+              "popularity": 49,
               "addedAt": "2024-03-13T10:29:03.000Z",
               "releaseDate": "2022-05-20",
               "trackId": "5HXLLBAf7cwiN6ycus4Azo"
@@ -2139,7 +2182,7 @@
             {
               "name": "Rush",
               "artists": "Brendan Ross",
-              "popularity": 36,
+              "popularity": 35,
               "addedAt": "2024-03-13T10:30:34.000Z",
               "releaseDate": "2023-01-18",
               "trackId": "5GofX5zXqntM8tuJuowXas"
@@ -2147,7 +2190,7 @@
             {
               "name": "Cover Me In Sunshine",
               "artists": "P!nk, Willow Sage Hart",
-              "popularity": 74,
+              "popularity": 72,
               "addedAt": "2024-03-14T08:14:39.000Z",
               "releaseDate": "2021-02-12",
               "trackId": "6Tio0ZoDeSQnI7EBAqWer2"
@@ -2155,7 +2198,7 @@
             {
               "name": "Maybe Man",
               "artists": "AJR",
-              "popularity": 61,
+              "popularity": 60,
               "addedAt": "2024-03-14T13:49:41.000Z",
               "releaseDate": "2023-11-10",
               "trackId": "7fhiGdj0nn0ZCmIAocG8G0"
@@ -2163,7 +2206,7 @@
             {
               "name": "Eat Your Young",
               "artists": "Hozier",
-              "popularity": 57,
+              "popularity": 55,
               "addedAt": "2024-03-14T13:56:09.000Z",
               "releaseDate": "2023-03-17",
               "trackId": "6PkxSIt2TYLMFa8ybyngVP"
@@ -2179,7 +2222,7 @@
             {
               "name": "Stick Season",
               "artists": "Noah Kahan",
-              "popularity": 88,
+              "popularity": 86,
               "addedAt": "2024-03-16T01:25:00.000Z",
               "releaseDate": "2022-10-14",
               "trackId": "0mflMxspEfB0VbI1kyLiAv"
@@ -2187,7 +2230,7 @@
             {
               "name": "Good Morning",
               "artists": "Kanye West",
-              "popularity": 75,
+              "popularity": 74,
               "addedAt": "2024-03-23T05:44:10.000Z",
               "releaseDate": "2007-09-11",
               "trackId": "6MXXY2eiWkpDCezVCc0cMH"
@@ -2195,7 +2238,7 @@
             {
               "name": "Soh-Soh",
               "artists": "Odeal",
-              "popularity": 5,
+              "popularity": 2,
               "addedAt": "2024-07-26T08:15:21.000Z",
               "releaseDate": "2024-07-05",
               "trackId": "1I08zQMc1sHy2xwd8itedV"
@@ -2203,7 +2246,7 @@
             {
               "name": "Ngozi",
               "artists": "Crayon, Ayra Starr",
-              "popularity": 68,
+              "popularity": 67,
               "addedAt": "2024-07-26T11:54:46.000Z",
               "releaseDate": "2023-07-21",
               "trackId": "5mhM7bfzv52bzfCzlq8vH1"
@@ -2211,7 +2254,7 @@
             {
               "name": "Sofa Silahlane (feat. Nkosazana Daughter)",
               "artists": "Wanitwa Mos, Master KG, Lowsheen, Nkosazana Daughter",
-              "popularity": 52,
+              "popularity": 51,
               "addedAt": "2024-08-02T06:22:26.000Z",
               "releaseDate": "2022-05-13",
               "trackId": "5L3FrGYyZA1DXbAJmFFZwv"
@@ -2219,7 +2262,7 @@
             {
               "name": "Too Sweet",
               "artists": "Hozier",
-              "popularity": 80,
+              "popularity": 78,
               "addedAt": "2025-06-08T15:38:45.000Z",
               "releaseDate": "2024-03-22",
               "trackId": "3HMY0r2BAdpasXMY8rseR0"
@@ -2261,7 +2304,7 @@
             2022,
             2024
           ],
-          "avgPopularity": 54,
+          "avgPopularity": 52.4,
           "genreDiversity": 16,
           "artistDiversity": 16,
           "avgAudioFeatures": {
@@ -2285,7 +2328,7 @@
           "id": "cl4u400dvbwcmn6vkind9twor",
           "name": "Kush",
           "tracksAdded": 10,
-          "totalPopularity": 417,
+          "totalPopularity": 402,
           "genres": [
             "indie folk",
             "rumba congolaise",
@@ -2320,7 +2363,7 @@
             {
               "name": "Green Green Grass",
               "artists": "George Ezra",
-              "popularity": 75,
+              "popularity": 73,
               "addedAt": "2024-06-07T13:59:12.000Z",
               "releaseDate": "2022-06-10",
               "trackId": "4N5s8lPTsjI9EGP7K4SXzB"
@@ -2328,7 +2371,7 @@
             {
               "name": "Neng makassi",
               "artists": "Sam Fan Thomas",
-              "popularity": 22,
+              "popularity": 21,
               "addedAt": "2024-06-07T17:44:04.000Z",
               "releaseDate": "1984-01-01",
               "trackId": "6vOLoRQpL5weEq8AmOgvcA"
@@ -2336,7 +2379,7 @@
             {
               "name": "Fati Mata",
               "artists": "Sam Mangwana",
-              "popularity": 40,
+              "popularity": 39,
               "addedAt": "2024-06-07T19:13:53.000Z",
               "releaseDate": "1994",
               "trackId": "2FC0FejM3C0vYNPb1B36ku"
@@ -2344,7 +2387,7 @@
             {
               "name": "What Other People Say",
               "artists": "Sam Fischer, Demi Lovato",
-              "popularity": 62,
+              "popularity": 60,
               "addedAt": "2024-06-07T19:20:34.000Z",
               "releaseDate": "2021-02-04",
               "trackId": "2h9TDNEXRhcDIV3fsoEVq9"
@@ -2352,7 +2395,7 @@
             {
               "name": "anew",
               "artists": "Amistat",
-              "popularity": 50,
+              "popularity": 49,
               "addedAt": "2024-06-07T19:37:08.000Z",
               "releaseDate": "2022-07-22",
               "trackId": "2E17445RgPqXOH7Jfn0Hhf"
@@ -2360,7 +2403,7 @@
             {
               "name": "SNAP",
               "artists": "Rosa Linn",
-              "popularity": 18,
+              "popularity": 16,
               "addedAt": "2024-07-03T19:48:30.000Z",
               "releaseDate": "2022-03-19",
               "trackId": "76OGwb5RA9h4FxQPT33ekc"
@@ -2368,7 +2411,7 @@
             {
               "name": "Nevermind",
               "artists": "Dennis Lloyd",
-              "popularity": 51,
+              "popularity": 49,
               "addedAt": "2024-07-08T14:30:45.000Z",
               "releaseDate": "2017-06-30",
               "trackId": "0d68assXQWEH9jtNrgpfRA"
@@ -2376,7 +2419,7 @@
             {
               "name": "Give A Little Kindness",
               "artists": "Lloyiso",
-              "popularity": 44,
+              "popularity": 42,
               "addedAt": "2024-07-16T05:21:40.000Z",
               "releaseDate": "2023-03-31",
               "trackId": "7JrYr89YEIGwWqiEFUlSvj"
@@ -2384,7 +2427,7 @@
             {
               "name": "Monaco",
               "artists": "Jude York",
-              "popularity": 55,
+              "popularity": 53,
               "addedAt": "2024-09-13T03:16:53.000Z",
               "releaseDate": "2024-07-12",
               "trackId": "0ieUviafigTnoovXhb8jyd"
@@ -2422,7 +2465,7 @@
             2023,
             2024
           ],
-          "avgPopularity": 41.7,
+          "avgPopularity": 40.2,
           "genreDiversity": 7,
           "artistDiversity": 11,
           "avgAudioFeatures": {
@@ -2448,10 +2491,149 @@
           ]
         },
         {
+          "id": "31edzcgyjv6zpuahz5uxo2t53kda",
+          "name": "Kiundi",
+          "tracksAdded": 8,
+          "totalPopularity": 468,
+          "genres": [
+            "rumba congolaise",
+            "afro soul",
+            "gengetone",
+            "bongo flava",
+            "afropop",
+            "afrobeats",
+            "afrobeat",
+            "kizomba",
+            "afro r&b"
+          ],
+          "artists": [
+            "Hornsphere",
+            "Mutoriah",
+            "Aliye",
+            "Noi",
+            "Dominic Fike",
+            "Sauti Sol",
+            "Frank Ocean"
+          ],
+          "tracks": [
+            {
+              "name": "For Lovers",
+              "artists": "Hornsphere, Mutoriah, Aliye, Noi",
+              "popularity": 45,
+              "addedAt": "2025-04-18T02:32:09.000Z",
+              "releaseDate": "2023-08-18",
+              "trackId": "7yKzWjujvc2MnBhRyURV9p"
+            },
+            {
+              "name": "4x4",
+              "artists": "Dominic Fike",
+              "popularity": 52,
+              "addedAt": "2025-04-18T02:33:27.000Z",
+              "releaseDate": "2023-07-07",
+              "trackId": "3frC55hy41BhQK65FiJK7q"
+            },
+            {
+              "name": "Coming home",
+              "artists": "Sauti Sol",
+              "popularity": 38,
+              "addedAt": "2025-04-18T02:33:43.000Z",
+              "releaseDate": "2011-02-25",
+              "trackId": "5O6zHaw3kIPPDfw6FFYfvh"
+            },
+            {
+              "name": "Lost",
+              "artists": "Frank Ocean",
+              "popularity": 85,
+              "addedAt": "2025-07-23T10:03:52.000Z",
+              "releaseDate": "2012-07-10",
+              "trackId": "3GZD6HmiNUhxXYf8Gch723"
+            },
+            {
+              "name": "Dancing In The Courthouse",
+              "artists": "Dominic Fike",
+              "popularity": 56,
+              "addedAt": "2025-07-23T10:04:16.000Z",
+              "releaseDate": "2023-07-07",
+              "trackId": "5fX8WljoAFrmFrFqahjz4Y"
+            },
+            {
+              "name": "How Much Is Weed?",
+              "artists": "Dominic Fike",
+              "popularity": 68,
+              "addedAt": "2025-07-23T10:04:41.000Z",
+              "releaseDate": "2023-07-07",
+              "trackId": "44KWbTVZev3SWdv1t5UoYE"
+            },
+            {
+              "name": "Frisky",
+              "artists": "Dominic Fike",
+              "popularity": 66,
+              "addedAt": "2025-07-23T10:04:45.000Z",
+              "releaseDate": "2023-07-07",
+              "trackId": "3my33XXLpYUzVEeLOyftV2"
+            },
+            {
+              "name": "Ant Pile",
+              "artists": "Dominic Fike",
+              "popularity": 58,
+              "addedAt": "2025-07-23T10:05:00.000Z",
+              "releaseDate": "2023-07-07",
+              "trackId": "6OrCWnvAja4n5IYdzchJlH"
+            }
+          ],
+          "audioFeatures": {
+            "energy": [],
+            "danceability": [],
+            "valence": [],
+            "acousticness": [],
+            "speechiness": [],
+            "tempo": []
+          },
+          "addedDates": [
+            "2025-04-18T02:32:09.000Z",
+            "2025-04-18T02:33:27.000Z",
+            "2025-04-18T02:33:43.000Z",
+            "2025-07-23T10:03:52.000Z",
+            "2025-07-23T10:04:16.000Z",
+            "2025-07-23T10:04:41.000Z",
+            "2025-07-23T10:04:45.000Z",
+            "2025-07-23T10:05:00.000Z"
+          ],
+          "releaseYears": [
+            2023,
+            2023,
+            2011,
+            2012,
+            2023,
+            2023,
+            2023,
+            2023
+          ],
+          "avgPopularity": 58.5,
+          "genreDiversity": 9,
+          "artistDiversity": 7,
+          "avgAudioFeatures": {
+            "energy": 0,
+            "danceability": 0,
+            "valence": 0,
+            "acousticness": 0,
+            "speechiness": 0,
+            "tempo": 0
+          },
+          "avgReleaseYear": 2020,
+          "badges": [
+            {
+              "id": "genre_guru",
+              "name": "🎖️ Genre Guru",
+              "description": "Master of rumba congolaise with 8 tracks"
+            }
+          ]
+        },
+        {
           "id": "xpe4w9i4tfeufakd7jfu1js6n",
           "name": "Sidoniasimanto",
           "tracksAdded": 7,
-          "totalPopularity": 396,
+          "totalPopularity": 385,
           "genres": [
             "gqom",
             "afro house",
@@ -2486,7 +2668,7 @@
             {
               "name": "Fetch Your Life",
               "artists": "Prince Kaybee, Msaki",
-              "popularity": 51,
+              "popularity": 50,
               "addedAt": "2024-04-05T10:03:08.000Z",
               "releaseDate": "2019-03-08",
               "trackId": "1CuLDXJZw8JuP6wCJw90Ko"
@@ -2494,7 +2676,7 @@
             {
               "name": "Summer YoMuthi",
               "artists": "Blaq Diamond",
-              "popularity": 54,
+              "popularity": 52,
               "addedAt": "2024-04-05T10:04:13.000Z",
               "releaseDate": "2020-11-20",
               "trackId": "6TRuE2tsRuY3rDc7ZGlRwp"
@@ -2502,7 +2684,7 @@
             {
               "name": "Work Song",
               "artists": "Hozier",
-              "popularity": 77,
+              "popularity": 76,
               "addedAt": "2024-04-05T10:04:19.000Z",
               "releaseDate": "2014-09-19",
               "trackId": "35PKfoynRpVFoAUE3D5Kc6"
@@ -2510,7 +2692,7 @@
             {
               "name": "Bad Dancer",
               "artists": "Johnny Drille",
-              "popularity": 41,
+              "popularity": 40,
               "addedAt": "2024-04-05T10:04:24.000Z",
               "releaseDate": "2021-02-19",
               "trackId": "1q8qhM7BNKNL9vUK2T3YOW"
@@ -2518,7 +2700,7 @@
             {
               "name": "Lifestyle",
               "artists": "Bien, Scar Mkadinali",
-              "popularity": 52,
+              "popularity": 50,
               "addedAt": "2024-04-05T10:06:18.000Z",
               "releaseDate": "2023-11-17",
               "trackId": "6PwjKdyaavh0KaOsU6KKYJ"
@@ -2526,7 +2708,7 @@
             {
               "name": "Tosheka",
               "artists": "Mutoriah, Bensoul",
-              "popularity": 42,
+              "popularity": 40,
               "addedAt": "2024-04-05T20:15:14.000Z",
               "releaseDate": "2019-06-22",
               "trackId": "5g1YeZeEGyPOMwnz0TpGeO"
@@ -2534,7 +2716,7 @@
             {
               "name": "Wide Awake",
               "artists": "Katy Perry",
-              "popularity": 79,
+              "popularity": 77,
               "addedAt": "2024-05-05T07:38:25.000Z",
               "releaseDate": "2012-03-12",
               "trackId": "5JLv62qFIS1DR3zGEcApRt"
@@ -2566,7 +2748,7 @@
             2019,
             2012
           ],
-          "avgPopularity": 56.6,
+          "avgPopularity": 55,
           "genreDiversity": 16,
           "artistDiversity": 10,
           "avgAudioFeatures": {
@@ -2587,10 +2769,10 @@
           ]
         },
         {
-          "id": "312r66ff2zkgga3jxwcf7oeofbaq",
-          "name": "Maddy",
+          "id": "unknown",
+          "name": "Unknown User",
           "tracksAdded": 6,
-          "totalPopularity": 483,
+          "totalPopularity": 475,
           "genres": [
             "french house",
             "electronic",
@@ -2616,7 +2798,7 @@
             {
               "name": "Another Love",
               "artists": "Tom Odell",
-              "popularity": 90,
+              "popularity": 89,
               "addedAt": "2024-03-14T08:54:28.000Z",
               "releaseDate": "2013-06-24",
               "trackId": "3JvKfv6T31zO0ini8iNItO"
@@ -2624,7 +2806,7 @@
             {
               "name": "Starboy",
               "artists": "The Weeknd, Daft Punk",
-              "popularity": 92,
+              "popularity": 91,
               "addedAt": "2024-03-14T08:55:57.000Z",
               "releaseDate": "2016-11-25",
               "trackId": "7MXVkk9YMctZqd1Srtv4MB"
@@ -2632,7 +2814,7 @@
             {
               "name": "Love Lies",
               "artists": "Khalid, Normani",
-              "popularity": 75,
+              "popularity": 74,
               "addedAt": "2024-03-14T09:05:27.000Z",
               "releaseDate": "2018-02-14",
               "trackId": "45Egmo7icyopuzJN0oMEdk"
@@ -2640,7 +2822,7 @@
             {
               "name": "Hymn for the Weekend",
               "artists": "Coldplay",
-              "popularity": 87,
+              "popularity": 86,
               "addedAt": "2024-03-14T10:45:18.000Z",
               "releaseDate": "2015-12-04",
               "trackId": "3RiPr603aXAoi4GHyXx0uy"
@@ -2648,7 +2830,7 @@
             {
               "name": "Happier",
               "artists": "Marshmello, Bastille",
-              "popularity": 86,
+              "popularity": 84,
               "addedAt": "2024-03-14T10:46:34.000Z",
               "releaseDate": "2018-08-17",
               "trackId": "7BqHUALzNBTanL6OvsqmC1"
@@ -2656,7 +2838,7 @@
             {
               "name": "Cham Thum (Atoti)",
               "artists": "Watendawili",
-              "popularity": 53,
+              "popularity": 51,
               "addedAt": "2024-03-14T10:56:28.000Z",
               "releaseDate": "2023-10-20",
               "trackId": "1BmwbhNlcgVsv8eSp4E0sJ"
@@ -2686,7 +2868,7 @@
             2018,
             2023
           ],
-          "avgPopularity": 80.5,
+          "avgPopularity": 79.2,
           "genreDiversity": 8,
           "artistDiversity": 9,
           "avgAudioFeatures": {
@@ -2710,7 +2892,7 @@
           "id": "nj6cjteprs0j0xs81x9ac7zek",
           "name": "Peterwambua",
           "tracksAdded": 6,
-          "totalPopularity": 479,
+          "totalPopularity": 469,
           "genres": [
             "rap",
             "hip hop",
@@ -2731,7 +2913,7 @@
             {
               "name": "Mirror",
               "artists": "Lil Wayne, Bruno Mars",
-              "popularity": 79,
+              "popularity": 77,
               "addedAt": "2024-03-15T15:18:22.000Z",
               "releaseDate": "2011-08-29",
               "trackId": "5hUYsaOyMY32yjRXeuQwGj"
@@ -2739,7 +2921,7 @@
             {
               "name": "Right My Wrongs",
               "artists": "Bryson Tiller",
-              "popularity": 83,
+              "popularity": 82,
               "addedAt": "2024-03-15T15:19:30.000Z",
               "releaseDate": "2015-10-02",
               "trackId": "5rgrBsAFYMun6yhtnLKRPz"
@@ -2747,7 +2929,7 @@
             {
               "name": "Pretty Little Fears (feat. J. Cole)",
               "artists": "6LACK, J. Cole",
-              "popularity": 73,
+              "popularity": 71,
               "addedAt": "2024-03-15T15:20:09.000Z",
               "releaseDate": "2018-09-14",
               "trackId": "4at3d5QWnlibMVN75ECDrp"
@@ -2755,7 +2937,7 @@
             {
               "name": "To Summer, From Cole - Audio Hug",
               "artists": "Summer Walker, J. Cole",
-              "popularity": 70,
+              "popularity": 68,
               "addedAt": "2024-03-15T15:20:56.000Z",
               "releaseDate": "2023-05-19",
               "trackId": "2f86Ae3R4OKAu1lEIqouih"
@@ -2763,7 +2945,7 @@
             {
               "name": "Mockingbird",
               "artists": "Eminem",
-              "popularity": 88,
+              "popularity": 87,
               "addedAt": "2024-04-04T09:43:01.000Z",
               "releaseDate": "2004-11-12",
               "trackId": "561jH07mF1jHuk7KlaeF0s"
@@ -2771,7 +2953,7 @@
             {
               "name": "Heartless",
               "artists": "Kanye West",
-              "popularity": 86,
+              "popularity": 84,
               "addedAt": "2024-04-04T15:40:59.000Z",
               "releaseDate": "2008-11-24",
               "trackId": "4EWCNWgDS8707fNSZ1oaA5"
@@ -2801,7 +2983,7 @@
             2004,
             2008
           ],
-          "avgPopularity": 79.8,
+          "avgPopularity": 78.2,
           "genreDiversity": 4,
           "artistDiversity": 8,
           "avgAudioFeatures": {
@@ -2820,133 +3002,13 @@
               "description": "Master of rap with 6 tracks"
             }
           ]
-        },
-        {
-          "id": "31lshdib3ipz2tbwbloklk5j4pn4",
-          "name": "Kristian",
-          "tracksAdded": 6,
-          "totalPopularity": 292,
-          "genres": [
-            "afrobeats",
-            "afropop",
-            "afrobeat",
-            "azonto",
-            "afro r&b",
-            "afro soul",
-            "alté",
-            "gengetone",
-            "bongo flava",
-            "nz reggae",
-            "rumba congolaise"
-          ],
-          "artists": [
-            "Seyi Shay",
-            "Johnny Drille",
-            "Nyashinski",
-            "Ra Costelloe",
-            "Gracie Abrams",
-            "Hornsphere"
-          ],
-          "tracks": [
-            {
-              "name": "Right Now",
-              "artists": "Seyi Shay",
-              "popularity": 47,
-              "addedAt": "2024-10-23T19:01:12.000Z",
-              "releaseDate": "2015-11-16",
-              "trackId": "0ECWWg1Wm139QY9Q2fFm52"
-            },
-            {
-              "name": "Wait for Me",
-              "artists": "Johnny Drille",
-              "popularity": 48,
-              "addedAt": "2024-10-23T19:01:28.000Z",
-              "releaseDate": "2015-08-20",
-              "trackId": "2Qs1xkhg3QyeGyh6UwcycC"
-            },
-            {
-              "name": "Busy",
-              "artists": "Nyashinski",
-              "popularity": 39,
-              "addedAt": "2024-11-10T13:40:37.000Z",
-              "releaseDate": "2024-09-13",
-              "trackId": "7BvvfrZXLCoXlx1w1kCQUX"
-            },
-            {
-              "name": "Open Road",
-              "artists": "Ra Costelloe",
-              "popularity": 55,
-              "addedAt": "2024-12-08T20:55:16.000Z",
-              "releaseDate": "2018",
-              "trackId": "3ahbc291oEDkpcwTN2j4AU"
-            },
-            {
-              "name": "That’s So True",
-              "artists": "Gracie Abrams",
-              "popularity": 96,
-              "addedAt": "2024-12-20T12:43:02.000Z",
-              "releaseDate": "2024-10-18",
-              "trackId": "7ne4VBA60CxGM75vw0EYad"
-            },
-            {
-              "name": "Champions",
-              "artists": "Hornsphere",
-              "popularity": 7,
-              "addedAt": "2025-05-07T17:54:45.000Z",
-              "releaseDate": "2023-08-18",
-              "trackId": "0FM3IChRPIqj389NLXBI7e"
-            }
-          ],
-          "audioFeatures": {
-            "energy": [],
-            "danceability": [],
-            "valence": [],
-            "acousticness": [],
-            "speechiness": [],
-            "tempo": []
-          },
-          "addedDates": [
-            "2024-10-23T19:01:12.000Z",
-            "2024-10-23T19:01:28.000Z",
-            "2024-11-10T13:40:37.000Z",
-            "2024-12-08T20:55:16.000Z",
-            "2024-12-20T12:43:02.000Z",
-            "2025-05-07T17:54:45.000Z"
-          ],
-          "releaseYears": [
-            2015,
-            2015,
-            2024,
-            2018,
-            2024,
-            2023
-          ],
-          "avgPopularity": 48.7,
-          "genreDiversity": 11,
-          "artistDiversity": 6,
-          "avgAudioFeatures": {
-            "energy": 0,
-            "danceability": 0,
-            "valence": 0,
-            "acousticness": 0,
-            "speechiness": 0,
-            "tempo": 0
-          },
-          "avgReleaseYear": 2020,
-          "badges": [
-            {
-              "id": "genre_guru",
-              "name": "🎖️ Genre Guru",
-              "description": "Master of afrobeats with 6 tracks"
-            }
-          ]
         }
       ],
       "summary": {
         "mostActive": "Dr. C",
-        "avgContribution": 8,
+        "avgContribution": 9,
         "totalGenres": 95,
-        "totalArtists": 291
+        "totalArtists": 296
       }
     },
     "genreMaestros": [
@@ -2954,27 +3016,27 @@
         "genre": "afro soul",
         "contributorId": "xua99owgtnso375kz2zz41rtf",
         "contributorName": "Dr. C",
-        "songCount": 19,
-        "totalGenreTracks": 57,
-        "percentage": 33,
+        "songCount": 22,
+        "totalGenreTracks": 60,
+        "percentage": 37,
         "title": "🌟 Afro Soul Sovereign",
         "tracks": [
           {
             "name": "Peru",
             "artists": "Fireboy DML, Ed Sheeran",
-            "popularity": 65,
+            "popularity": 63,
             "trackId": "3s1KwrLP0NlFWiWbjz6bfQ"
           },
           {
             "name": "Asibe Happy",
             "artists": "Kabza De Small, DJ Maphorisa, Ami Faku",
-            "popularity": 60,
+            "popularity": 58,
             "trackId": "6F70m9aMK4PSJKBfp1H8DZ"
           },
           {
             "name": "Beta",
             "artists": "Mutoriah",
-            "popularity": 57,
+            "popularity": 55,
             "trackId": "7xO9Xzb6UqP2bFmCUYTAI2"
           }
         ],
@@ -2984,28 +3046,28 @@
         "genre": "gengetone",
         "contributorId": "xua99owgtnso375kz2zz41rtf",
         "contributorName": "Dr. C",
-        "songCount": 17,
-        "totalGenreTracks": 39,
-        "percentage": 44,
+        "songCount": 19,
+        "totalGenreTracks": 41,
+        "percentage": 46,
         "title": "🎤 Gengetone Guru",
         "tracks": [
           {
             "name": "Beta",
             "artists": "Mutoriah",
-            "popularity": 57,
+            "popularity": 55,
             "trackId": "7xO9Xzb6UqP2bFmCUYTAI2"
+          },
+          {
+            "name": "All My Enemies Are Suffering",
+            "artists": "Bien",
+            "popularity": 53,
+            "trackId": "2KtuNqz9wE23Uy0VVS8izJ"
           },
           {
             "name": "ANGUKA NAYO",
             "artists": "From The Hood Music, Wadaglizke",
-            "popularity": 49,
+            "popularity": 47,
             "trackId": "4WuxxGa7qAMBpNFFyHsLlE"
-          },
-          {
-            "name": "ManyoPesa",
-            "artists": "Coster Ojwang, Watendawili",
-            "popularity": 45,
-            "trackId": "0CE53lBoWtLoHkn5v0hSTK"
           }
         ],
         "avatar": null
@@ -3014,28 +3076,28 @@
         "genre": "rumba congolaise",
         "contributorId": "xua99owgtnso375kz2zz41rtf",
         "contributorName": "Dr. C",
-        "songCount": 14,
-        "totalGenreTracks": 33,
-        "percentage": 42,
+        "songCount": 16,
+        "totalGenreTracks": 35,
+        "percentage": 46,
         "title": "🎵 Rumba Congolaise Master",
         "tracks": [
           {
             "name": "Beta",
             "artists": "Mutoriah",
-            "popularity": 57,
+            "popularity": 55,
             "trackId": "7xO9Xzb6UqP2bFmCUYTAI2"
+          },
+          {
+            "name": "All My Enemies Are Suffering",
+            "artists": "Bien",
+            "popularity": 53,
+            "trackId": "2KtuNqz9wE23Uy0VVS8izJ"
           },
           {
             "name": "Okaman",
             "artists": "Monique Séka",
-            "popularity": 47,
+            "popularity": 46,
             "trackId": "0EiFKLfPN0XfZ9izkvYAJh"
-          },
-          {
-            "name": "ManyoPesa",
-            "artists": "Coster Ojwang, Watendawili",
-            "popularity": 45,
-            "trackId": "0CE53lBoWtLoHkn5v0hSTK"
           }
         ],
         "avatar": null
@@ -3044,28 +3106,28 @@
         "genre": "bongo flava",
         "contributorId": "xua99owgtnso375kz2zz41rtf",
         "contributorName": "Dr. C",
-        "songCount": 12,
-        "totalGenreTracks": 29,
-        "percentage": 41,
+        "songCount": 15,
+        "totalGenreTracks": 32,
+        "percentage": 47,
         "title": "🔥 Bongo Flava Boss",
         "tracks": [
           {
+            "name": "All My Enemies Are Suffering",
+            "artists": "Bien",
+            "popularity": 53,
+            "trackId": "2KtuNqz9wE23Uy0VVS8izJ"
+          },
+          {
             "name": "ANGUKA NAYO",
             "artists": "From The Hood Music, Wadaglizke",
-            "popularity": 49,
+            "popularity": 47,
             "trackId": "4WuxxGa7qAMBpNFFyHsLlE"
           },
           {
             "name": "ManyoPesa",
             "artists": "Coster Ojwang, Watendawili",
-            "popularity": 45,
+            "popularity": 43,
             "trackId": "0CE53lBoWtLoHkn5v0hSTK"
-          },
-          {
-            "name": "Good Vibes & Inshallah",
-            "artists": "Iyanii, Bien",
-            "popularity": 44,
-            "trackId": "0WPvYW8CwXnrPi0mpn7uDs"
           }
         ],
         "avatar": null
@@ -3074,28 +3136,28 @@
         "genre": "afrobeat",
         "contributorId": "xua99owgtnso375kz2zz41rtf",
         "contributorName": "Dr. C",
-        "songCount": 11,
-        "totalGenreTracks": 33,
-        "percentage": 33,
+        "songCount": 12,
+        "totalGenreTracks": 35,
+        "percentage": 34,
         "title": "🪘 Afrobeat Authority",
         "tracks": [
           {
             "name": "THIS YEAR (Blessings)",
             "artists": "Victor Thompson, Ehis 'D' Greatest",
-            "popularity": 67,
+            "popularity": 65,
             "trackId": "2VGGQdroduj4dIMGPsBzDG"
           },
           {
             "name": "Peru",
             "artists": "Fireboy DML, Ed Sheeran",
-            "popularity": 65,
+            "popularity": 63,
             "trackId": "3s1KwrLP0NlFWiWbjz6bfQ"
           },
           {
-            "name": "MAD",
-            "artists": "Sarz, WurlD",
-            "popularity": 47,
-            "trackId": "6mGUY6CaFbnK9a6YxV5lpJ"
+            "name": "All My Enemies Are Suffering",
+            "artists": "Bien",
+            "popularity": 53,
+            "trackId": "2KtuNqz9wE23Uy0VVS8izJ"
           }
         ],
         "avatar": null
@@ -3104,28 +3166,28 @@
         "genre": "afro r&b",
         "contributorId": "xua99owgtnso375kz2zz41rtf",
         "contributorName": "Dr. C",
-        "songCount": 11,
-        "totalGenreTracks": 45,
-        "percentage": 24,
+        "songCount": 12,
+        "totalGenreTracks": 46,
+        "percentage": 26,
         "title": "💫 Afro R&B Royalty",
         "tracks": [
           {
             "name": "Peru",
             "artists": "Fireboy DML, Ed Sheeran",
-            "popularity": 65,
+            "popularity": 63,
             "trackId": "3s1KwrLP0NlFWiWbjz6bfQ"
+          },
+          {
+            "name": "All My Enemies Are Suffering",
+            "artists": "Bien",
+            "popularity": 53,
+            "trackId": "2KtuNqz9wE23Uy0VVS8izJ"
           },
           {
             "name": "MAD",
             "artists": "Sarz, WurlD",
-            "popularity": 47,
+            "popularity": 46,
             "trackId": "6mGUY6CaFbnK9a6YxV5lpJ"
-          },
-          {
-            "name": "Good Vibes & Inshallah",
-            "artists": "Iyanii, Bien",
-            "popularity": 44,
-            "trackId": "0WPvYW8CwXnrPi0mpn7uDs"
           }
         ],
         "avatar": null
@@ -3142,19 +3204,19 @@
           {
             "name": "Egwu",
             "artists": "Chike, Mohbad",
-            "popularity": 60,
+            "popularity": 58,
             "trackId": "1IMRi5UVOV77PsAgdWDvzh"
           },
           {
             "name": "Hamba Juba",
             "artists": "Lady Amar, JL SA, Cici, Murumba Pitch",
-            "popularity": 56,
+            "popularity": 54,
             "trackId": "4k5FlWz3dfhyQzmRpVPZsW"
           },
           {
             "name": "Sgudi Snyc",
             "artists": "De Mthuda, Da Muziqal Chef, Eemoh",
-            "popularity": 55,
+            "popularity": 53,
             "trackId": "0XSYoJ0MJpMB2tddyRcBEC"
           }
         ],
@@ -3172,19 +3234,19 @@
           {
             "name": "Hamba Juba",
             "artists": "Lady Amar, JL SA, Cici, Murumba Pitch",
-            "popularity": 56,
+            "popularity": 54,
             "trackId": "4k5FlWz3dfhyQzmRpVPZsW"
           },
           {
             "name": "Sgudi Snyc",
             "artists": "De Mthuda, Da Muziqal Chef, Eemoh",
-            "popularity": 55,
+            "popularity": 53,
             "trackId": "0XSYoJ0MJpMB2tddyRcBEC"
           },
           {
             "name": "yey",
             "artists": "uLazi, Infinity MusiQ",
-            "popularity": 54,
+            "popularity": 52,
             "trackId": "37ISMEYWqhRHcPEitHn8Er"
           }
         ],
@@ -3202,20 +3264,80 @@
           {
             "name": "Egwu",
             "artists": "Chike, Mohbad",
-            "popularity": 60,
+            "popularity": 58,
             "trackId": "1IMRi5UVOV77PsAgdWDvzh"
           },
           {
             "name": "Hamba Juba",
             "artists": "Lady Amar, JL SA, Cici, Murumba Pitch",
-            "popularity": 56,
+            "popularity": 54,
             "trackId": "4k5FlWz3dfhyQzmRpVPZsW"
           },
           {
             "name": "Sgudi Snyc",
             "artists": "De Mthuda, Da Muziqal Chef, Eemoh",
-            "popularity": 55,
+            "popularity": 53,
             "trackId": "0XSYoJ0MJpMB2tddyRcBEC"
+          }
+        ],
+        "avatar": null
+      },
+      {
+        "genre": "afropop",
+        "contributorId": "xua99owgtnso375kz2zz41rtf",
+        "contributorName": "Dr. C",
+        "songCount": 9,
+        "totalGenreTracks": 41,
+        "percentage": 22,
+        "title": "🌍 Afropop Authority",
+        "tracks": [
+          {
+            "name": "Ngishutheni",
+            "artists": "Goon Flavour, Master KG, Eemoh",
+            "popularity": 71,
+            "trackId": "3JW9hNUjUN51X9jZyn2HVV"
+          },
+          {
+            "name": "Peru",
+            "artists": "Fireboy DML, Ed Sheeran",
+            "popularity": 63,
+            "trackId": "3s1KwrLP0NlFWiWbjz6bfQ"
+          },
+          {
+            "name": "Asibe Happy",
+            "artists": "Kabza De Small, DJ Maphorisa, Ami Faku",
+            "popularity": 58,
+            "trackId": "6F70m9aMK4PSJKBfp1H8DZ"
+          }
+        ],
+        "avatar": null
+      },
+      {
+        "genre": "afrobeats",
+        "contributorId": "xua99owgtnso375kz2zz41rtf",
+        "contributorName": "Dr. C",
+        "songCount": 9,
+        "totalGenreTracks": 35,
+        "percentage": 26,
+        "title": "🥁 Afrobeats Baron",
+        "tracks": [
+          {
+            "name": "Ngishutheni",
+            "artists": "Goon Flavour, Master KG, Eemoh",
+            "popularity": 71,
+            "trackId": "3JW9hNUjUN51X9jZyn2HVV"
+          },
+          {
+            "name": "THIS YEAR (Blessings)",
+            "artists": "Victor Thompson, Ehis 'D' Greatest",
+            "popularity": 65,
+            "trackId": "2VGGQdroduj4dIMGPsBzDG"
+          },
+          {
+            "name": "Peru",
+            "artists": "Fireboy DML, Ed Sheeran",
+            "popularity": 63,
+            "trackId": "3s1KwrLP0NlFWiWbjz6bfQ"
           }
         ],
         "avatar": null
@@ -3232,97 +3354,37 @@
           {
             "name": "Not Like Us",
             "artists": "Kendrick Lamar",
-            "popularity": 93,
+            "popularity": 90,
             "trackId": "6AI3ezQ4o3HUoP6Dhudph3"
           },
           {
             "name": "PRIDE.",
             "artists": "Kendrick Lamar",
-            "popularity": 86,
+            "popularity": 84,
             "trackId": "6IZvVAP7VPPnsGX6bvgkqg"
           },
           {
             "name": "Stan",
             "artists": "Eminem, Dido",
-            "popularity": 83,
+            "popularity": 82,
             "trackId": "3UmaczJpikHgJFyBTAJVoz"
-          }
-        ],
-        "avatar": null
-      },
-      {
-        "genre": "afropop",
-        "contributorId": "31gqlwjf2ejtzfcv7yhjgpebhuxa",
-        "contributorName": "Pepp🍂",
-        "songCount": 8,
-        "totalGenreTracks": 39,
-        "percentage": 21,
-        "title": "🌍 Afropop Authority",
-        "tracks": [
-          {
-            "name": "Bandana",
-            "artists": "Fireboy DML, Asake",
-            "popularity": 72,
-            "trackId": "2qWwuCVeMjF9mUT0S5Iqvl"
-          },
-          {
-            "name": "Lost & Found",
-            "artists": "Bien",
-            "popularity": 52,
-            "trackId": "3wYgpYQX97F8p5XP4Yz2XJ"
-          },
-          {
-            "name": "Suzanna",
-            "artists": "Sauti Sol",
-            "popularity": 51,
-            "trackId": "4CpkKi23V5U6fd419XNQnG"
-          }
-        ],
-        "avatar": null
-      },
-      {
-        "genre": "afrobeats",
-        "contributorId": "xua99owgtnso375kz2zz41rtf",
-        "contributorName": "Dr. C",
-        "songCount": 8,
-        "totalGenreTracks": 33,
-        "percentage": 24,
-        "title": "🥁 Afrobeats Baron",
-        "tracks": [
-          {
-            "name": "Ngishutheni",
-            "artists": "Goon Flavour, Master KG, Eemoh",
-            "popularity": 73,
-            "trackId": "3JW9hNUjUN51X9jZyn2HVV"
-          },
-          {
-            "name": "THIS YEAR (Blessings)",
-            "artists": "Victor Thompson, Ehis 'D' Greatest",
-            "popularity": 67,
-            "trackId": "2VGGQdroduj4dIMGPsBzDG"
-          },
-          {
-            "name": "Peru",
-            "artists": "Fireboy DML, Ed Sheeran",
-            "popularity": 65,
-            "trackId": "3s1KwrLP0NlFWiWbjz6bfQ"
           }
         ],
         "avatar": null
       }
     ],
     "playlistMembers": {
-      "totalMembers": 29,
+      "totalMembers": 28,
       "totalFollowers": 48,
       "contributors": [
         {
           "id": "xua99owgtnso375kz2zz41rtf",
-          "tracksAdded": 78,
+          "tracksAdded": 82,
           "role": "🎶 Contributor",
           "isContributor": true,
           "name": "Dr. C",
           "icon": "🎶",
-          "description": "Added 78 tracks"
+          "description": "Added 82 tracks"
         },
         {
           "id": "31gqlwjf2ejtzfcv7yhjgpebhuxa",
@@ -3370,6 +3432,15 @@
           "description": "Added 10 tracks"
         },
         {
+          "id": "31edzcgyjv6zpuahz5uxo2t53kda",
+          "tracksAdded": 8,
+          "role": "🎶 Contributor",
+          "isContributor": true,
+          "name": "Kiundi",
+          "icon": "🎶",
+          "description": "Added 8 tracks"
+        },
+        {
           "id": "xpe4w9i4tfeufakd7jfu1js6n",
           "tracksAdded": 7,
           "role": "🎶 Contributor",
@@ -3377,15 +3448,6 @@
           "name": "Sidoniasimanto",
           "icon": "🎶",
           "description": "Added 7 tracks"
-        },
-        {
-          "id": "312r66ff2zkgga3jxwcf7oeofbaq",
-          "tracksAdded": 6,
-          "role": "🎶 Contributor",
-          "isContributor": true,
-          "name": "Maddy",
-          "icon": "🎶",
-          "description": "Added 6 tracks"
         },
         {
           "id": "nj6cjteprs0j0xs81x9ac7zek",
@@ -3478,20 +3540,20 @@
           "description": "Added 3 tracks"
         },
         {
-          "id": "31edzcgyjv6zpuahz5uxo2t53kda",
-          "tracksAdded": 3,
-          "role": "🎶 Contributor",
-          "isContributor": true,
-          "name": "Kiundi",
-          "icon": "🎶",
-          "description": "Added 3 tracks"
-        },
-        {
           "id": "31xdm3fjchczrh54lnksmpwokgii",
           "tracksAdded": 3,
           "role": "🎶 Contributor",
           "isContributor": true,
           "name": "Tifa🫧",
+          "icon": "🎶",
+          "description": "Added 3 tracks"
+        },
+        {
+          "id": "31lfa5lg2224jr7wrcvc3wy2k3xe",
+          "tracksAdded": 3,
+          "role": "🎶 Contributor",
+          "isContributor": true,
+          "name": "Nguthis",
           "icon": "🎶",
           "description": "Added 3 tracks"
         },
@@ -3566,21 +3628,12 @@
           "name": "bubba",
           "icon": "🎶",
           "description": "Added 1 track"
-        },
-        {
-          "id": "31lfa5lg2224jr7wrcvc3wy2k3xe",
-          "tracksAdded": 1,
-          "role": "🎶 Contributor",
-          "isContributor": true,
-          "name": "Nguthis",
-          "icon": "🎶",
-          "description": "Added 1 track"
         }
       ],
       "listeners": [],
       "summary": {
-        "contributorCount": 29,
-        "listenerCount": 19,
+        "contributorCount": 28,
+        "listenerCount": 20,
         "totalMembers": 48
       }
     }
