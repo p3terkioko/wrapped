@@ -12,18 +12,17 @@ const playlistRoutes = require('../backend/routes/playlist');
 
 const app = express();
 
-// Cache file paths - multiple locations for redundancy
-const RUNTIME_CACHE = '/tmp/playlist-data.json';
+// Cache file paths - prioritize api cache for Vercel
 const API_CACHE = path.join(__dirname, 'cache', 'playlist-data.json');
+const RUNTIME_CACHE = '/tmp/playlist-data.json';
 const BACKEND_CACHE = path.join(__dirname, '..', 'backend', 'cache', 'playlist-data.json');
 
-// Ensure all cache directories exist
-[RUNTIME_CACHE, API_CACHE, BACKEND_CACHE].forEach(cacheFile => {
-    const cacheDir = path.dirname(cacheFile);
-    if (!fs.existsSync(cacheDir)) {
-        fs.mkdirSync(cacheDir, { recursive: true });
-    }
-});
+// Ensure cache directory exists
+const cacheDir = path.dirname(API_CACHE);
+if (!fs.existsSync(cacheDir)) {
+    fs.mkdirSync(cacheDir, { recursive: true });
+    console.log('Created cache directory:', cacheDir);
+}
 
 // Admin password
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin123';
@@ -31,30 +30,30 @@ const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin123';
 // Utility functions for cache
 function readCache() {
     try {
-        // Try runtime cache first (fastest)
-        if (fs.existsSync(RUNTIME_CACHE)) {
-            const data = fs.readFileSync(RUNTIME_CACHE, 'utf8');
-            console.log('Using runtime cache data');
-            return JSON.parse(data);
-        }
-        
-        // Try backend cache next
-        if (fs.existsSync(BACKEND_CACHE)) {
-            const data = fs.readFileSync(BACKEND_CACHE, 'utf8');
-            console.log('Using backend cache data');
-            return JSON.parse(data);
-        }
-        
-        // Fallback to api cache
+        // Try api cache first (most persistent in Vercel)
         if (fs.existsSync(API_CACHE)) {
             const data = fs.readFileSync(API_CACHE, 'utf8');
-            console.log('Using api cache data');
+            console.log('✅ Using api cache data from:', API_CACHE);
+            return JSON.parse(data);
+        }
+        
+        // Try runtime cache next
+        if (fs.existsSync(RUNTIME_CACHE)) {
+            const data = fs.readFileSync(RUNTIME_CACHE, 'utf8');
+            console.log('✅ Using runtime cache data from:', RUNTIME_CACHE);
+            return JSON.parse(data);
+        }
+        
+        // Try backend cache as fallback
+        if (fs.existsSync(BACKEND_CACHE)) {
+            const data = fs.readFileSync(BACKEND_CACHE, 'utf8');
+            console.log('✅ Using backend cache data from:', BACKEND_CACHE);
             return JSON.parse(data);
         }
     } catch (error) {
-        console.error('Error reading cache:', error);
+        console.error('❌ Error reading cache:', error);
     }
-    console.log('No cache data found');
+    console.log('❌ No cache data found in any location');
     return { data: null, lastUpdated: null };
 }
 
@@ -65,28 +64,44 @@ function writeCache(data) {
             lastUpdated: new Date().toISOString()
         };
         
-        // Write to all cache locations for redundancy
-        const locations = [
-            { path: RUNTIME_CACHE, name: 'runtime' },
-            { path: API_CACHE, name: 'api' },
-            { path: BACKEND_CACHE, name: 'backend' }
-        ];
+        const cacheString = JSON.stringify(cacheData, null, 2);
         
-        let successCount = 0;
-        locations.forEach(location => {
-            try {
-                fs.writeFileSync(location.path, JSON.stringify(cacheData, null, 2));
-                console.log(`✅ Cache written to ${location.name}: ${location.path}`);
-                successCount++;
-            } catch (error) {
-                console.error(`❌ Failed to write cache to ${location.name}:`, error.message);
+        // Primary: Write to api cache (most persistent)
+        try {
+            fs.writeFileSync(API_CACHE, cacheString);
+            console.log(`✅ Primary cache written to: ${API_CACHE}`);
+        } catch (error) {
+            console.error(`❌ Failed to write primary cache:`, error);
+        }
+        
+        // Secondary: Write to runtime cache for this session
+        try {
+            const runtimeDir = path.dirname(RUNTIME_CACHE);
+            if (!fs.existsSync(runtimeDir)) {
+                fs.mkdirSync(runtimeDir, { recursive: true });
             }
-        });
+            fs.writeFileSync(RUNTIME_CACHE, cacheString);
+            console.log(`✅ Runtime cache written to: ${RUNTIME_CACHE}`);
+        } catch (error) {
+            console.error(`❌ Failed to write runtime cache:`, error);
+        }
         
-        console.log(`Cache update complete: ${successCount}/${locations.length} locations updated`);
+        // Tertiary: Try backend cache if possible
+        try {
+            const backendDir = path.dirname(BACKEND_CACHE);
+            if (!fs.existsSync(backendDir)) {
+                fs.mkdirSync(backendDir, { recursive: true });
+            }
+            fs.writeFileSync(BACKEND_CACHE, cacheString);
+            console.log(`✅ Backend cache written to: ${BACKEND_CACHE}`);
+        } catch (error) {
+            console.error(`❌ Failed to write backend cache:`, error);
+        }
+        
+        console.log(`📝 Cache update completed at: ${cacheData.lastUpdated}`);
         
     } catch (error) {
-        console.error('Error writing cache:', error);
+        console.error('❌ Error writing cache:', error);
     }
 }
 
@@ -144,15 +159,46 @@ app.get('/api/public/status', (req, res) => {
 app.get('/api/admin/status', (req, res) => {
     const cache = readCache();
     
+    // Check all cache locations for debugging
+    const cacheLocations = [
+        { name: 'API Cache', path: API_CACHE, exists: fs.existsSync(API_CACHE) },
+        { name: 'Runtime Cache', path: RUNTIME_CACHE, exists: fs.existsSync(RUNTIME_CACHE) },
+        { name: 'Backend Cache', path: BACKEND_CACHE, exists: fs.existsSync(BACKEND_CACHE) }
+    ];
+    
     res.json({
         hasData: !!cache.data,
         lastUpdated: cache.lastUpdated,
         tracksCount: cache.data?.playlist?.totalTracks || 0,
         environment: process.env.NODE_ENV || 'production',
+        cacheLocations: cacheLocations,
         scheduler: {
             isRunning: false, // Vercel doesn't support persistent scheduling
             nextUpdate: '9 AM EAT daily (manual trigger required on Vercel)'
         }
+    });
+});
+
+// Cache verification endpoint for debugging
+app.get('/api/admin/cache-debug', (req, res) => {
+    const cacheLocations = [
+        { name: 'API Cache', path: API_CACHE, exists: fs.existsSync(API_CACHE) },
+        { name: 'Runtime Cache', path: RUNTIME_CACHE, exists: fs.existsSync(RUNTIME_CACHE) },
+        { name: 'Backend Cache', path: BACKEND_CACHE, exists: fs.existsSync(BACKEND_CACHE) }
+    ];
+    
+    const cacheData = readCache();
+    
+    res.json({
+        timestamp: new Date().toISOString(),
+        cacheLocations: cacheLocations,
+        hasData: !!cacheData.data,
+        lastUpdated: cacheData.lastUpdated,
+        dataPreview: cacheData.data ? {
+            playlistName: cacheData.data.playlist?.name,
+            trackCount: cacheData.data.playlist?.totalTracks,
+            hasContributors: !!cacheData.data.topContributors
+        } : null
     });
 });
 
