@@ -46,6 +46,29 @@ class SpotifyAPI {
     }
   }
 
+  // Refresh access token using refresh token
+  async refreshAccessToken(refreshToken) {
+    try {
+      const response = await axios.post(this.authURL, 
+        new URLSearchParams({
+          grant_type: 'refresh_token',
+          refresh_token: refreshToken,
+        }),
+        {
+          headers: {
+            'Authorization': `Basic ${Buffer.from(`${this.clientId}:${this.clientSecret}`).toString('base64')}`,
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        }
+      );
+      
+      return response.data;
+    } catch (error) {
+      console.error('Error refreshing access token:', error.response?.data || error.message);
+      throw error;
+    }
+  }
+
   // Get playlist details
   async getPlaylist(playlistId, accessToken) {
     try {

@@ -145,8 +145,15 @@
                 </div>
                 <button id="refresh-btn" class="admin-btn" disabled>
                     <i class="fas fa-sync"></i>
-                    Fetch Data
+                    Fetch Data (Legacy)
                 </button>
+                <button id="trigger-update-btn" class="admin-btn" style="background: #10b981;">
+                    <i class="fas fa-bolt"></i>
+                    Trigger Auto Update
+                </button>
+                <p style="font-size: 0.9rem; color: var(--text-secondary); margin-top: 8px;">
+                    <strong>Auto Update:</strong> Uses stored refresh token, no manual auth needed
+                </p>
             </div>
         </div>
         
@@ -229,6 +236,18 @@
                         <div class="status-value">${data.lastUpdated ? new Date(data.lastUpdated).toLocaleDateString() : 'Never'}</div>
                         <div class="status-label">Last Updated</div>
                     </div>
+                    <div class="status-item">
+                        <div class="status-value">${data.environment || 'unknown'}</div>
+                        <div class="status-label">Environment</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-value">${data.scheduler?.isRunning ? '🔄' : '⏰'}</div>
+                        <div class="status-label">Scheduler Status</div>
+                    </div>
+                    <div class="status-item">
+                        <div class="status-value">9 AM EAT</div>
+                        <div class="status-label">Auto Update</div>
+                    </div>
                 `;
                 
                 addLog(`Status loaded: ${data.hasData ? 'Data available' : 'No data'}`);
@@ -236,7 +255,43 @@
                 addLog(`Error loading status: ${error.message}`);
             }
         }
-          document.getElementById('refresh-btn').addEventListener('click', async () => {
+          document.getElementById('trigger-update-btn').addEventListener('click', async () => {
+            const btn = document.getElementById('trigger-update-btn');
+            
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Triggering Update...';
+            addLog('🔄 Triggering automated update with refresh token...');
+            
+            try {
+                const response = await fetch('/api/admin/trigger-update', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        password: 'admin123'
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (response.ok && result.success) {
+                    addLog(`✅ Auto-update successful: ${result.message}`);
+                    addLog(`📊 Processed ${result.tracksCount} tracks`);
+                    loadStatus(); // Refresh status
+                    addLog('🎉 Data updated using refresh token!');
+                } else {
+                    addLog(`❌ Auto-update failed: ${result.message || result.error}`);
+                }
+            } catch (error) {
+                addLog(`❌ Network error: ${error.message}`);
+            }
+            
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-bolt"></i> Trigger Auto Update';
+        });
+        
+        document.getElementById('refresh-btn').addEventListener('click', async () => {
             const btn = document.getElementById('refresh-btn');
             
             // Get access token from cookies

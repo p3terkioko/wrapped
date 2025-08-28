@@ -5,11 +5,21 @@ const cookieParser = require('cookie-parser');
 const path = require('path');
 const fs = require('fs');
 const SpotifyAPI = require('./utils/spotify');
+const PlaylistScheduler = require('./utils/scheduler');
 const playlistRoutes = require('./routes/playlist');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const spotify = new SpotifyAPI();
+const scheduler = new PlaylistScheduler();
+
+// Start the scheduler for automated updates
+if (process.env.NODE_ENV === 'production' || process.env.ENABLE_SCHEDULER === 'true') {
+  scheduler.start();
+  console.log('📅 Automated playlist updates enabled');
+} else {
+  console.log('📅 Automated updates disabled (development mode)');
+}
 
 // Cache file paths - both backend and api directories
 const BACKEND_CACHE_FILE = path.join(__dirname, 'cache', 'playlist-data.json');
@@ -113,6 +123,17 @@ app.get('/api/public/data', (req, res) => {
             error: 'No data available. Admin needs to fetch data first.'
         });
     }
+});
+
+// Public route to get just the last updated info
+app.get('/api/public/status', (req, res) => {
+    const cache = readCache();
+    res.json({
+        hasData: !!cache.data,
+        lastUpdated: cache.lastUpdated,
+        tracksCount: cache.data?.playlist?.totalTracks || 0,
+        playlistName: cache.data?.playlist?.name || null
+    });
 });
 
 // Admin routes
@@ -279,11 +300,43 @@ app.post('/api/admin/refresh', async (req, res) => {
 
 app.get('/api/admin/status', (req, res) => {
     const cache = readCache();
+    const schedulerStatus = scheduler.getStatus();
+    
     res.json({
         hasData: !!cache.data,
         lastUpdated: cache.lastUpdated,
-        tracksCount: cache.data?.playlist?.totalTracks || 0
+        tracksCount: cache.data?.playlist?.totalTracks || 0,
+        scheduler: schedulerStatus,
+        environment: process.env.NODE_ENV || 'development'
     });
+});
+
+// Manual trigger for admin
+app.post('/api/admin/trigger-update', async (req, res) => {
+    const { password } = req.body;
+    
+    if (password !== ADMIN_PASSWORD) {
+        return res.status(401).json({ error: 'Invalid admin password' });
+    }
+    
+    try {
+        console.log('🔄 Admin triggered manual update...');
+        const result = await scheduler.triggerUpdate();
+        
+        res.json({
+            success: result.success,
+            message: result.message,
+            lastUpdated: result.lastUpdated,
+            tracksCount: result.tracksCount || 0
+        });
+    } catch (error) {
+        console.error('❌ Admin trigger failed:', error);
+        res.status(500).json({ 
+            success: false, 
+            error: 'Failed to trigger update',
+            message: error.message 
+        });
+    }
 });
 
 // Auth routes
@@ -309,6 +362,11 @@ app.get('/auth/callback', async (req, res) => {
 
   try {
     const tokenData = await spotify.getAccessToken(code);
+    
+    // Log the tokens for debugging
+    console.log('🎯 ACCESS TOKEN:', tokenData.access_token);
+    console.log('🔄 REFRESH TOKEN:', tokenData.refresh_token);
+    console.log('⏰ EXPIRES IN:', tokenData.expires_in, 'seconds');
     
     // Store token in cookie (in production, use secure httpOnly cookies)
     res.cookie('spotify_access_token', tokenData.access_token, {

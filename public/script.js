@@ -26,6 +26,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Try to load cached data first
     loadCachedData();
+    
+    // Load last updated info
+    loadLastUpdatedInfo();
 });
 
 // Check authentication status (now simplified)
@@ -1918,6 +1921,56 @@ async function loadCachedData() {
         console.error('Error loading cached data:', error);
         currentData = null;
         showLandingPage();
+    }
+}
+
+// Load and display last updated information
+async function loadLastUpdatedInfo() {
+    try {
+        const response = await fetch('/api/public/status');
+        
+        if (response.ok) {
+            const result = await response.json();
+            const lastUpdatedElement = document.getElementById('last-updated-info');
+            
+            if (lastUpdatedElement && result.lastUpdated) {
+                const lastUpdated = new Date(result.lastUpdated);
+                
+                // Format date and time for East Africa Time
+                const options = {
+                    timeZone: 'Africa/Nairobi',
+                    year: 'numeric',
+                    month: 'short',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    hour12: true
+                };
+                
+                const formattedDateTime = lastUpdated.toLocaleString('en-US', options);
+                
+                lastUpdatedElement.innerHTML = `
+                    <i class="fas fa-clock"></i>
+                    <span>Last updated: ${formattedDateTime} EAT</span>
+                `;
+            } else if (lastUpdatedElement) {
+                lastUpdatedElement.innerHTML = `
+                    <i class="fas fa-clock"></i>
+                    <span>Last updated: Never</span>
+                `;
+            }
+        } else {
+            console.log('Could not fetch last updated info');
+        }
+    } catch (error) {
+        console.error('Error fetching last updated info:', error);
+        const lastUpdatedElement = document.getElementById('last-updated-info');
+        if (lastUpdatedElement) {
+            lastUpdatedElement.innerHTML = `
+                <i class="fas fa-clock"></i>
+                <span>Update status unavailable</span>
+            `;
+        }
     }
 }
 
