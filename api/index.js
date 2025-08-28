@@ -103,9 +103,14 @@ app.use(express.static(path.join(__dirname, '../public')));
 
 // Public data endpoint
 app.get('/api/public/data', (req, res) => {
-    console.log('Public data endpoint called');
+    console.log('📊 Public data endpoint called');
     const cache = readCache();
-    console.log('Cache read result:', { hasData: !!cache.data, lastUpdated: cache.lastUpdated });
+    console.log('📊 Cache read result:', { 
+        hasData: !!cache.data, 
+        lastUpdated: cache.lastUpdated,
+        dataKeys: cache.data ? Object.keys(cache.data) : [],
+        playlistName: cache.data?.playlist?.name || 'No playlist found'
+    });
     
     if (cache.data) {
         res.json({
@@ -207,6 +212,89 @@ app.post('/api/admin/trigger-update', async (req, res) => {
         // Generate insights using the playlist route functions
         const { generateInsights } = require('../backend/routes/playlist');
         const insights = generateInsights(playlist, validTracks, audioFeatures, artists);
+        
+        // Get contributor counts and resolve display names (like in backend server.js)
+        const contributorCounts = {};
+        validTracks.forEach(item => {
+            const addedBy = item.added_by?.id || 'unknown';
+            contributorCounts[addedBy] = (contributorCounts[addedBy] || 0) + 1;
+        });
+        
+        // Resolve contributor display names
+        const topContributors = await Promise.all(
+            Object.entries(contributorCounts)
+                .sort(([,a], [,b]) => b - a)
+                .slice(0, 5)
+                .map(async ([userId, count]) => {
+                    if (userId === playlist.owner.id) {
+                        return {
+                            userId,
+                            count,
+                            displayName: playlist.owner.display_name || playlist.owner.id
+                        };
+                    } else if (userId === 'unknown') {
+                        return {
+                            userId,
+                            count,
+                            displayName: 'Unknown User'
+                        };
+                    } else {
+                        try {
+                            const profile = await spotify.getUserProfile(userId, accessToken);
+                            return {
+                                userId,
+                                count,
+                                displayName: profile?.display_name || `User ${userId.slice(-4)}`
+                            };
+                        } catch {
+                            return {
+                                userId,
+                                count,
+                                displayName: `User ${userId.slice(-4)}`
+                            };
+                        }
+                    }
+                })
+        );
+        
+        insights.topContributors = topContributors;
+        
+        // Generate advanced analytics
+        const allContributorIds = [...new Set(
+            validTracks
+                .map(item => item.added_by?.id)
+                .filter(id => id && id !== 'unknown')
+        )];
+        
+        const allUserProfiles = [];
+        for (const userId of allContributorIds) {
+            try {
+                const profile = await spotify.getUserProfile(userId, accessToken);
+                allUserProfiles.push({
+                    id: userId,
+                    displayName: profile?.display_name || `User ${userId.slice(-4)}`
+                });
+            } catch (error) {
+                allUserProfiles.push({
+                    id: userId,
+                    displayName: `User ${userId.slice(-4)}`
+                });
+            }
+        }
+        
+        const { generateAdvancedContributorAnalytics, calculateGenreMaestros, generatePlaylistMembers } = require('../backend/routes/playlist');
+        
+        const contributorAnalytics = generateAdvancedContributorAnalytics(validTracks, audioFeatures, artists, allUserProfiles);
+        insights.contributors = contributorAnalytics;
+        
+        const genreMaestros = calculateGenreMaestros(validTracks, artists, allUserProfiles);
+        insights.genreMaestros = genreMaestros;
+        
+        const followerCount = playlist.followers?.total || 0;
+        const playlistMembers = generatePlaylistMembers(validTracks, allUserProfiles, followerCount);
+        insights.playlistMembers = playlistMembers;
+        
+        console.log(`✅ Complete data generated: ${validTracks.length} tracks, ${topContributors.length} contributors, ${genreMaestros.length} genre maestros`);
         
         // Cache the data
         writeCache(insights);
