@@ -121,6 +121,113 @@ app.get('/api/public/data', (req, res) => {
     }
 });
 
+// Public status endpoint
+app.get('/api/public/status', (req, res) => {
+    console.log('📊 Public status endpoint called');
+    const cache = readCache();
+    console.log('📊 Cache data:', { hasData: !!cache.data, lastUpdated: cache.lastUpdated });
+    
+    res.json({
+        hasData: !!cache.data,
+        lastUpdated: cache.lastUpdated,
+        tracksCount: cache.data?.playlist?.totalTracks || 0,
+        playlistName: cache.data?.playlist?.name || null
+    });
+});
+
+// Admin status endpoint
+app.get('/api/admin/status', (req, res) => {
+    const cache = readCache();
+    
+    res.json({
+        hasData: !!cache.data,
+        lastUpdated: cache.lastUpdated,
+        tracksCount: cache.data?.playlist?.totalTracks || 0,
+        environment: process.env.NODE_ENV || 'production',
+        scheduler: {
+            isRunning: false, // Vercel doesn't support persistent scheduling
+            nextUpdate: '9 AM EAT daily (manual trigger required on Vercel)'
+        }
+    });
+});
+
+// Manual trigger endpoint for Vercel
+app.post('/api/admin/trigger-update', async (req, res) => {
+    const { password } = req.body;
+    
+    if (password !== ADMIN_PASSWORD) {
+        return res.status(401).json({ error: 'Invalid admin password' });
+    }
+    
+    try {
+        console.log('🔄 Admin triggered manual update...');
+        
+        const spotify = new SpotifyAPI();
+        const refreshToken = process.env.SPOTIFY_REFRESH_TOKEN;
+        
+        if (!refreshToken) {
+            throw new Error('No refresh token found in environment variables');
+        }
+
+        // Get fresh access token using refresh token
+        const tokenData = await spotify.refreshAccessToken(refreshToken);
+        const accessToken = tokenData.access_token;
+        
+        const playlistId = process.env.DEFAULT_PLAYLIST_ID || '1BZY7mhShLhc2fIlI6uIa4';
+        
+        // Get playlist details
+        const playlist = await spotify.getPlaylist(playlistId, accessToken);
+        
+        // Get all tracks
+        const tracks = await spotify.getPlaylistTracks(playlistId, accessToken);
+        const validTracks = tracks.filter(item => item.track && item.track.id);
+        
+        // Extract track IDs for audio features
+        const trackIds = validTracks.map(item => item.track.id);
+        
+        // Get audio features
+        let audioFeatures = [];
+        try {
+            audioFeatures = await spotify.getAudioFeatures(trackIds, accessToken);
+            console.log(`✅ Fetched audio features for ${audioFeatures.length} tracks`);
+        } catch (audioError) {
+            console.warn('⚠️ Failed to fetch audio features, continuing without them:', audioError.message);
+            audioFeatures = trackIds.map(() => null);
+        }
+        
+        // Extract unique artist IDs and get artist details
+        const artistIds = [...new Set(
+            validTracks.flatMap(item => 
+                item.track.artists.map(artist => artist.id)
+            )
+        )];
+        
+        const artists = await spotify.getArtists(artistIds, accessToken);
+        
+        // Generate insights using the playlist route functions
+        const { generateInsights } = require('../backend/routes/playlist');
+        const insights = generateInsights(playlist, validTracks, audioFeatures, artists);
+        
+        // Cache the data
+        writeCache(insights);
+        
+        res.json({
+            success: true,
+            message: 'Playlist data updated successfully using refresh token',
+            lastUpdated: new Date().toISOString(),
+            tracksCount: validTracks.length
+        });
+        
+    } catch (error) {
+        console.error('❌ Auto-update failed:', error);
+        res.status(500).json({ 
+            success: false, 
+            error: 'Failed to trigger update',
+            message: error.message 
+        });
+    }
+});
+
 // Admin refresh endpoint
 app.post('/api/admin/refresh', async (req, res) => {
     const { password, accessToken } = req.body;
