@@ -127,7 +127,10 @@ app.get('/api/public/data', (req, res) => {
 
 // Public route to get just the last updated info
 app.get('/api/public/status', (req, res) => {
+    console.log('📊 Public status endpoint called');
     const cache = readCache();
+    console.log('📊 Cache data:', { hasData: !!cache.data, lastUpdated: cache.lastUpdated });
+    
     res.json({
         hasData: !!cache.data,
         lastUpdated: cache.lastUpdated,
@@ -411,11 +414,6 @@ app.get('/admin', (req, res) => {
 // Serve main page
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/index.html'));
-});
-
-// Serve admin panel
-app.get('/admin', (req, res) => {
-  res.sendFile(path.join(__dirname, '../public/admin.html'));
 });
 
 // Start server
