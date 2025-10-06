@@ -15,3 +15,5 @@ Thumbs.db
 # Cache (optional - keeping for demo)
 # backend/cache/*.json
 .vercel
+
+/generated/prisma

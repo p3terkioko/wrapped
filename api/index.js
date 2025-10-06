@@ -10,6 +10,17 @@ const fs = require('fs');
 const SpotifyAPI = require('../backend/utils/spotify');
 const playlistRoutes = require('../backend/routes/playlist');
 
+// Import Prisma client with fallback
+let prisma;
+try {
+  const { prisma: prismaClient } = require('../lib/prisma');
+  prisma = prismaClient;
+  console.log('✅ Prisma client loaded successfully');
+} catch (error) {
+  console.warn('⚠️ Prisma not available, using file cache fallback:', error.message);
+  prisma = null;
+}
+
 const app = express();
 
 // Cache file paths - prioritize api cache for Vercel
@@ -27,7 +38,74 @@ if (!fs.existsSync(cacheDir)) {
 // Admin password
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin123';
 
-// Utility functions for cache
+// Database functions (Prisma)
+async function readFromDatabase() {
+    if (!prisma) return null;
+    
+    try {
+        const data = await prisma.playlistData.findUnique({
+            where: { playlistId: process.env.DEFAULT_PLAYLIST_ID || '1BZY7mhShLhc2fIlI6uIa4' }
+        });
+        
+        if (data) {
+            console.log('✅ Data loaded from database');
+            return {
+                data: data.data,
+                lastUpdated: data.lastUpdated.toISOString()
+            };
+        }
+        return { data: null, lastUpdated: null };
+    } catch (error) {
+        console.error('❌ Database read error:', error);
+        return null;
+    }
+}
+
+async function writeToDatabase(insights) {
+    if (!prisma) return false;
+    
+    try {
+        const saved = await prisma.playlistData.upsert({
+            where: { playlistId: process.env.DEFAULT_PLAYLIST_ID || '1BZY7mhShLhc2fIlI6uIa4' },
+            update: {
+                data: insights,
+                lastUpdated: new Date()
+            },
+            create: {
+                playlistId: process.env.DEFAULT_PLAYLIST_ID || '1BZY7mhShLhc2fIlI6uIa4',
+                data: insights,
+                lastUpdated: new Date()
+            }
+        });
+        
+        console.log('✅ Data saved to database');
+        return saved;
+    } catch (error) {
+        console.error('❌ Database write error:', error);
+        return false;
+    }
+}
+
+async function logUpdate(status, message, tracksCount = null, triggeredBy = null) {
+    if (!prisma) return;
+    
+    try {
+        await prisma.updateLog.create({
+            data: {
+                playlistId: process.env.DEFAULT_PLAYLIST_ID || '1BZY7mhShLhc2fIlI6uIa4',
+                status,
+                message,
+                tracksCount,
+                triggeredBy: triggeredBy || 'Unknown'
+            }
+        });
+        console.log(`📝 Update logged: ${status} - ${message}`);
+    } catch (error) {
+        console.error('❌ Failed to log update:', error);
+    }
+}
+
+// Utility functions for cache (fallback)
 function readCache() {
     try {
         // Try api cache first (most persistent in Vercel)
@@ -117,21 +195,36 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../public')));
 
 // Public data endpoint
-app.get('/api/public/data', (req, res) => {
+app.get('/api/public/data', async (req, res) => {
     console.log('📊 Public data endpoint called');
-    const cache = readCache();
-    console.log('📊 Cache read result:', { 
-        hasData: !!cache.data, 
-        lastUpdated: cache.lastUpdated,
-        dataKeys: cache.data ? Object.keys(cache.data) : [],
-        playlistName: cache.data?.playlist?.name || 'No playlist found'
+    
+    let result = null;
+    
+    // Try database first
+    if (prisma) {
+        result = await readFromDatabase();
+    }
+    
+    // Fallback to file cache
+    if (!result) {
+        const cache = readCache();
+        result = cache;
+        console.log('📊 Using file cache fallback');
+    }
+    
+    console.log('📊 Data result:', { 
+        hasData: !!result.data, 
+        lastUpdated: result.lastUpdated,
+        dataKeys: result.data ? Object.keys(result.data) : [],
+        playlistName: result.data?.playlist?.name || 'No playlist found',
+        source: prisma ? 'database' : 'file-cache'
     });
     
-    if (cache.data) {
+    if (result.data) {
         res.json({
             success: true,
-            data: cache.data,
-            lastUpdated: cache.lastUpdated
+            data: result.data,
+            lastUpdated: result.lastUpdated
         });
     } else {
         res.status(404).json({
@@ -142,22 +235,62 @@ app.get('/api/public/data', (req, res) => {
 });
 
 // Public status endpoint
-app.get('/api/public/status', (req, res) => {
+app.get('/api/public/status', async (req, res) => {
     console.log('📊 Public status endpoint called');
-    const cache = readCache();
-    console.log('📊 Cache data:', { hasData: !!cache.data, lastUpdated: cache.lastUpdated });
+    
+    let result = null;
+    
+    // Try database first
+    if (prisma) {
+        result = await readFromDatabase();
+    }
+    
+    // Fallback to file cache
+    if (!result) {
+        const cache = readCache();
+        result = cache;
+    }
+    
+    console.log('📊 Status data:', { 
+        hasData: !!result.data, 
+        lastUpdated: result.lastUpdated,
+        source: prisma ? 'database' : 'file-cache'
+    });
     
     res.json({
-        hasData: !!cache.data,
-        lastUpdated: cache.lastUpdated,
-        tracksCount: cache.data?.playlist?.totalTracks || 0,
-        playlistName: cache.data?.playlist?.name || null
+        hasData: !!result.data,
+        lastUpdated: result.lastUpdated,
+        tracksCount: result.data?.playlist?.totalTracks || 0,
+        playlistName: result.data?.playlist?.name || null,
+        source: prisma ? 'database' : 'file-cache'
     });
 });
 
 // Admin status endpoint
-app.get('/api/admin/status', (req, res) => {
-    const cache = readCache();
+app.get('/api/admin/status', async (req, res) => {
+    let result = null;
+    let recentLogs = [];
+    
+    // Try database first
+    if (prisma) {
+        try {
+            result = await readFromDatabase();
+            // Get recent update logs
+            recentLogs = await prisma.updateLog.findMany({
+                where: { playlistId: process.env.DEFAULT_PLAYLIST_ID || '1BZY7mhShLhc2fIlI6uIa4' },
+                orderBy: { createdAt: 'desc' },
+                take: 5
+            });
+        } catch (error) {
+            console.error('Database query failed:', error);
+        }
+    }
+    
+    // Fallback to file cache
+    if (!result) {
+        const cache = readCache();
+        result = cache;
+    }
     
     // Check all cache locations for debugging
     const cacheLocations = [
@@ -167,14 +300,17 @@ app.get('/api/admin/status', (req, res) => {
     ];
     
     res.json({
-        hasData: !!cache.data,
-        lastUpdated: cache.lastUpdated,
-        tracksCount: cache.data?.playlist?.totalTracks || 0,
+        hasData: !!result.data,
+        lastUpdated: result.lastUpdated,
+        tracksCount: result.data?.playlist?.totalTracks || 0,
         environment: process.env.NODE_ENV || 'production',
+        database: prisma ? 'Connected to Prisma Database ✅' : 'Using File Cache ⚠️',
+        storage: prisma ? 'database' : 'file-cache',
+        recentLogs: recentLogs,
         cacheLocations: cacheLocations,
         scheduler: {
             isRunning: false, // Vercel doesn't support persistent scheduling
-            nextUpdate: '9 AM EAT daily (manual trigger required on Vercel)'
+            nextUpdate: 'Manual trigger via admin panel (updates ALL users globally when using database)'
         }
     });
 });
@@ -342,18 +478,44 @@ app.post('/api/admin/trigger-update', async (req, res) => {
         
         console.log(`✅ Complete data generated: ${validTracks.length} tracks, ${topContributors.length} contributors, ${genreMaestros.length} genre maestros`);
         
-        // Cache the data
-        writeCache(insights);
+        // Save to database first (for global access)
+        let savedToDatabase = false;
+        if (prisma) {
+            const dbResult = await writeToDatabase(insights);
+            if (dbResult) {
+                savedToDatabase = true;
+                await logUpdate('success', `Updated successfully with ${validTracks.length} tracks`, validTracks.length, req.ip);
+                console.log('🌍 Data saved to database - NOW AVAILABLE TO ALL USERS GLOBALLY! 🌍');
+            }
+        }
+        
+        // Fallback: Cache the data locally
+        if (!savedToDatabase) {
+            writeCache(insights);
+            console.log('📝 Data saved to file cache as fallback');
+        }
+        
+        const now = new Date().toISOString();
         
         res.json({
             success: true,
-            message: 'Playlist data updated successfully using refresh token',
-            lastUpdated: new Date().toISOString(),
-            tracksCount: validTracks.length
+            message: savedToDatabase ? 
+                'Playlist data updated successfully for ALL USERS globally! 🌍' : 
+                'Playlist data updated successfully using refresh token',
+            lastUpdated: now,
+            tracksCount: validTracks.length,
+            storage: savedToDatabase ? 'database' : 'file-cache',
+            globalUpdate: savedToDatabase
         });
         
     } catch (error) {
         console.error('❌ Auto-update failed:', error);
+        
+        // Log the error to database if possible
+        if (prisma) {
+            await logUpdate('failed', `Update failed: ${error.message}`, 0, req.ip);
+        }
+        
         res.status(500).json({ 
             success: false, 
             error: 'Failed to trigger update',
