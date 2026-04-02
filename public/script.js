@@ -47,6 +47,7 @@ async function loadData() {
 
     populateHeaderStats(currentData);
     populatePlaylistArt(currentData);
+    setupArtClick();
 
     const ts = result.lastUpdated || result.cached_at;
     if (ts) {
@@ -678,12 +679,6 @@ function setupArtClick() {
   });
 }
 
-// call setupArtClick after art is populated
-var _origPopulateArt = populatePlaylistArt;
-function populatePlaylistArt(data) {
-  _origPopulateArt(data);
-  setupArtClick();
-}
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 function setText(id, val) {
