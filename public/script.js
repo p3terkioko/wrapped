@@ -46,7 +46,7 @@ async function loadData() {
     currentData = result.data;
 
     populateHeaderStats(currentData);
-    populateLandingStats(currentData);
+    populatePlaylistArt(currentData);
 
     const ts = result.lastUpdated || result.cached_at;
     if (ts) {
@@ -74,15 +74,14 @@ function populateHeaderStats(data) {
   ].join('');
 }
 
-function populateLandingStats(data) {
-  const container = document.getElementById('landing-stats');
-  if (!container) return;
-  container.innerHTML = [
-    mkStatCard(fmt(data.playlist.totalTracks), 'Tracks'),
-    mkStatCard(fmt(data.totalUniqueArtists), 'Artists'),
-    mkStatCard(data.topGenres ? data.topGenres.length : '—', 'Genres'),
-    mkStatCard(data.contributors ? data.contributors.totalContributors : (data.topContributors ? data.topContributors.length : '—'), 'Contributors'),
-  ].join('');
+function populatePlaylistArt(data) {
+  var artEl = document.getElementById('landing-art');
+  var placeholder = document.getElementById('landing-art-placeholder');
+  if (artEl && data.playlist.image) {
+    artEl.src = data.playlist.image;
+    artEl.hidden = false;
+    if (placeholder) placeholder.hidden = true;
+  }
 }
 
 function mkStat(label, value) {
@@ -90,10 +89,6 @@ function mkStat(label, value) {
     '</span><span class="header-stat-value">' + value + '</span></div>';
 }
 
-function mkStatCard(number, label) {
-  return '<div class="landing-stat-card"><div class="landing-stat-number">' + number +
-    '</div><div class="landing-stat-label">' + label + '</div></div>';
-}
 
 // ── Page Transitions ──────────────────────────────────────────────────────────
 function showLanding() {
@@ -120,13 +115,14 @@ function populateDashboard(data) {
   setText('total-followers', fmt(p.followers));
   setText('playlist-owner',  p.owner);
 
-  var topGenre   = (data.topGenres && data.topGenres[0]) ? data.topGenres[0].genre : '—';
+  var topGenre   = (data.topGenres && data.topGenres[0]) ? data.topGenres[0].genre : '';
   var topContrib = (data.contributors && data.contributors.contributors && data.contributors.contributors[0])
     ? data.contributors.contributors[0].name
-    : (data.topContributors && data.topContributors[0] ? data.topContributors[0].displayName : '—');
+    : (data.topContributors && data.topContributors[0] ? data.topContributors[0].displayName : '');
 
   setText('ov-tracks',          fmt(p.totalTracks));
-  setText('ov-contributors',    data.contributors ? data.contributors.totalContributors : (data.topContributors ? data.topContributors.length : '—'));
+  setText('ov-runtime',         data.runtime ? data.runtime.display : '');
+  setText('ov-contributors',    data.contributors ? data.contributors.totalContributors : (data.topContributors ? data.topContributors.length : ''));
   setText('ov-top-genre',       topGenre);
   setText('ov-top-contributor', topContrib);
 
@@ -137,6 +133,10 @@ function populateDashboard(data) {
   renderTimeline(data.dateRange);
   renderGenreChart(data.topGenres || []);
   renderMoodChart(data.audioFeatures || {});
+  renderDecades(data.decades || []);
+  var hasAudioFeatures = data.totalAnalyzedTracks > 0;
+  renderKeyTempo(data.keyInsights, data.tempoBreakdown, hasAudioFeatures);
+  renderDayOfWeek(data.dayOfWeek || [], data.peakDay);
 
   if (data.contributors && data.contributors.contributors && data.contributors.contributors.length) {
     renderLeaderboard(data.contributors);
@@ -313,6 +313,94 @@ function renderMoodChart(af) {
   });
 }
 
+// ── Decade Breakdown ──────────────────────────────────────────────────────────
+function renderDecades(decades) {
+  var el = document.getElementById('decades-chart-wrap');
+  if (!el || !decades.length) return;
+  var max = Math.max.apply(null, decades.map(function(d) { return d.count; }));
+  el.innerHTML = decades.map(function(d) {
+    var pct = max > 0 ? Math.round((d.count / max) * 100) : 0;
+    return '<div class="insight-bar-row">' +
+      '<span class="insight-bar-label">' + esc(d.label) + '</span>' +
+      '<div class="insight-bar-track"><div class="insight-bar-fill" style="width:' + pct + '%"></div></div>' +
+      '<span class="insight-bar-value">' + d.count + '</span>' +
+    '</div>';
+  }).join('');
+}
+
+// ── Key + Tempo ───────────────────────────────────────────────────────────────
+function renderKeyTempo(keyInsights, tempoBreakdown, hasAudioFeatures) {
+  var el = document.getElementById('key-tempo-wrap');
+  if (!el) return;
+  if (!hasAudioFeatures) {
+    el.closest('.dash-card').style.display = 'none';
+    return;
+  }
+
+  var keyHtml = '';
+  if (hasKeyData) {
+    var majorPct = keyInsights.majorPct;
+    keyHtml =
+      '<div class="kt-section">' +
+        '<div class="kt-section-label">Musical Key</div>' +
+        '<div class="kt-key-display">' +
+          '<span class="kt-key-name">' + esc(keyInsights.topKey) + '</span>' +
+          '<span class="kt-key-sub">most common key</span>' +
+        '</div>' +
+        '<div class="kt-mode-bar">' +
+          '<div class="kt-mode-fill" style="width:' + majorPct + '%"></div>' +
+        '</div>' +
+        '<div class="kt-mode-labels">' +
+          '<span class="kt-mode-label">Major ' + majorPct + '%</span>' +
+          '<span class="kt-mode-label">Minor ' + (100 - majorPct) + '%</span>' +
+        '</div>' +
+      '</div>';
+  }
+
+  var tempoHtml = '';
+  if (hasTempoData) {
+    var maxT = Math.max.apply(null, tempoBreakdown.map(function(t) { return t.count; }));
+    tempoHtml =
+      '<div class="kt-section">' +
+        '<div class="kt-section-label">Tempo Zones</div>' +
+        tempoBreakdown.map(function(t) {
+          var pct = maxT > 0 ? Math.round((t.count / maxT) * 100) : 0;
+          return '<div class="insight-bar-row insight-bar-row--compact">' +
+            '<span class="insight-bar-label">' + esc(t.label) + '</span>' +
+            '<div class="insight-bar-track"><div class="insight-bar-fill" style="width:' + pct + '%"></div></div>' +
+            '<span class="insight-bar-value">' + t.pct + '%</span>' +
+          '</div>';
+        }).join('') +
+      '</div>';
+  }
+
+  el.innerHTML = keyHtml + tempoHtml;
+}
+
+// ── Day of Week ───────────────────────────────────────────────────────────────
+function renderDayOfWeek(days, peakDay) {
+  var el = document.getElementById('day-of-week-wrap');
+  if (!el || !days.length) return;
+  var max = Math.max.apply(null, days.map(function(d) { return d.count; }));
+  var peakName = peakDay ? peakDay.day : '';
+
+  el.innerHTML =
+    '<div class="dow-grid">' +
+    days.map(function(d) {
+      var pct    = max > 0 ? Math.round((d.count / max) * 100) : 0;
+      var isPeak = d.day === peakName;
+      return '<div class="dow-col' + (isPeak ? ' dow-col--peak' : '') + '">' +
+        '<div class="dow-bar-wrap">' +
+          '<div class="dow-bar" style="height:' + Math.max(pct, 4) + '%"></div>' +
+        '</div>' +
+        '<div class="dow-count">' + d.count + '</div>' +
+        '<div class="dow-label">' + esc(d.short) + '</div>' +
+      '</div>';
+    }).join('') +
+    '</div>' +
+    (peakDay ? '<p class="dow-peak-note">Most tracks added on <b>' + esc(peakDay.day) + 's</b></p>' : '');
+}
+
 // ── Contributor Leaderboard ───────────────────────────────────────────────────
 function renderLeaderboard(data) {
   var el = document.getElementById('contributor-analytics');
@@ -434,11 +522,167 @@ function notify(message, type) {
 
 // ── Keyboard ──────────────────────────────────────────────────────────────────
 function handleKeyboard(e) {
+  // Story navigation
   var story = document.getElementById('story-container');
-  if (!story || story.classList.contains('hidden')) return;
-  if (e.key === 'ArrowRight') onStoryNext();
-  if (e.key === 'ArrowLeft')  navigateStory('prev');
-  if (e.key === 'Escape')     exitStory();
+  if (story && !story.classList.contains('hidden')) {
+    if (e.key === 'ArrowRight') onStoryNext();
+    if (e.key === 'ArrowLeft')  navigateStory('prev');
+    if (e.key === 'Escape')     exitStory();
+  }
+
+  // Easter eggs
+  konamiTrack(e.key);
+  typedTrack(e.key);
+}
+
+// ── Easter Eggs ───────────────────────────────────────────────────────────────
+
+// Konami code → full-page confetti burst
+var KONAMI = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+var konamiPos = 0;
+function konamiTrack(key) {
+  if (key === KONAMI[konamiPos]) {
+    konamiPos++;
+    if (konamiPos === KONAMI.length) {
+      konamiPos = 0;
+      pageConfetti();
+    }
+  } else {
+    konamiPos = key === KONAMI[0] ? 1 : 0;
+  }
+}
+
+// Typed sequences
+var typedBuffer = '';
+var typedTimeout = null;
+var TYPED_CODES = { 'kamilimu': triggerKamilimu, 'disco': triggerDisco };
+function typedTrack(key) {
+  if (key.length !== 1) return; // ignore arrow keys etc
+  typedBuffer += key.toLowerCase();
+  clearTimeout(typedTimeout);
+  typedTimeout = setTimeout(function() { typedBuffer = ''; }, 1500);
+  Object.keys(TYPED_CODES).forEach(function(word) {
+    if (typedBuffer.endsWith(word)) {
+      typedBuffer = '';
+      TYPED_CODES[word]();
+    }
+  });
+}
+
+// ── Confetti burst ────────────────────────────────────────────────────────────
+function pageConfetti() {
+  var existing = document.getElementById('page-confetti');
+  if (existing) existing.remove();
+
+  var COLORS = ['#00b4c2','#4dd0da','#eaa000','#ac3931','#214e34','#1b4864','#f8f9f0'];
+  var wrap = document.createElement('div');
+  wrap.id = 'page-confetti';
+  wrap.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:9999;overflow:hidden';
+
+  for (var i = 0; i < 90; i++) {
+    var piece = document.createElement('div');
+    var size  = 6 + Math.random() * 6;
+    piece.style.cssText = [
+      'position:absolute',
+      'top:-12px',
+      'left:' + (Math.random() * 100) + '%',
+      'width:' + size + 'px',
+      'height:' + size + 'px',
+      'background:' + COLORS[Math.floor(Math.random() * COLORS.length)],
+      'opacity:0',
+      'animation:confettiFall ' + (2.5 + Math.random() * 2) + 's ease-in ' + (Math.random() * 0.8) + 's forwards',
+    ].join(';');
+    wrap.appendChild(piece);
+  }
+
+  document.body.appendChild(wrap);
+  setTimeout(function() { wrap.remove(); }, 5000);
+}
+
+// ── kamilima → show OG contributor + first track ─────────────────────────────
+function triggerKamilimu() {
+  if (!currentData) return;
+
+  // First track ever added
+  var oldest = null;
+  if (currentData.dateRange && currentData.dateRange.earliest) {
+    oldest = currentData.dateRange.earliest;
+  }
+
+  // Earliest contributor (from playlistMembers or topContributors)
+  var members = currentData.playlistMembers && currentData.playlistMembers.contributors;
+  var firstContrib = members && members.length ? members[members.length - 1].name : null;
+
+  var toast = document.createElement('div');
+  toast.style.cssText = [
+    'position:fixed','bottom:2rem','left:50%','transform:translateX(-50%)',
+    'background:#0d0d0d','border:1px solid #00b4c2','color:#f8f9f0',
+    'font-family:JetBrains Mono,monospace','font-size:.8125rem',
+    'padding:1.25rem 1.75rem','z-index:9999','max-width:420px','width:90%',
+    'line-height:1.6','text-align:center',
+  ].join(';');
+
+  var joined = oldest ? new Date(oldest).toLocaleDateString('en-US', { month: 'long', year: 'numeric' }) : 'the beginning';
+  toast.innerHTML =
+    '<div style="color:#00b4c2;font-size:.625rem;letter-spacing:.1em;text-transform:uppercase;margin-bottom:.625rem">You found it</div>' +
+    '<div style="font-size:1rem;font-weight:700;margin-bottom:.5rem">KamiLimu.inthe.Ears</div>' +
+    '<div style="color:rgba(248,249,240,0.55)">Playlist started ' + esc(joined) + (firstContrib ? '.<br>First contributor: <b style="color:#f8f9f0">' + esc(firstContrib) + '</b>' : '.') + '</div>';
+
+  document.body.appendChild(toast);
+  setTimeout(function() {
+    toast.style.transition = 'opacity .5s';
+    toast.style.opacity = '0';
+    setTimeout(function() { toast.remove(); }, 500);
+  }, 5000);
+}
+
+// ── disco → cycle accent color ────────────────────────────────────────────────
+var discoActive = false;
+var discoInterval = null;
+var DISCO_COLORS = ['#00b4c2','#eaa000','#ac3931','#4dd0da','#214e34','#a855f7','#ec4899','#f97316'];
+function triggerDisco() {
+  if (discoActive) return;
+  discoActive = true;
+  var i = 0;
+  var root = document.documentElement;
+  discoInterval = setInterval(function() {
+    root.style.setProperty('--teal-500', DISCO_COLORS[i % DISCO_COLORS.length]);
+    root.style.setProperty('--teal-300', DISCO_COLORS[(i + 2) % DISCO_COLORS.length]);
+    i++;
+  }, 300);
+  setTimeout(function() {
+    clearInterval(discoInterval);
+    root.style.removeProperty('--teal-500');
+    root.style.removeProperty('--teal-300');
+    discoActive = false;
+  }, 10000);
+}
+
+// ── Playlist art click × 5 → flip ────────────────────────────────────────────
+var artClickCount = 0;
+var artClickTimeout = null;
+function setupArtClick() {
+  var art = document.getElementById('landing-art');
+  if (!art) return;
+  art.style.cursor = 'pointer';
+  art.addEventListener('click', function() {
+    artClickCount++;
+    clearTimeout(artClickTimeout);
+    artClickTimeout = setTimeout(function() { artClickCount = 0; }, 1500);
+    if (artClickCount >= 5) {
+      artClickCount = 0;
+      var flipped = art.style.transform === 'rotate(180deg)';
+      art.style.transition = 'transform .6s cubic-bezier(0.4,0,0.2,1)';
+      art.style.transform  = flipped ? '' : 'rotate(180deg)';
+    }
+  });
+}
+
+// call setupArtClick after art is populated
+var _origPopulateArt = populatePlaylistArt;
+function populatePlaylistArt(data) {
+  _origPopulateArt(data);
+  setupArtClick();
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────

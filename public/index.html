@@ -29,7 +29,7 @@
         <!-- populated by JS: tracks / followers / curator -->
       </div>
       <div class="header-actions">
-        <span class="last-updated-text" id="last-updated-info">—</span>
+        <span class="last-updated-text" id="last-updated-info"></span>
         <button type="button" id="analyze-btn" class="btn-primary">View Dashboard</button>
       </div>
     </div>
@@ -40,15 +40,18 @@
       <p class="landing-label">Playlist Analytics</p>
       <h1 class="landing-title">KamiLimu<br><span class="landing-title-accent">.inthe.Ears</span></h1>
       <p class="landing-body">
-        A deep look at the music that defines KamiLimu — the artists, genres, contributors, and stories
+        A deep look at the music that defines KamiLimu, the artists, genres, contributors, and stories
         behind every track in the community playlist.
       </p>
       <div class="landing-cta">
         <button type="button" id="analyze-btn-hero" class="btn-primary">Explore the Playlist</button>
       </div>
     </div>
-    <div class="landing-stats" id="landing-stats">
-      <!-- populated by JS -->
+    <div class="landing-right">
+      <div class="landing-art-wrap">
+        <img class="landing-art" id="landing-art" src="" alt="Playlist cover" hidden>
+        <div class="landing-art-placeholder" id="landing-art-placeholder"></div>
+      </div>
     </div>
   </main>
 </div>
@@ -79,19 +82,19 @@
       <div class="dash-header-left">
         <button type="button" id="back-btn" class="btn-ghost">← Back</button>
         <div class="dash-playlist-meta">
-          <span class="dash-playlist-name" id="playlist-name">—</span>
+          <span class="dash-playlist-name" id="playlist-name"></span>
           <div class="dash-inline-stats">
             <div class="inline-stat">
               <span class="inline-stat-label">tracks</span>
-              <span class="inline-stat-value" id="total-tracks">—</span>
+              <span class="inline-stat-value" id="total-tracks"></span>
             </div>
             <div class="inline-stat">
               <span class="inline-stat-label">followers</span>
-              <span class="inline-stat-value" id="total-followers">—</span>
+              <span class="inline-stat-value" id="total-followers"></span>
             </div>
             <div class="inline-stat">
               <span class="inline-stat-label">curator</span>
-              <span class="inline-stat-value" id="playlist-owner">—</span>
+              <span class="inline-stat-value" id="playlist-owner"></span>
             </div>
           </div>
         </div>
@@ -106,22 +109,26 @@
 
   <div class="dash-body">
 
-    <!-- Overview strip: 4 stat cards -->
+    <!-- Overview strip: 5 stat cards -->
     <section class="overview-strip">
       <div class="overview-card">
-        <div class="overview-number" id="ov-tracks">—</div>
+        <div class="overview-number" id="ov-tracks"></div>
         <div class="overview-label">Total Tracks</div>
       </div>
       <div class="overview-card">
-        <div class="overview-number" id="ov-contributors">—</div>
+        <div class="overview-number" id="ov-runtime"></div>
+        <div class="overview-label">Playlist Runtime</div>
+      </div>
+      <div class="overview-card">
+        <div class="overview-number" id="ov-contributors"></div>
         <div class="overview-label">Contributors</div>
       </div>
       <div class="overview-card">
-        <div class="overview-number overview-number--sm" id="ov-top-genre">—</div>
+        <div class="overview-number overview-number--sm" id="ov-top-genre"></div>
         <div class="overview-label">Top Genre</div>
       </div>
       <div class="overview-card">
-        <div class="overview-number overview-number--sm" id="ov-top-contributor">—</div>
+        <div class="overview-number overview-number--sm" id="ov-top-contributor"></div>
         <div class="overview-label">Most Active</div>
       </div>
     </section>
@@ -188,6 +195,33 @@
           <span class="card-sub">When tracks were added</span>
         </div>
         <div class="timeline-visual" id="timeline-info"></div>
+      </div>
+
+      <!-- Decade breakdown -->
+      <div class="dash-card">
+        <div class="card-head">
+          <span class="card-title">Decade Breakdown</span>
+          <span class="card-sub">Tracks by release era</span>
+        </div>
+        <div id="decades-chart-wrap"></div>
+      </div>
+
+      <!-- Key + Tempo -->
+      <div class="dash-card">
+        <div class="card-head">
+          <span class="card-title">Key &amp; Tempo</span>
+          <span class="card-sub">Musical character of the playlist</span>
+        </div>
+        <div id="key-tempo-wrap"></div>
+      </div>
+
+      <!-- Day of week -->
+      <div class="dash-card dash-card--full">
+        <div class="card-head">
+          <span class="card-title">When Tracks Get Added</span>
+          <span class="card-sub">Day-of-week activity</span>
+        </div>
+        <div id="day-of-week-wrap"></div>
       </div>
 
       <!-- Contributor leaderboard (advanced) -->
