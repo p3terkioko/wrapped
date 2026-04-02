@@ -1,407 +1,228 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Playlist Wrapped - Spotify Analytics</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="story.css">
-    <link href="https://fonts.googleapis.com/css2?family=Circular+Std:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KamiLimu.inthe.Ears</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="story.css">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Hind+Guntur:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
-    <!-- Loading Screen -->
-    <div id="loading-screen" class="loading-screen hidden">
-        <div class="loading-content">
-            <div class="vinyl-record">
-                <div class="vinyl-center"></div>
-            </div>
-            <h2>Analyzing your playlist...</h2>
-            <p>Discovering musical insights</p>
-        </div>
+
+<!-- ── Loading Screen ─────────────────────────────────────────────────────────── -->
+<div id="loading-screen" class="loading-screen hidden">
+  <div class="loading-inner">
+    <div class="loading-spinner"></div>
+    <p class="loading-text">Loading playlist data</p>
+  </div>
+</div>
+
+<!-- ── Landing Page ───────────────────────────────────────────────────────────── -->
+<div id="landing-page" class="landing-page">
+  <header class="site-header">
+    <div class="header-inner">
+      <div class="header-brand">
+        <span class="brand-name">KamiLimu.inthe.Ears</span>
+      </div>
+      <div class="header-meta" id="header-meta">
+        <!-- populated by JS: tracks / followers / curator -->
+      </div>
+      <div class="header-actions">
+        <span class="last-updated-text" id="last-updated-info">—</span>
+        <button type="button" id="analyze-btn" class="btn-primary">View Dashboard</button>
+      </div>
     </div>
+  </header>
 
-    <!-- Landing Page -->
-    <div id="landing-page" class="landing-page">        <div class="nav-bar">
-            <div class="nav-content">
-                <div class="logo">
-                    <i class="fas fa-music"></i>
-                    <span>Playlist Wrapped</span>
-                </div>
-                <div class="nav-actions">
-                    <button id="theme-toggle" class="theme-toggle" title="Toggle theme">
-                        <i class="fas fa-moon"></i>
-                    </button>
-                    
-                    
-                </div>
-            </div>
-        </div>
-
-        <div class="hero-section">
-            <div class="hero-content">
-                <h1 class="hero-title">
-                    KamiLimu.inthe.Ears,
-                    <span class="gradient-text">Unwrapped</span>
-                </h1>
-                <p class="hero-subtitle">
-                    Discover the hidden stories and musical insights from this amazing playlist.
-                </p>
-                <div class="playlist-input-section">
-                    <div class="input-group">
-                        <div class="playlist-info">
-                            <h3>🎵 Ready to explore the music!</h3>
-                            <p>Featuring Afro Soul, Amapiano, Afropop, and more amazing genres</p>
-                            <div class="last-updated" id="last-updated-info">
-                                <i class="fas fa-clock"></i>
-                                <span>Loading update info...</span>
-                            </div>
-                        </div>
-                        <button id="analyze-btn" class="analyze-btn">
-                            <i class="fas fa-play-circle"></i>
-                            Dive In
-                        </button>
-                    </div>
-                    <p class="input-help">
-                        Click the button above to get your personalized playlist wrapped!
-                    </p>
-                </div>
-
-                <div class="features-grid">
-                    <div class="feature-card">
-                        <i class="fas fa-users"></i>
-                        <h3>Top Artists</h3>
-                        <p>See which artists dominate your playlist</p>
-                    </div>
-                    <div class="feature-card">
-                        <i class="fas fa-music"></i>
-                        <h3>Genre Analysis</h3>
-                        <p>Discover your musical taste patterns</p>
-                    </div>
-                    <div class="feature-card">
-                        <i class="fas fa-heart"></i>
-                        <h3>Mood Insights</h3>
-                        <p>Explore the emotional landscape of your music</p>
-                    </div>
-                    <div class="feature-card">
-                        <i class="fas fa-star"></i>
-                        <h3>Hidden Gems</h3>
-                        <p>Find your playlist's best kept secrets</p>
-                    </div>
-                </div>
-            </div>
-        </div>    </div>    <!-- Playlist Wrapped Story Mode -->
-    <div id="story-container" class="story-container hidden">
-        <!-- Progress Bar -->
-        <div class="story-progress-container">
-            <div class="story-progress-bar" id="story-progress-bar"></div>
-        </div>
-        
-        <!-- Slide Indicators -->
-        <div class="story-slide-indicators" id="story-indicators">
-            <!-- Will be generated dynamically -->
-        </div>
-        
-        <!-- Slide Counter -->
-        <div class="story-counter" id="story-counter">1 / 12</div>
-        
-        <!-- Exit Button -->
-        <button class="story-exit-btn" id="story-exit-btn" title="Exit story mode">
-            <i class="fas fa-times"></i>
-        </button>
-        
-        <!-- Story Slides Container -->
-        <div class="story-slides" id="story-slides" data-slide="0">
-            <!-- Slides will be generated dynamically -->
-        </div>
-        
-        <!-- Navigation -->
-        <div class="story-navigation">
-            <button class="story-nav-btn" id="story-prev-btn" title="Previous slide">
-                <i class="fas fa-chevron-left"></i>
-                <span>Back</span>
-            </button>
-            <button class="story-nav-btn primary" id="story-next-btn" title="Next slide">
-                <span>Next</span>
-                <i class="fas fa-chevron-right"></i>
-            </button>
-        </div>
+  <main class="landing-main">
+    <div class="landing-content">
+      <p class="landing-label">Playlist Analytics</p>
+      <h1 class="landing-title">KamiLimu<br><span class="landing-title-accent">.inthe.Ears</span></h1>
+      <p class="landing-body">
+        A deep look at the music that defines KamiLimu — the artists, genres, contributors, and stories
+        behind every track in the community playlist.
+      </p>
+      <div class="landing-cta">
+        <button type="button" id="analyze-btn-hero" class="btn-primary">Explore the Playlist</button>
+      </div>
     </div>
-
-    <!-- Dashboard -->
-    <div id="dashboard" class="dashboard hidden">
-        <div class="dashboard-header">
-            <button id="back-btn" class="back-btn">
-                <i class="fas fa-arrow-left"></i>
-                Back
-            </button>
-            <div class="dashboard-title">
-                <h1>Playlist Insights</h1>
-            </div>            <div class="dashboard-actions">
-                <!-- <button id="view-story-btn" class="action-btn primary">
-                    <i class="fas fa-play"></i>
-                    View Story
-                </button> -->
-                <button id="advanced-analytics-btn" class="action-btn">
-                    <i class="fas fa-chart-line"></i>
-                    Advanced Analytics
-                </button>
-                <button id="share-btn" class="action-btn">
-                    <i class="fas fa-share"></i>
-                    Share
-                </button>
-                <button id="export-btn" class="action-btn">
-                    <i class="fas fa-download"></i>
-                    Export
-                </button>
-            </div>
-        </div>
-
-        <div class="dashboard-content">
-            <!-- Playlist Overview -->
-            <section class="playlist-overview">
-                <div class="playlist-header">
-                    <div class="playlist-image">
-                        <img id="playlist-img" src="" alt="Playlist cover">
-                    </div>
-                    <div class="playlist-info">
-                        <h2 id="playlist-name">Playlist Name</h2>
-                        <p id="playlist-description">Playlist description</p>
-                        <div class="playlist-stats">
-                            <div class="stat">
-                                <span class="stat-value" id="total-tracks">0</span>
-                                <span class="stat-label">tracks</span>
-                            </div>
-                            <div class="stat">
-                                <span class="stat-value" id="total-followers">0</span>
-                                <span class="stat-label">followers</span>
-                            </div>
-                            <div class="stat">
-                                <span class="stat-value" id="playlist-owner">Owner</span>
-                                <span class="stat-label">curator</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- Insights Grid -->
-            <div class="insights-grid">
-                <!-- Top Artists -->
-                <div class="insight-card artists-card">
-                    <div class="card-header">
-                        <h3><i class="fas fa-users"></i> Top Artists</h3>
-                        <span class="card-subtitle">Your playlist's superstars</span>
-                    </div>
-                    <div class="artists-list" id="artists-list">
-                        <!-- Artists will be populated here -->
-                    </div>
-                </div>
-
-                <!-- Top Genres -->
-                <div class="insight-card genres-card">
-                    <div class="card-header">
-                        <h3><i class="fas fa-music"></i> Top Genres</h3>
-                        <span class="card-subtitle">Your musical DNA</span>
-                    </div>
-                    <div class="genres-chart">
-                        <canvas id="genres-chart"></canvas>
-                    </div>
-                </div>
-
-                <!-- Mood Analysis -->
-                <div class="insight-card mood-card">
-                    <div class="card-header">
-                        <h3><i class="fas fa-heart"></i> Playlist Mood</h3>
-                        <span class="card-subtitle">The emotional fingerprint</span>
-                    </div>
-                    <div class="mood-chart">
-                        <canvas id="mood-chart"></canvas>
-                    </div>
-                </div>
-
-                <!-- Top Contributors -->
-                <div class="insight-card contributors-card">
-                    <div class="card-header">
-                        <h3><i class="fas fa-user-plus"></i> Top Contributors</h3>
-                        <span class="card-subtitle">Who's adding the hits?</span>
-                    </div>
-                    <div class="contributors-list" id="contributors-list">
-                        <!-- Contributors will be populated here -->
-                    </div>
-                </div>
-
-                <!-- Most Popular Track -->
-                <div class="insight-card popular-track-card">
-                    <div class="card-header">
-                        <h3><i class="fas fa-fire"></i> Most Popular Track</h3>
-                        <span class="card-subtitle">The crowd favorite</span>
-                    </div>
-                    <div class="track-info" id="popular-track">
-                        <!-- Popular track info -->
-                    </div>
-                </div>                <!-- Hidden Gem -->
-                <div class="insight-card hidden-gem-card">
-                    <div class="card-header">
-                        <h3><i class="fas fa-gem"></i> Hidden Gem</h3>
-                        <span class="card-subtitle">Your playlist's best kept secret</span>
-                    </div>
-                    <div class="track-info" id="hidden-gem">
-                        <!-- Hidden gem info -->
-                    </div>
-                </div>
-
-                <!-- Popularity Explanation -->
-                <div class="insight-card popularity-explanation-card">
-                    <div class="card-header">
-                        <h3><i class="fas fa-info-circle"></i> Understanding Popularity</h3>
-                        <span class="card-subtitle">What the numbers mean</span>
-                    </div>
-                    <div class="popularity-explanation">
-                        <div class="explanation-content">
-                            <p><strong>Spotify Popularity Score:</strong> A value between 0-100 that reflects how popular a track currently is on Spotify.</p>
-                              <div class="popularity-scale">
-                                <div class="scale-item">
-                                    <div class="scale-bar">
-                                        <div class="scale-fill high scale-100"></div>
-                                    </div>
-                                    <div class="scale-info">
-                                        <span class="scale-range">80-100</span>
-                                        <span class="scale-label">🔥 Viral Hits</span>
-                                        <span class="scale-desc">Global chart-toppers and trending tracks</span>
-                                    </div>
-                                </div>
-                                
-                                <div class="scale-item">
-                                    <div class="scale-bar">
-                                        <div class="scale-fill medium scale-70"></div>
-                                    </div>
-                                    <div class="scale-info">
-                                        <span class="scale-range">60-79</span>
-                                        <span class="scale-label">📈 Popular</span>
-                                        <span class="scale-desc">Well-known songs with solid streaming numbers</span>
-                                    </div>
-                                </div>
-                                
-                                <div class="scale-item">
-                                    <div class="scale-bar">
-                                        <div class="scale-fill low-medium scale-45"></div>
-                                    </div>
-                                    <div class="scale-info">
-                                        <span class="scale-range">40-59</span>
-                                        <span class="scale-label">🎵 Moderate</span>
-                                        <span class="scale-desc">Decent following, gaining traction</span>
-                                    </div>
-                                </div>
-                                
-                                <div class="scale-item">
-                                    <div class="scale-bar">
-                                        <div class="scale-fill low scale-25"></div>
-                                    </div>
-                                    <div class="scale-info">
-                                        <span class="scale-range">20-39</span>
-                                        <span class="scale-label">💎 Underground</span>
-                                        <span class="scale-desc">Hidden gems and niche favorites</span>
-                                    </div>
-                                </div>
-                                
-                                <div class="scale-item">
-                                    <div class="scale-bar">
-                                        <div class="scale-fill very-low scale-10"></div>
-                                    </div>
-                                    <div class="scale-info">
-                                        <span class="scale-range">0-19</span>
-                                        <span class="scale-label">🌚 Deep Cuts</span>
-                                        <span class="scale-desc">Ultra-rare finds and personal discoveries</span>
-                                    </div>
-                                </div>
-                            </div>
-                            
-                            <div class="popularity-notes">
-                                <p><i class="fas fa-lightbulb"></i> <strong>Fun Fact:</strong> The popularity score changes daily based on recent play counts, so today's underground hit could be tomorrow's viral sensation!</p>
-                            </div>
-                        </div>
-                    </div>
-                </div><!-- Timeline -->
-                <div class="insight-card timeline-card">
-                    <div class="card-header">
-                        <h3><i class="fas fa-calendar"></i> Playlist Timeline</h3>
-                        <span class="card-subtitle">Your musical journey</span>
-                    </div>
-                    <div class="timeline-info" id="timeline-info">
-                        <!-- Timeline info -->
-                    </div>                </div>
-
-                <!-- Oldest & Newest Songs -->
-                <div class="insight-card oldest-newest-card">
-                    <div class="card-header">
-                        <h3><i class="fas fa-clock"></i> Musical Time Span</h3>
-                        <span class="card-subtitle">From classics to fresh releases</span>
-                    </div>
-                    <div class="oldest-newest-info" id="oldest-newest-info">
-                        <!-- Oldest and newest song info -->
-                    </div>
-                </div>
-
-                <!-- Advanced Analytics Section -->                <!-- Contributor Leaderboard -->
-                <div class="insight-card contributor-analytics-card">
-                    <div class="card-header">
-                        <h3><i class="fas fa-trophy"></i> Contributor Leaderboard</h3>
-                        <span class="card-subtitle">Top playlist curators with achievements</span>
-                    </div>
-                    <div class="contributor-analytics" id="contributor-analytics">
-                        <!-- Contributor analytics will be populated here -->
-                    </div>
-                </div>
-                
-                <!-- Genre Maestros Section -->
-                <div class="insight-card genre-maestros-card">
-                    <div class="card-header">
-                        <h3><i class="fas fa-crown"></i> Genre Maestros</h3>
-                        <span class="card-subtitle">Champions of each musical genre</span>
-                    </div>
-                    <div class="genre-maestros" id="genre-maestros">
-                        <!-- Genre maestros will be populated here -->
-                    </div>
-                </div>
-                
-                <!-- Playlist Members Section -->
-                <div class="insight-card playlist-members-card">
-                    <div class="card-header">
-                        <h3><i class="fas fa-users"></i> Playlist Members</h3>
-                        <span class="card-subtitle">Everyone who's part of this musical journey</span>
-                    </div>
-                    <div class="playlist-members" id="playlist-members">
-                        <!-- Playlist members will be populated here -->
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="landing-stats" id="landing-stats">
+      <!-- populated by JS -->
     </div>
+  </main>
+</div>
 
-    <header>
-    <div class="header-controls">
-        <button id="themeToggle">Toggle Theme</button>
-        <div class="status-item">
-            <div class="status-value" id="lastUpdatedValue">Loading...</div>
-            <div class="status-label">Last Updated</div>
+<!-- ── Story Mode ─────────────────────────────────────────────────────────────── -->
+<div id="story-container" class="story-container hidden">
+  <div class="story-progress-track">
+    <div class="story-progress-bar" id="story-progress-bar"></div>
+  </div>
+
+  <div class="story-slides" id="story-slides"></div>
+
+  <div class="story-ui">
+    <button type="button" class="story-nav-text" id="story-prev-btn">← Prev</button>
+    <span class="story-counter" id="story-counter">1 / 12</span>
+    <button type="button" class="story-nav-text primary" id="story-next-btn">Next →</button>
+  </div>
+
+  <button type="button" class="story-close" id="story-exit-btn">✕</button>
+</div>
+
+<!-- ── Dashboard ─────────────────────────────────────────────────────────────── -->
+<div id="dashboard" class="dashboard hidden">
+
+  <!-- Header bar -->
+  <div class="dash-header">
+    <div class="dash-header-inner">
+      <div class="dash-header-left">
+        <button type="button" id="back-btn" class="btn-ghost">← Back</button>
+        <div class="dash-playlist-meta">
+          <span class="dash-playlist-name" id="playlist-name">—</span>
+          <div class="dash-inline-stats">
+            <div class="inline-stat">
+              <span class="inline-stat-label">tracks</span>
+              <span class="inline-stat-value" id="total-tracks">—</span>
+            </div>
+            <div class="inline-stat">
+              <span class="inline-stat-label">followers</span>
+              <span class="inline-stat-value" id="total-followers">—</span>
+            </div>
+            <div class="inline-stat">
+              <span class="inline-stat-label">curator</span>
+              <span class="inline-stat-value" id="playlist-owner">—</span>
+            </div>
+          </div>
         </div>
+      </div>
+      <div class="dash-header-right">
+        <button type="button" id="view-story-btn" class="btn-primary">View Story</button>
+        <button type="button" id="share-btn" class="btn-ghost">Share</button>
+        <button type="button" id="export-btn" class="btn-ghost">Export</button>
+      </div>
     </div>
-</header>
+  </div>
 
-<script src="cache/playlist-data.js"></script>
-<script>
-    // Get timestamp from playlist-data.js
-    const lastUpdatedElement = document.getElementById('lastUpdatedValue');
-    if (typeof playlistData !== 'undefined' && playlistData.lastUpdated) {
-        lastUpdatedElement.textContent = new Date(playlistData.lastUpdated).toLocaleDateString();
-    } else {
-        lastUpdatedElement.textContent = 'Never';
-    }
-</script>
+  <div class="dash-body">
 
-    <!-- Chart.js for visualizations -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="script.js"></script>
+    <!-- Overview strip: 4 stat cards -->
+    <section class="overview-strip">
+      <div class="overview-card">
+        <div class="overview-number" id="ov-tracks">—</div>
+        <div class="overview-label">Total Tracks</div>
+      </div>
+      <div class="overview-card">
+        <div class="overview-number" id="ov-contributors">—</div>
+        <div class="overview-label">Contributors</div>
+      </div>
+      <div class="overview-card">
+        <div class="overview-number overview-number--sm" id="ov-top-genre">—</div>
+        <div class="overview-label">Top Genre</div>
+      </div>
+      <div class="overview-card">
+        <div class="overview-number overview-number--sm" id="ov-top-contributor">—</div>
+        <div class="overview-label">Most Active</div>
+      </div>
+    </section>
+
+    <!-- Two-column grid -->
+    <div class="dash-grid">
+
+      <!-- Artists -->
+      <div class="dash-card">
+        <div class="card-head">
+          <span class="card-title">Top Artists</span>
+          <span class="card-sub">By track count</span>
+        </div>
+        <div class="artist-list" id="artists-list"></div>
+      </div>
+
+      <!-- Contributors -->
+      <div class="dash-card">
+        <div class="card-head">
+          <span class="card-title">Contributors</span>
+          <span class="card-sub">Ranked by songs added</span>
+        </div>
+        <div class="contributor-list" id="contributors-list"></div>
+      </div>
+
+      <!-- Genre chart -->
+      <div class="dash-card">
+        <div class="card-head">
+          <span class="card-title">Genre Breakdown</span>
+          <span class="card-sub">By track count</span>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="genres-chart"></canvas>
+        </div>
+      </div>
+
+      <!-- Mood radar -->
+      <div class="dash-card">
+        <div class="card-head">
+          <span class="card-title">Playlist Mood</span>
+          <span class="card-sub">Audio feature averages</span>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="mood-chart"></canvas>
+        </div>
+      </div>
+
+      <!-- Most popular + Hidden gem -->
+      <div class="dash-card track-pair-card">
+        <div class="track-pair">
+          <div class="track-spotlight track-spotlight--popular" id="popular-track">
+            <span class="track-type-label">Most Popular</span>
+          </div>
+          <div class="track-spotlight track-spotlight--gem" id="hidden-gem">
+            <span class="track-type-label">Hidden Gem</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Timeline -->
+      <div class="dash-card">
+        <div class="card-head">
+          <span class="card-title">Timeline</span>
+          <span class="card-sub">When tracks were added</span>
+        </div>
+        <div class="timeline-visual" id="timeline-info"></div>
+      </div>
+
+      <!-- Contributor leaderboard (advanced) -->
+      <div class="dash-card dash-card--full">
+        <div class="card-head">
+          <span class="card-title">Contributor Leaderboard</span>
+          <span class="card-sub">Detailed stats and badges</span>
+        </div>
+        <div id="contributor-analytics"></div>
+      </div>
+
+      <!-- Genre Maestros -->
+      <div class="dash-card dash-card--full">
+        <div class="card-head">
+          <span class="card-title">Genre Maestros</span>
+          <span class="card-sub">Top contributor per genre</span>
+        </div>
+        <div id="genre-maestros"></div>
+      </div>
+
+      <!-- Playlist Members -->
+      <div class="dash-card dash-card--full">
+        <div class="card-head">
+          <span class="card-title">All Contributors</span>
+          <span class="card-sub">Everyone who shaped this playlist</span>
+        </div>
+        <div id="playlist-members"></div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
