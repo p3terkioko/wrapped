@@ -105,6 +105,16 @@ async function handleRefresh(req, res) {
 router.post('/refresh',        adminAuth, asyncHandler(handleRefresh));
 router.post('/trigger-update', adminAuth, asyncHandler(handleRefresh));
 
+// GET /api/cron/refresh — called by Vercel Cron at 06:00 UTC (09:00 EAT)
+router.get('/cron/refresh', asyncHandler(async (req, res) => {
+  const secret = req.headers['authorization']?.replace('Bearer ', '');
+  if (env.CRON_SECRET && secret !== env.CRON_SECRET) {
+    return res.status(401).json({ success: false, error: 'Unauthorized' });
+  }
+  const result = await runRefreshPipeline('cron');
+  res.json({ success: true, message: `Cron updated ${result.tracksCount} tracks` });
+}));
+
 // GET /api/admin/status
 router.get('/status', asyncHandler(async (req, res) => {
   const cached = await readCache();

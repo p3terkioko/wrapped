@@ -21,6 +21,7 @@ const env = {
   SPOTIFY_PLAYLIST_ID:   optional('SPOTIFY_PLAYLIST_ID') || optional('DEFAULT_PLAYLIST_ID', '1BZY7mhShLhc2fIlI6uIa4'),
 
   ADMIN_PASSWORD:        optional('ADMIN_PASSWORD', 'admin123'),
+  CRON_SECRET:           optional('CRON_SECRET'),
   DATABASE_URL:          optional('DATABASE_URL'),
   NODE_ENV:              optional('NODE_ENV', 'development'),
   PORT:                  parseInt(optional('PORT', '3000'), 10),

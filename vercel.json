@@ -2,9 +2,15 @@
   "version": 2,
   "functions": {
     "api/index.js": {
-      "maxDuration": 30
+      "maxDuration": 60
     }
   },
+  "crons": [
+    {
+      "path": "/api/admin/cron/refresh",
+      "schedule": "0 6 * * *"
+    }
+  ],
   "routes": [
     {
       "src": "/api/(.*)",
