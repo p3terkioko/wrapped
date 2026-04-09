@@ -9,10 +9,6 @@
     {
       "path": "/api/admin/cron/refresh",
       "schedule": "0 6 * * *"
-    },
-    {
-      "path": "/api/admin/cron/song-of-hour",
-      "schedule": "0 12 * * *"
     }
   ],
   "routes": [

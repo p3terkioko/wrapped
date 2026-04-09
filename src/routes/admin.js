@@ -153,43 +153,6 @@ router.get('/cron/refresh', asyncHandler(async (req, res) => {
   res.json({ success: true, message: `Cron updated ${result.tracksCount} tracks` });
 }));
 
-// GET /api/cron/song-of-hour — called by Vercel Cron every hour
-router.get('/cron/song-of-hour', asyncHandler(async (req, res) => {
-  const secret = req.headers['authorization']?.replace('Bearer ', '');
-  if (env.CRON_SECRET && secret !== env.CRON_SECRET) {
-    return res.status(401).json({ success: false, error: 'Unauthorized' });
-  }
-
-  const tokenData   = await spotify.refreshAccessToken(env.SPOTIFY_REFRESH_TOKEN);
-  const accessToken = tokenData.access_token;
-  const tracks      = await spotify.getPlaylistTracks(env.SPOTIFY_PLAYLIST_ID, accessToken);
-  const validTracks = tracks.filter(item => item.track && item.track.id);
-
-  if (!validTracks.length) {
-    return res.status(200).json({ success: false, message: 'No tracks found' });
-  }
-
-  const pickedItem  = validTracks[Math.floor(Math.random() * validTracks.length)];
-  const pickedArtistIds = [...new Set(pickedItem.track.artists.map(a => a.id))];
-  const pickedArtists   = await spotify.getArtists(pickedArtistIds, accessToken);
-
-  const allContributorIds = [...new Set(validTracks.map(item => item.added_by?.id).filter(id => id && id !== 'unknown'))];
-  const allUserProfiles   = await Promise.all(
-    allContributorIds.map(async userId => {
-      const profile = await spotify.getUserProfile(userId, accessToken);
-      return { id: userId, displayName: profile?.display_name || `User ${userId.slice(-4)}` };
-    })
-  );
-
-  const songOfTheHour = buildSongOfTheHour(pickedItem, pickedArtists, allUserProfiles);
-
-  const cached = await readCache();
-  if (cached) {
-    await writeCache({ ...cached.data, songOfTheHour });
-  }
-
-  res.json({ success: true, song: songOfTheHour });
-}));
 
 // GET /api/admin/status
 router.get('/status', asyncHandler(async (req, res) => {
