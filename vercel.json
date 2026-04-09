@@ -12,7 +12,7 @@
     },
     {
       "path": "/api/admin/cron/song-of-hour",
-      "schedule": "0 * * * *"
+      "schedule": "0 12 * * *"
     }
   ],
   "routes": [
