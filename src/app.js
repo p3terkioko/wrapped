@@ -14,7 +14,10 @@ const { errorHandler, asyncHandler, AppError } = require('./middleware/errorHand
 const app = express();
 
 // ── Middleware ─────────────────────────────────────────────────────────────────
-app.use(cors());
+app.use(cors({
+  origin: env.NODE_ENV === 'production' ? 'https://wrapped-beige.vercel.app' : 'http://localhost:3000',
+  credentials: true,
+}));
 app.use(express.json());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../public')));
