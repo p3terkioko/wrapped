@@ -468,6 +468,97 @@ a { color: inherit; }
 }
 .track-spotify-link:hover { text-decoration: underline; }
 
+/* ── Song of the Hour ───────────────────────────────────────────────────────── */
+#song-of-hour {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: .75rem;
+  padding: 1rem 0;
+  text-align: center;
+}
+.soth-art {
+  width: 140px;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+.soth-name {
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  line-height: 1.3;
+}
+.soth-artist {
+  font-family: var(--font-body);
+  font-size: .875rem;
+  color: var(--text-secondary);
+}
+.soth-album {
+  font-family: var(--font-mono);
+  font-size: .6875rem;
+  color: var(--text-muted);
+}
+.soth-album-type { text-transform: capitalize; }
+.soth-explicit {
+  display: inline-block;
+  font-size: .5rem;
+  font-family: var(--font-mono);
+  background: var(--text-muted);
+  color: var(--bg);
+  border-radius: 2px;
+  padding: 0 3px;
+  vertical-align: middle;
+  margin-left: 4px;
+  line-height: 1.6;
+}
+.soth-genres {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .35rem;
+  justify-content: center;
+}
+.soth-genre {
+  font-family: var(--font-mono);
+  font-size: .5625rem;
+  color: var(--teal-500);
+  border: 1px solid rgba(0,180,194,0.3);
+  border-radius: 3px;
+  padding: 1px 6px;
+  text-transform: capitalize;
+}
+.soth-meta {
+  display: flex;
+  gap: 1.5rem;
+  justify-content: center;
+}
+.soth-stat {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.soth-stat-val {
+  font-family: var(--font-mono);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--teal-500);
+  line-height: 1;
+}
+.soth-stat-label {
+  font-family: var(--font-mono);
+  font-size: .5625rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: .08em;
+}
+.soth-added {
+  font-family: var(--font-mono);
+  font-size: .625rem;
+  color: var(--text-muted);
+}
+
 /* ── Timeline ───────────────────────────────────────────────────────────────── */
 .timeline-visual { padding: .5rem 0; }
 .timeline-line {

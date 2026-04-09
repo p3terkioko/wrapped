@@ -9,6 +9,41 @@ const { adminAuth }    = require('../middleware/adminAuth');
 const { asyncHandler, AppError } = require('../middleware/errorHandler');
 const { env }    = require('../config/env');
 
+// Build enriched song-of-the-hour object from a playlist track item
+function buildSongOfTheHour(item, artists, userProfiles) {
+  const track = item.track;
+  const adderId = item.added_by?.id;
+  const profile = userProfiles.find(p => p.id === adderId);
+  const addedBy = profile?.displayName || (adderId ? `User ${adderId.slice(-4)}` : 'Unknown');
+
+  const artistGenres = [...new Set(
+    track.artists.flatMap(ta => {
+      const full = artists.find(a => a?.id === ta.id);
+      return full?.genres || [];
+    })
+  )];
+
+  const mins = Math.floor((track.duration_ms || 0) / 60000);
+  const secs = String(Math.floor(((track.duration_ms || 0) % 60000) / 1000)).padStart(2, '0');
+
+  return {
+    name:       track.name,
+    artist:     track.artists.map(a => a.name).join(', '),
+    image:      track.album?.images?.[0]?.url || null,
+    id:         track.id,
+    url:        `https://open.spotify.com/track/${track.id}`,
+    album:      track.album?.name || null,
+    albumType:  track.album?.album_type || null,
+    releaseDate: track.album?.release_date || null,
+    popularity: track.popularity ?? null,
+    explicit:   track.explicit ?? false,
+    duration:   `${mins}:${secs}`,
+    addedBy,
+    addedAt:    item.added_at || null,
+    genres:     artistGenres.slice(0, 5),
+  };
+}
+
 // Full pipeline: refresh token → Spotify data → insights → DB
 async function runRefreshPipeline(triggeredBy = 'admin') {
   if (!env.SPOTIFY_REFRESH_TOKEN) throw new AppError(400, 'SPOTIFY_REFRESH_TOKEN not configured');
@@ -90,6 +125,9 @@ async function runRefreshPipeline(triggeredBy = 'admin') {
   insights.genreMaestros   = calculateGenreMaestros(validTracks, artists, allUserProfiles);
   insights.playlistMembers = generatePlaylistMembers(validTracks, allUserProfiles, playlist.followers?.total || 0);
 
+  const randomItem = validTracks[Math.floor(Math.random() * validTracks.length)];
+  insights.songOfTheHour = randomItem ? buildSongOfTheHour(randomItem, artists, allUserProfiles) : null;
+
   await writeCache(insights);
   await logUpdate('success', `${triggeredBy} — ${validTracks.length} tracks`, validTracks.length, triggeredBy);
 
@@ -113,6 +151,44 @@ router.get('/cron/refresh', asyncHandler(async (req, res) => {
   }
   const result = await runRefreshPipeline('cron');
   res.json({ success: true, message: `Cron updated ${result.tracksCount} tracks` });
+}));
+
+// GET /api/cron/song-of-hour — called by Vercel Cron every hour
+router.get('/cron/song-of-hour', asyncHandler(async (req, res) => {
+  const secret = req.headers['authorization']?.replace('Bearer ', '');
+  if (env.CRON_SECRET && secret !== env.CRON_SECRET) {
+    return res.status(401).json({ success: false, error: 'Unauthorized' });
+  }
+
+  const tokenData   = await spotify.refreshAccessToken(env.SPOTIFY_REFRESH_TOKEN);
+  const accessToken = tokenData.access_token;
+  const tracks      = await spotify.getPlaylistTracks(env.SPOTIFY_PLAYLIST_ID, accessToken);
+  const validTracks = tracks.filter(item => item.track && item.track.id);
+
+  if (!validTracks.length) {
+    return res.status(200).json({ success: false, message: 'No tracks found' });
+  }
+
+  const pickedItem  = validTracks[Math.floor(Math.random() * validTracks.length)];
+  const pickedArtistIds = [...new Set(pickedItem.track.artists.map(a => a.id))];
+  const pickedArtists   = await spotify.getArtists(pickedArtistIds, accessToken);
+
+  const allContributorIds = [...new Set(validTracks.map(item => item.added_by?.id).filter(id => id && id !== 'unknown'))];
+  const allUserProfiles   = await Promise.all(
+    allContributorIds.map(async userId => {
+      const profile = await spotify.getUserProfile(userId, accessToken);
+      return { id: userId, displayName: profile?.display_name || `User ${userId.slice(-4)}` };
+    })
+  );
+
+  const songOfTheHour = buildSongOfTheHour(pickedItem, pickedArtists, allUserProfiles);
+
+  const cached = await readCache();
+  if (cached) {
+    await writeCache({ ...cached.data, songOfTheHour });
+  }
+
+  res.json({ success: true, song: songOfTheHour });
 }));
 
 // GET /api/admin/status

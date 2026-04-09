@@ -106,7 +106,6 @@ function showDashboard() {
 
 // ── Dashboard Population ──────────────────────────────────────────────────────
 var genreChartInstance = null;
-var moodChartInstance  = null;
 
 function populateDashboard(data) {
   var p = data.playlist;
@@ -133,7 +132,7 @@ function populateDashboard(data) {
   renderTrackSpotlight('hidden-gem',    data.leastPopular, true);
   renderTimeline(data.dateRange);
   renderGenreChart(data.topGenres || []);
-  renderMoodChart(data.audioFeatures || {});
+  renderSongOfTheHour(data.songOfTheHour);
   renderDecades(data.decades || []);
   var hasAudioFeatures = data.totalAnalyzedTracks > 0;
   renderKeyTempo(data.keyInsights, data.tempoBreakdown, hasAudioFeatures);
@@ -265,53 +264,40 @@ function renderGenreChart(genres) {
   });
 }
 
-// ── Mood Radar ────────────────────────────────────────────────────────────────
-function renderMoodChart(af) {
-  var ctx = document.getElementById('mood-chart');
-  if (!ctx) return;
-  if (moodChartInstance) { moodChartInstance.destroy(); moodChartInstance = null; }
+// ── Song of the Hour ──────────────────────────────────────────────────────────
+function renderSongOfTheHour(song) {
+  var el = document.getElementById('song-of-hour');
+  if (!el) return;
+  if (!song) {
+    el.innerHTML = '<p class="no-data">No song selected yet</p>';
+    return;
+  }
 
-  moodChartInstance = new Chart(ctx, {
-    type: 'radar',
-    data: {
-      labels: ['Valence', 'Energy', 'Danceability', 'Acousticness', 'Speechiness'],
-      datasets: [{
-        label: 'Mood',
-        data: [af.valence, af.energy, af.danceability, af.acousticness, af.speechiness],
-        backgroundColor: 'rgba(0,180,194,0.12)',
-        borderColor: '#00b4c2',
-        borderWidth: 1.5,
-        pointBackgroundColor: '#00b4c2',
-        pointRadius: 3,
-      }],
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { display: false },
-        tooltip: {
-          backgroundColor: '#141414',
-          titleColor: '#f8f9f0',
-          bodyColor: 'rgba(248,249,240,0.55)',
-          borderColor: 'rgba(248,249,240,0.07)',
-          borderWidth: 1,
-          titleFont: { family: 'JetBrains Mono' },
-          bodyFont:  { family: 'JetBrains Mono' },
-        },
-      },
-      scales: {
-        r: {
-          min: 0, max: 1,
-          backgroundColor: 'transparent',
-          angleLines: { color: 'rgba(248,249,240,0.07)' },
-          grid:        { color: 'rgba(248,249,240,0.07)' },
-          pointLabels: { color: 'rgba(248,249,240,0.4)', font: { family: 'JetBrains Mono', size: 10 } },
-          ticks:       { display: false },
-        },
-      },
-    },
-  });
+  var releaseYear = song.releaseDate ? song.releaseDate.slice(0, 4) : null;
+  var albumLine   = song.album
+    ? esc(song.album) + (song.albumType ? ' <span class="soth-album-type">(' + esc(song.albumType) + ')</span>' : '') + (releaseYear ? ' · ' + releaseYear : '')
+    : null;
+
+  var genreHtml = (song.genres && song.genres.length)
+    ? '<div class="soth-genres">' + song.genres.map(function(g) { return '<span class="soth-genre">' + esc(g) + '</span>'; }).join('') + '</div>'
+    : '';
+
+  var addedLine = song.addedBy
+    ? 'Added by <strong>' + esc(song.addedBy) + '</strong>' + (song.addedAt ? ' · ' + new Date(song.addedAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '')
+    : '';
+
+  el.innerHTML =
+    (song.image ? '<img class="soth-art" src="' + song.image + '" alt="Album art">' : '') +
+    '<div class="soth-name">' + esc(song.name) + (song.explicit ? ' <span class="soth-explicit">E</span>' : '') + '</div>' +
+    '<div class="soth-artist">' + esc(song.artist) + '</div>' +
+    (albumLine ? '<div class="soth-album">' + albumLine + '</div>' : '') +
+    genreHtml +
+    '<div class="soth-meta">' +
+      (song.popularity !== null ? '<span class="soth-stat"><span class="soth-stat-val">' + song.popularity + '</span><span class="soth-stat-label">popularity</span></span>' : '') +
+      (song.duration   ? '<span class="soth-stat"><span class="soth-stat-val">' + esc(song.duration) + '</span><span class="soth-stat-label">duration</span></span>' : '') +
+    '</div>' +
+    (addedLine ? '<div class="soth-added">' + addedLine + '</div>' : '') +
+    '<a class="track-spotify-link" href="' + song.url + '" target="_blank" rel="noopener">Listen on Spotify</a>';
 }
 
 // ── Decade Breakdown ──────────────────────────────────────────────────────────
