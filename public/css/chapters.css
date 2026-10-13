@@ -126,15 +126,17 @@
 .cal.has { fill: var(--vermilion); }
 .timeline { position: relative; height: 150px; max-width: 980px; margin-top: 8px; }
 .timeline__axis { position: absolute; left: 0; right: 0; bottom: 26px; height: 1px; background: var(--hair); }
-.tl-gap { position: absolute; bottom: 26px; left: var(--a); width: calc(var(--b) - var(--a)); height: 10px; background: repeating-linear-gradient(90deg, rgba(243, 233, 214, 0.18) 0 2px, transparent 2px 6px); }
-.tl-binge { position: absolute; bottom: 26px; left: var(--a); width: 3px; height: var(--h); background: var(--vermilion); border-radius: 2px; transform-origin: bottom; }
+.tl-gap { position: absolute; bottom: 26px; left: var(--a); width: calc(var(--b) - var(--a)); height: 10px; background: repeating-linear-gradient(90deg, rgba(243, 233, 214, 0.16) 0 2px, transparent 2px 6px); }
+.tl-gap.is-lead { background: repeating-linear-gradient(90deg, rgba(233, 180, 76, 0.55) 0 2px, transparent 2px 6px); }
+.tl-binge { position: absolute; bottom: 26px; left: var(--a); width: 3px; height: var(--h); background: var(--bar); border-radius: 2px; transform-origin: bottom; }
+.tl-binge.is-lead { background: var(--vermilion); }
 .tl-event { position: absolute; bottom: 26px; left: var(--a); width: 1px; height: 100%; background: var(--gold); }
 .tl-label { position: absolute; bottom: calc(100% + 4px); left: 0; white-space: nowrap; font: 400 0.68rem/1.2 var(--data); color: var(--cream-2); }
-.tl-gap .tl-label { bottom: calc(100% + 2px); color: var(--cream-3); }
+.tl-gap .tl-label { bottom: calc(100% + 4px); color: var(--gold); }
+.tl-binge .tl-label { color: var(--cream); }
 .tl-end { position: absolute; bottom: 4px; font: 400 0.68rem/1 var(--data); color: var(--cream-3); }
 .tl-end--a { left: 0; }
 .tl-end--b { right: 0; }
-@media (max-width: 559px) { .tl-binge:nth-of-type(n+4) .tl-label, .tl-gap:nth-of-type(n+3) .tl-label { display: none; } }
 
 /* ── Picks ──────────────────────────────────────────────────────────────── */
 .singles { display: grid; gap: 22px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 21rem), 1fr)); }
@@ -176,6 +178,10 @@
 
 .finale { min-height: 100svh; align-content: center; }
 .finale .lede { margin: 0; max-width: 26ch; font-size: clamp(1.2rem, 2.1vw, 1.55rem); line-height: 1.35; }
+/* Phones: like the opening, the record takes the top half and the words sit below it. */
+@media (max-width: 759px) {
+  .finale { align-content: end; padding-top: 52svh; padding-bottom: 10svh; }
+}
 
 
 /* Find yourself */
@@ -229,3 +235,10 @@ html.reveal-ready:not(.motion-off) [data-reveal='dots'].is-in .moodmap__dots { o
 .colchart__axis { display: flex; margin-top: 6px; }
 .colchart__axis span { flex: 1 1 0; min-width: 0; text-align: center; white-space: nowrap; overflow: visible; font: 400 0.68rem/1.2 var(--data); color: var(--cream-3); }
 .tip { position: fixed; z-index: 60; pointer-events: none; padding: 6px 10px; border-radius: 6px; background: var(--cream); color: var(--lacquer); font: 400 0.75rem/1.2 var(--data); white-space: nowrap; transform: translate(-50%, calc(-100% - 10px)); }
+
+.streaks__lists { display: grid; gap: 24px 48px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr)); max-width: 980px; }
+.streaks__h { margin: 0 0 8px; font: 600 1.15rem/1.2 var(--display); font-style: italic; }
+.streaks__list { list-style: none; margin: 0; padding: 0; display: grid; }
+.streaks__list li { display: grid; grid-template-columns: auto minmax(0, 1fr); column-gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--hair); font-size: 0.95rem; color: var(--cream-2); }
+.streaks__list b { font: 600 1.1rem/1.1 var(--display); font-style: italic; color: var(--vermilion); font-weight: 600; }
+.streaks__list span { grid-column: 2; font: 400 0.74rem/1.4 var(--data); color: var(--cream-3); }

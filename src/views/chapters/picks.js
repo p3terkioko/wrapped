@@ -75,11 +75,11 @@ function renderCredits(film) {
   <h2 class="title" id="finale-h" aria-label="KamiLimu.inthe.Ears"><span class="line" data-split>KamiLimu</span><span class="line dim" data-split>.inthe.Ears</span></h2>
   <p class="lede"><span class="n">${fmt(t.entries)}</span> songs and counting. The record's still spinning. What's the next one?</p>
   <div class="actions">
-    <a class="btn btn--primary" href="${esc(film.playlist.url || 'https://open.spotify.com/playlist/' + film.playlist.id)}" rel="noopener">Add a song ↗</a>
+    <a class="btn btn--primary" href="/dashboard">Open the dashboard</a>
+    <a class="btn" href="${esc(film.playlist.url || 'https://open.spotify.com/playlist/' + film.playlist.id)}" rel="noopener">Add a song ↗</a>
     <a class="btn" href="#opening" data-find-open>Find yourself</a>
     <button type="button" class="btn" data-share>Share</button>
   </div>
-  <p class="attribution"><img src="/img/spotify-logo.png" width="140" height="38" alt="Spotify"> <span>Songs, artwork and data from Spotify; audio features from ReccoBeats, Deezer and essentia.js; origins from MusicBrainz; lyric counts from LRCLIB. Numbers as of ${esc(date(film.generatedAt))}.</span></p>
 </section>`;
 }
 

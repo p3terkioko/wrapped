@@ -109,12 +109,23 @@ function renderRhythmTimeline(film) {
     <p class="sub">${esc(b.name)} added ${fmt(b.n)} songs on ${esc(date(b.from))}, starting at ${esc(time12(b.from))}. The longest silence ran from ${esc(date(d.from, { month: 'short' }))} to ${esc(date(d.to, { month: 'short' }))}, until ${esc(d.brokenBy)} broke it.</p>
   </div>
   ${calendar(r.calendar, first, last)}
-  <div class="timeline" role="list" aria-label="Binges and long silences">
+  <div class="timeline" aria-hidden="true">
     <div class="timeline__axis"></div>
-    ${r.droughts.slice(0, 4).map(g => `<span class="tl-gap" role="listitem" style="--a:${x(g.from)}%;--b:${x(g.to)}%"><span class="tl-label">${fmt(g.days)} days quiet</span></span>`).join('')}
-    ${r.binges.slice(0, 5).map(g => `<span class="tl-binge" role="listitem" style="--a:${x(g.from)}%;--h:${Math.min(100, 20 + g.n * 2.4)}%"><span class="tl-label">${esc(g.name)}, ${fmt(g.n)}</span></span>`).join('')}
-    ${r.events.map(ev => `<span class="tl-event" role="listitem" style="--a:${x(ev.date)}%"><span class="tl-label">${esc(ev.title)}</span></span>`).join('')}
+    ${r.droughts.slice(0, 4).map((g, i) => `<span class="tl-gap${i === 0 ? ' is-lead' : ''}" style="--a:${x(g.from)}%;--b:${x(g.to)}%">${i === 0 ? `<span class="tl-label">${fmt(g.days)} days quiet</span>` : ''}</span>`).join('')}
+    ${r.binges.slice(0, 5).map((g, i) => `<span class="tl-binge${i === 0 ? ' is-lead' : ''}" style="--a:${x(g.from)}%;--h:${Math.min(100, 20 + g.n * 2.4)}%">${i === 0 ? `<span class="tl-label">${esc(g.name)}, ${fmt(g.n)} songs</span>` : ''}</span>`).join('')}
+    ${r.events.map(ev => `<span class="tl-event" style="--a:${x(ev.date)}%"></span>`).join('')}
     <span class="tl-end tl-end--a">${esc(date(first, { month: 'short' }))}</span><span class="tl-end tl-end--b">${esc(date(last, { month: 'short' }))}</span>
+  </div>
+  <div class="streaks__lists">
+    <div>
+      <h3 class="streaks__h">Biggest binges</h3>
+      <ol class="streaks__list">${r.binges.slice(0, 5).map(g => `<li><b>${fmt(g.n)}</b> songs in ${fmt(g.minutes)} min <span>${esc(g.name)} · ${esc(date(g.from, { month: 'short' }))}</span></li>`).join('')}</ol>
+    </div>
+    <div>
+      <h3 class="streaks__h">Longest silences</h3>
+      <ol class="streaks__list">${r.droughts.slice(0, 5).map(g => `<li><b>${fmt(g.days)}</b> days <span>${esc(date(g.from, { month: 'short' }))} – ${esc(date(g.to, { month: 'short' }))} · broken by ${esc(g.brokenBy)}</span></li>`).join('')}</ol>
+    </div>
+    ${r.events.length ? `<div><h3 class="streaks__h">Community moments</h3><ol class="streaks__list">${r.events.map(ev => `<li><b>${esc(date(ev.date, { month: 'short' }))}</b> ${esc(ev.title)} <span>${fmt(ev.adds)} songs within three days</span></li>`).join('')}</ol></div>` : ''}
   </div>
   <p class="caption">A binge is one person adding five or more songs with no more than 30 minutes between them. A silence is 14 or more days with no new song. ${r.events.length ? 'Community moments come from the admin list.' : 'Community moments (kickoffs, outdoor days) can be added in the admin and will appear on this line.'} Busiest single day: ${esc(date(r.busiest.day + 'T12:00:00+03:00'))}, ${fmt(r.busiest.n)} songs.</p>
 </section>`;

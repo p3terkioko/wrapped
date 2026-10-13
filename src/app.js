@@ -12,6 +12,7 @@ const spotify          = require('./services/spotify');
 const { prisma }       = require('./db/client');
 const { readPayload }  = require('./services/payloads');
 const { renderPage, renderUnavailable } = require('./views/page');
+const { renderDashboard } = require('./views/dashboard');
 const { errorHandler, asyncHandler } = require('./middleware/errorHandler');
 
 const app = express();
@@ -63,6 +64,16 @@ app.get('/auth/status', (req, res) => {
 app.get('/admin', (req, res) => {
   res.sendFile(path.join(__dirname, '../public/admin.html'));
 });
+
+// ── The Crate: the dashboard page, reached from the end of the film ───────────
+app.get('/dashboard', asyncHandler(async (req, res) => {
+  const film = prisma ? await readPayload(prisma, 'film').catch(() => null) : null;
+  res.set('Content-Type', 'text/html; charset=utf-8');
+  if (!film) { res.set('Cache-Control', 'no-store'); return res.status(503).send(renderUnavailable()); }
+  const host = req.headers['x-forwarded-host'] || req.headers.host || 'wrapped-beige.vercel.app';
+  res.set('Cache-Control', 'public, max-age=0, s-maxage=600, stale-while-revalidate=86400');
+  res.send(renderDashboard({ ...film.data, version: film.version }, { url: `https://${host}/dashboard` }));
+}));
 
 // ── The film: server-rendered from the precomputed payload. Every other path
 // (old links, shared URLs) lands here too. ─────────────────────────────────────

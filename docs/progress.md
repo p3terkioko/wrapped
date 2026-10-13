@@ -8,7 +8,7 @@ Running log for the KamiLimu.inthe.Ears rebuild. Newest entries at the bottom of
 - Stop and ask only before anything that writes to, changes, or deploys to production, or for a decision that can't be made from the brief, audit, or research where a wrong guess costs more than a stage.
 - Never run against the production database. Local work uses a separate dev database seeded from the read-only pull; the refresh job stays off locally.
 - Work on a branch. Vercel preview deployments are allowed; production only after sign-off.
-- The scroll film replaces the landing page and the old dashboard. Story mode stays, reachable from the opening and the closing frame. Old URLs land on the film. The admin page stays.
+- The scroll film replaces the landing page and the old dashboard. (Story mode first stayed; Peter later asked for it to go, and it is removed.) Old URLs land on the film. The admin page stays.
 - Corrections accepted as truth: Nairobi time for all time stats; 42 contributors plus 6 honestly-unknown tracks; 515 entries / 485 unique songs with the count named on screen; whole-playlist denominators; genre families with coverage and admin corrections; a defensible hidden-gem definition; cached API, slim payload, CDN static files; audio data from ReccoBeats → Deezer → essentia.js with coverage shown.
 
 ## Stage 1 — Audit (done)
@@ -105,8 +105,9 @@ Decisions:
 - "Hidden gem" excludes duplicates, zero-popularity copies and songs added within six months of release.
 - "Deepest cut" is the song whose lead artist has the fewest followers.
 
-## Story mode (moved, minimal fixes, compared)
+## Story mode (moved, minimal fixes, compared — later removed)
 
+- **Removed entirely at Peter's request** (commit 6568037): the 12-slide story, its CSS, loader and buttons are gone. The notes below are kept as the record of what it showed.
 - Moved unchanged into `public/story/story.js`. `story.css` is untouched. `story-base.css` holds the few old base rules, scoped with `:where()` so specificity matches the old global rules. The old fonts load only when story mode opens.
 - Reachable from the opening ("Play the 12-slide story") and the finale. Closing it returns to the same place in the film.
 - **Code changes (3, approved):** "Built from N worlds" and the summary genre count use `totalGenres`; "Musical era" uses `musicTimeSpan` (whole playlist).
@@ -132,3 +133,28 @@ Decisions:
 - **Colour follows the music.** The second light layer takes the cover colour in view (the first song, the newest mosaic tile while scrubbing, song cards, a song you press play on). It's scoped to the light layer, so nothing else restyles.
 - **Live pulse.** The latest add is server-rendered from the last refresh. On idle the page asks `/api/public/pulse` (CDN-cached for five minutes), which reads the playlist's last page from Spotify, and updates the line if something newer has arrived.
 - **Share cards.** "Share this" on every chapter draws a 1080×1920 card: the record (with the ring where the chapter has a share), the chapter's own headline with vermilion numbers, your personal line, and the link. It uses the native share sheet with the image where supported, otherwise downloads. No album artwork on cards (Spotify rule).
+
+## After Stage 7 — Peter's requests
+
+- **Charts:** vertical columns are HTML, not stretched SVG, so labels keep their size at any width; tap or focus a column to read its value.
+- **Song cards:** Spotify's player gets the card's full width.
+- **Binges and silences:** only the lead binge and the lead silence are labelled on the line; the rest are listed underneath (biggest binges, longest silences, community moments), so no labels collide.
+- **Finale:** the long sources line is gone (Spotify's logo credit stays once, in the growth chapter). On phones the closing words sit below the record, as in the opening.
+- **The Crate (`/dashboard`):** the dashboard as its own page, opened from the finale.
+  - Every panel is a filter: people, genre families, release decades, weekday, month, hour, mood quadrant, Camelot key, plus search and "Only mine".
+  - Each panel counts with every filter except its own, so you can see what you'd get by switching.
+  - Filters live in the URL, so a cut can be shared.
+  - The tracklist has four sorts and plays songs in place.
+  - The half record in the corner names the current cut.
+  - Checked: East African + Thursday → 22 songs, 8 people, 34 artists, 1 h 22 m, 120 BPM; no console errors at 1440 and 390 px.
+
+## Going live — status
+
+- **Schema change (checked offline against main's schema):** additive only. It adds 7 tables (tracks, playlist_entries, artists, contributors, community_events, settings, payloads), 3 indexes and 1 foreign key between the new tables. `PlaylistData` and `UpdateLog` are not touched.
+- **Order that keeps the live site up:**
+  1. Back up the production tables.
+  2. Run `prisma db push` (additive; the old live code ignores the new tables).
+  3. Load the catalogue and compute the payloads.
+  4. Merge to main.
+  Merging first would deploy code whose tables don't exist yet, and the site would show "unavailable".
+- **Not yet done:** these steps need production access, which this session's permissions blocked; they are Peter's to run or to allow.
