@@ -19,3 +19,9 @@ Thumbs.db
 /generated/prisma
 
 .vercel
+
+# Local dev database (PGlite) and local env
+.devdb/
+!.env.local.example
+.cache/
+scripts/audio/node_modules/

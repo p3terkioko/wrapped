@@ -1,0 +1,9 @@
+{
+  "name": "kamilimu-audio-analysis",
+  "private": true,
+  "description": "Local-only audio analysis for the backfill script (tempo and key from 30-second previews). Never deployed. Depends on essentia.js, which is AGPL-3.0.",
+  "dependencies": {
+    "essentia.js": "0.1.3",
+    "mpg123-decoder": "1.0.3"
+  }
+}
