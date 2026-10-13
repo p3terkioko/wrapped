@@ -74,7 +74,7 @@ main.film { position: relative; z-index: 4; }
 .mono { font-family: var(--data); }
 
 /* ── Chapters ───────────────────────────────────────────────────────────── */
-.chapter { position: relative; padding: 14svh var(--gutter); display: grid; gap: 28px; }
+.chapter { position: relative; padding: 14svh var(--gutter); display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; }
 .chapter__head { display: grid; gap: 18px; max-width: 46rem; }
 .chapter__body { display: grid; gap: 28px; }
 @media (min-width: 760px) {

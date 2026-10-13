@@ -27,16 +27,36 @@ export function setupChapters() {
   const sections = [...document.querySelectorAll('main.film > section[data-chapter]')];
   const keys = ['x', 'y', 's', 'o'];
 
-  // Travel between consecutive roles, scrubbed as the next chapter arrives.
-  for (let i = 1; i < sections.length; i++) {
-    const from = roleOf(sections[i - 1]), to = roleOf(sections[i]);
-    if (from === to) continue;
-    const tw = gsap.fromTo(record.state,
-      Object.fromEntries(keys.map(k => [k, () => record.roleState(from)[k]])),
-      { ...Object.fromEntries(keys.map(k => [k, () => record.roleState(to)[k]])), ease: 'power2.inOut', immediateRender: false, onUpdate: record.render,
-        scrollTrigger: { trigger: sections[i], start: 'top bottom', end: 'top 35%', scrub: true, invalidateOnRefresh: true } });
-    kill.push(() => { tw.scrollTrigger?.kill(); tw.kill(); });
-  }
+  // The record's position is a single function of scroll: between the moment
+  // a chapter's top enters the viewport and when it reaches 35% from the top,
+  // the record travels from the previous chapter's role to this one's. One
+  // owner, so nothing overwrites anything on load or resize.
+  let windows = [];
+  const measure = () => {
+    windows = sections.map((sec, i) => {
+      const top = sec.getBoundingClientRect().top + scrollY;
+      return { role: roleOf(sec), start: top - innerHeight, end: top - innerHeight * 0.35, i };
+    });
+  };
+  const ease = t => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
+  const place = () => {
+    if (!windows.length) return;
+    const y = scrollY;
+    let k = 0;
+    for (let i = 1; i < windows.length; i++) if (windows[i].start <= y) k = i;
+    const w = windows[k];
+    const to = record.roleState(w.role);
+    let v = to;
+    if (k > 0 && y < w.end) {
+      const from = record.roleState(windows[k - 1].role);
+      const t = ease(Math.min(1, Math.max(0, (y - w.start) / (w.end - w.start))));
+      v = Object.fromEntries(keys.map(key => [key, from[key] + (to[key] - from[key]) * t]));
+    }
+    for (const key of keys) record.state[key] = v[key];
+    record.render();
+  };
+  const traveller = ScrollTrigger.create({ start: 0, end: 'max', onUpdate: place, onRefresh: () => { measure(); place(); } });
+  kill.push(() => traveller.kill());
 
   // Ring value and label per chapter, cut on entry.
   sections.forEach(sec => {

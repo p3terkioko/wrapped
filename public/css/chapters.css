@@ -177,3 +177,8 @@
 
 .finale { min-height: 100svh; align-content: center; }
 .finale .lede { margin: 0; max-width: 26ch; font-size: clamp(1.2rem, 2.1vw, 1.55rem); line-height: 1.35; }
+
+@media (max-width: 559px) {
+  .picks > .single { grid-template-columns: 1fr; }
+  .picks > .single .single__art { max-width: 260px; }
+}

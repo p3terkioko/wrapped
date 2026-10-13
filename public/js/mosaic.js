@@ -31,6 +31,7 @@ export function createMosaic() {
   const images = new Map();   // small-cover hash → HTMLImageElement
   const pending = new Set();  // covers decoded but not yet swapped in
   let hashOf = null;          // tile index → small-cover hash
+  let mine = null;            // tile indices to outline for Find yourself
 
   function size() {
     const r = svg.getBoundingClientRect();
@@ -75,8 +76,21 @@ export function createMosaic() {
       for (let i = 0; i <= drawnUpTo; i++) if (pending.has(hashOf[i])) { const [x, y] = xy(i); paintTile(i, x, y); }
       pending.clear();
     }
-    // Playhead outline around the latest tiles, outside the artwork.
     octx.clearRect(0, 0, over.width, over.height);
+    // Find yourself: your tiles get a thin gold outline, outside the artwork.
+    if (mine && mine.size) {
+      octx.strokeStyle = 'rgba(233,180,76,.95)';
+      octx.lineWidth = Math.max(1.2, gap * 0.7) * dpr;
+      octx.globalAlpha = 1;
+      for (const i of mine) {
+        if (i > last) continue;
+        const [x, y] = xy(i);
+        const g = gap * 0.45 * dpr;
+        rounded(octx, x - g, y - g, side * dpr + 2 * g, side * dpr + 2 * g, (radius + gap * 0.45) * dpr);
+        octx.stroke();
+      }
+    }
+    // Playhead outline around the latest tiles, outside the artwork.
     if (glow > 0 && last >= 0) {
       octx.strokeStyle = '#e9b44c';
       octx.lineWidth = Math.max(1, gap * 0.6) * dpr;
@@ -125,6 +139,7 @@ export function createMosaic() {
   return {
     setDay(d, glowDays = 0) { if (d === day && glowDays === glow) return; day = d; glow = glowDays; schedule(); },
     loadArt,
+    highlight(set) { mine = set; drawnUpTo = Math.min(drawnUpTo, drawnUpTo); schedule(); },
     destroy() { removeEventListener('resize', size); base.remove(); over.remove(); svg.style.opacity = ''; },
   };
 }
