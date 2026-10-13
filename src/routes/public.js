@@ -36,7 +36,7 @@ router.get('/tracks', servePayload('tracks'));
 router.get('/data', servePayload('legacy', (data, p) => ({ success: true, data, lastUpdated: p.updatedAt, cached_at: p.updatedAt })));
 
 router.get('/status', asyncHandler(async (req, res) => {
-  const p = prisma ? await readPayload(prisma, 'film') : null;
+  const p = prisma ? await readPayload(prisma, 'film').catch(() => null) : null;
   res.set('Cache-Control', 'public, max-age=30, s-maxage=60');
   res.json({ success: true, hasData: !!p, lastUpdated: p?.updatedAt || null, version: p?.version || null });
 }));
