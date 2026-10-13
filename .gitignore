@@ -17,3 +17,5 @@ Thumbs.db
 .vercel
 
 /generated/prisma
+
+.vercel

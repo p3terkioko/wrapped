@@ -15,6 +15,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // ── Event Listeners ───────────────────────────────────────────────────────────
 function setupEventListeners() {
+  // Opt into the staggered card reveal only when JS is live (see .js-reveal in CSS).
+  document.getElementById('dashboard')?.classList.add('js-reveal');
   document.getElementById('analyze-btn')?.addEventListener('click', onEnterDashboard);
   document.getElementById('analyze-btn-hero')?.addEventListener('click', onEnterDashboard);
   document.getElementById('back-btn')?.addEventListener('click', showLanding);
@@ -102,6 +104,26 @@ function showDashboard() {
   document.getElementById('landing-page').classList.add('hidden');
   document.getElementById('dashboard').classList.remove('hidden');
   populateDashboard(currentData);
+  revealDashboard();
+}
+
+// Graceful bottom-to-top reveal: cards start translated down + transparent and
+// rise into place on a short stagger. Retriggerable each time the dashboard is
+// shown; respects prefers-reduced-motion via the CSS.
+function revealDashboard() {
+  var body = document.querySelector('.dash-body');
+  if (!body) return;
+  var cards = body.querySelectorAll('.dash-card, .overview-card');
+  cards.forEach(function(card, i) {
+    card.classList.remove('is-revealed');
+    card.style.setProperty('--reveal-delay', Math.min(i * 45, 500) + 'ms');
+  });
+  // Next frame so the reset paints before we animate to the revealed state.
+  requestAnimationFrame(function() {
+    requestAnimationFrame(function() {
+      cards.forEach(function(card) { card.classList.add('is-revealed'); });
+    });
+  });
 }
 
 // ── Dashboard Population ──────────────────────────────────────────────────────
@@ -130,12 +152,12 @@ function populateDashboard(data) {
   renderContributors(data.topContributors || []);
   renderTrackSpotlight('popular-track', data.mostPopular, false);
   renderTrackSpotlight('hidden-gem',    data.leastPopular, true);
-  renderTimeline(data.dateRange);
+  renderTimeline(data);
   renderGenreChart(data.topGenres || []);
   renderSongOfTheHour(data.songOfTheHour);
   renderDecades(data.decades || []);
   var hasAudioFeatures = data.totalAnalyzedTracks > 0;
-  renderKeyTempo(data.keyInsights, data.tempoBreakdown, hasAudioFeatures);
+  renderKeyTempo(data.keyInsights, data.tempoBreakdown, data.audioFeatures, hasAudioFeatures);
   renderDayOfWeek(data.dayOfWeek || [], data.peakDay);
 
   if (data.contributors && data.contributors.contributors && data.contributors.contributors.length) {
@@ -165,10 +187,23 @@ function renderContributors(contribs) {
   var el = document.getElementById('contributors-list');
   if (!el) return;
   el.innerHTML = contribs.slice(0, 10).map(function(c, i) {
-    return '<div class="contributor-row"><span class="row-rank">' + (i + 1) +
-      '</span><span class="row-name">' + esc(c.displayName) +
-      '</span><span class="row-count">' + c.count + '</span></div>';
+    return '<div class="contributor-row">' +
+      '<span class="row-rank">' + (i + 1) + '</span>' +
+      avatarHtml(c.avatarUrl, c.displayName) +
+      '<span class="row-name">' + esc(c.displayName) + '</span>' +
+      '<span class="row-count">' + c.count + '</span>' +
+    '</div>';
   }).join('');
+}
+
+// Compact avatar chip: real image when available, otherwise a monogram disc.
+function avatarHtml(url, name, cls) {
+  var klass = 'avatar' + (cls ? ' ' + cls : '');
+  if (url) {
+    return '<span class="' + klass + '"><img src="' + esc(url) + '" alt="" loading="lazy"></span>';
+  }
+  var initial = (String(name || '?').trim()[0] || '?').toUpperCase();
+  return '<span class="' + klass + ' avatar--fallback">' + esc(initial) + '</span>';
 }
 
 // ── Track Spotlight ───────────────────────────────────────────────────────────
@@ -190,11 +225,93 @@ function renderTrackSpotlight(id, track, isGem) {
 }
 
 // ── Timeline ──────────────────────────────────────────────────────────────────
-function renderTimeline(dateRange) {
+// When per-track audio features are available we plot an emotional/vibrancy
+// area chart (happiness + energy over the months tracks were added). Otherwise
+// we fall back to the simple date-range rail.
+var moodChartInstance = null;
+
+function renderTimeline(data) {
   var el = document.getElementById('timeline-info');
   if (!el) return;
-  if (!dateRange) { el.innerHTML = '<p class="no-data">No timeline data</p>'; return; }
+  if (moodChartInstance) { moodChartInstance.destroy(); moodChartInstance = null; }
 
+  var mood = data.moodTimeline || [];
+  if (data.moodHasFeatures && mood.length > 1 && window.Chart) {
+    renderMoodTimeline(el, mood, data.dateRange);
+    return;
+  }
+  renderDateRail(el, data.dateRange);
+}
+
+function renderMoodTimeline(el, mood, dateRange) {
+  el.innerHTML =
+    '<div class="mood-chart-wrap"><canvas id="mood-chart"></canvas></div>' +
+    '<div class="mood-legend">' +
+      '<span class="mood-legend-item mood-legend-item--valence">Happiness</span>' +
+      '<span class="mood-legend-item mood-legend-item--energy">Energy</span>' +
+    '</div>';
+
+  var ctx    = el.querySelector('#mood-chart');
+  var pct    = function(v) { return v == null ? null : Math.round(v * 100); };
+  var valSet = mood.map(function(m) { return pct(m.valence); });
+  var engSet = mood.map(function(m) { return pct(m.energy); });
+
+  var valFill = makeAreaFill(ctx, 'rgba(224,168,107,0.28)', 'rgba(224,168,107,0.0)');
+  var engFill = makeAreaFill(ctx, 'rgba(0,180,194,0.22)',  'rgba(0,180,194,0.0)');
+
+  moodChartInstance = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: mood.map(function(m) { return m.label; }),
+      datasets: [
+        { label: 'Happiness', data: valSet, borderColor: '#e0a86b', backgroundColor: valFill,
+          borderWidth: 2, tension: 0.4, fill: true, pointRadius: 0, pointHoverRadius: 4, spanGaps: true },
+        { label: 'Energy', data: engSet, borderColor: '#4dd0da', backgroundColor: engFill,
+          borderWidth: 2, tension: 0.4, fill: true, pointRadius: 0, pointHoverRadius: 4, spanGaps: true },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#141210',
+          titleColor: '#f4efe6',
+          bodyColor: 'rgba(244,239,230,0.65)',
+          borderColor: 'rgba(244,239,230,0.08)',
+          borderWidth: 1,
+          titleFont: { family: 'Hind Guntur' },
+          bodyFont:  { family: 'JetBrains Mono' },
+          callbacks: { label: function(c) { return ' ' + c.dataset.label + ': ' + (c.raw == null ? '—' : c.raw + '%'); } },
+        },
+      },
+      scales: {
+        x: {
+          grid:  { display: false },
+          ticks: { color: 'rgba(244,239,230,0.3)', font: { family: 'JetBrains Mono', size: 9 }, maxRotation: 0, autoSkipPadding: 12 },
+        },
+        y: {
+          min: 0, max: 100,
+          grid:  { color: 'rgba(244,239,230,0.05)' },
+          ticks: { color: 'rgba(244,239,230,0.28)', font: { family: 'JetBrains Mono', size: 9 }, stepSize: 25,
+                   callback: function(v) { return v + '%'; } },
+        },
+      },
+    },
+  });
+}
+
+function makeAreaFill(canvas, top, bottom) {
+  var g = canvas.getContext('2d').createLinearGradient(0, 0, 0, canvas.parentNode.clientHeight || 200);
+  g.addColorStop(0, top);
+  g.addColorStop(1, bottom);
+  return g;
+}
+
+function renderDateRail(el, dateRange) {
+  if (!dateRange) { el.innerHTML = '<p class="no-data">No timeline data</p>'; return; }
   var start = new Date(dateRange.earliest);
   var end   = new Date(dateRange.latest);
   var days  = Math.ceil((end - start) / 86400000);
@@ -315,14 +432,46 @@ function renderDecades(decades) {
   }).join('');
 }
 
-// ── Key + Tempo ───────────────────────────────────────────────────────────────
-function renderKeyTempo(keyInsights, tempoBreakdown, hasAudioFeatures) {
+// ── Key + Tempo + Sonic Profile ───────────────────────────────────────────────
+function renderKeyTempo(keyInsights, tempoBreakdown, audioFeatures, hasAudioFeatures) {
   var el = document.getElementById('key-tempo-wrap');
   if (!el) return;
+  var card = el.closest('.dash-card');
   if (!hasAudioFeatures) {
-    el.closest('.dash-card').style.display = 'none';
+    if (card) card.style.display = 'none';
     return;
   }
+  if (card) card.style.display = '';
+
+  var hasKeyData   = keyInsights && keyInsights.topKey;
+  var hasTempoData = tempoBreakdown && tempoBreakdown.length;
+
+  // Sonic fingerprint — high-density compact meters for the extra audio features.
+  var af = audioFeatures || {};
+  var SONIC = [
+    { key: 'energy',           label: 'Energy' },
+    { key: 'valence',          label: 'Happiness' },
+    { key: 'danceability',     label: 'Danceability' },
+    { key: 'acousticness',     label: 'Acoustic' },
+    { key: 'instrumentalness', label: 'Instrumental' },
+    { key: 'liveness',         label: 'Liveness' },
+  ];
+  var sonicHtml =
+    '<div class="kt-section">' +
+      '<div class="kt-section-label">Sonic Fingerprint</div>' +
+      '<div class="sonic-grid">' +
+      SONIC.map(function(s) {
+        var pct = Math.round((af[s.key] || 0) * 100);
+        return '<div class="sonic-meter">' +
+          '<div class="sonic-meter-head">' +
+            '<span class="sonic-meter-label">' + s.label + '</span>' +
+            '<span class="sonic-meter-val">' + pct + '</span>' +
+          '</div>' +
+          '<div class="sonic-meter-track"><div class="sonic-meter-fill" style="width:' + pct + '%"></div></div>' +
+        '</div>';
+      }).join('') +
+      '</div>' +
+    '</div>';
 
   var keyHtml = '';
   if (hasKeyData) {
@@ -361,7 +510,7 @@ function renderKeyTempo(keyInsights, tempoBreakdown, hasAudioFeatures) {
       '</div>';
   }
 
-  el.innerHTML = keyHtml + tempoHtml;
+  el.innerHTML = sonicHtml + keyHtml + tempoHtml;
 }
 
 // ── Day of Week ───────────────────────────────────────────────────────────────
@@ -403,6 +552,7 @@ function renderLeaderboard(data) {
     }).join('');
     return '<div class="leaderboard-row">' +
       '<span class="lb-rank">' + (i + 1) + '</span>' +
+      avatarHtml(c.avatarUrl, c.name, 'avatar--lg') +
       '<div class="lb-info">' +
         '<span class="lb-name">' + esc(c.name) + '</span>' +
         '<div class="lb-meta">' +
@@ -436,6 +586,7 @@ function renderMaestros(maestros) {
   el.innerHTML = '<div class="maestros-list">' +
     maestros.map(function(m) {
       return '<div class="maestro-row">' +
+        avatarHtml(m.contributorAvatar, m.contributorName, 'avatar--lg') +
         '<div class="maestro-info">' +
           '<span class="maestro-genre">' + esc(m.genre) + '</span>' +
           '<span class="maestro-name">' + esc(m.contributorName) + '</span>' +
@@ -449,19 +600,34 @@ function renderMaestros(maestros) {
 }
 
 // ── Playlist Members ──────────────────────────────────────────────────────────
+// Community datasets can be large — cap the visible list and let it scroll
+// instead of letting the section grow without bound.
+var MEMBERS_VISIBLE = 10;
+
 function renderMembers(data) {
   var el = document.getElementById('playlist-members');
   if (!el) return;
 
-  el.innerHTML = '<div class="members-list">' +
-    (data.contributors || []).map(function(m, i) {
-      return '<div class="member-row">' +
-        '<span class="member-rank">' + (i + 1) + '</span>' +
-        '<span class="member-name">' + esc(m.name) + '</span>' +
-        '<span class="member-tracks">' + m.tracksAdded + ' track' + (m.tracksAdded !== 1 ? 's' : '') + '</span>' +
-      '</div>';
-    }).join('') +
-  '</div>';
+  var all   = data.contributors || [];
+  var total = data.totalMembers != null ? data.totalMembers : all.length;
+
+  var rows = all.map(function(m, i) {
+    return '<div class="member-row">' +
+      '<span class="member-rank">' + (i + 1) + '</span>' +
+      avatarHtml(m.avatarUrl, m.name) +
+      '<span class="member-name">' + esc(m.name) + '</span>' +
+      '<span class="member-tracks">' + m.tracksAdded + ' track' + (m.tracksAdded !== 1 ? 's' : '') + '</span>' +
+    '</div>';
+  }).join('');
+
+  // A capped, scrollable viewport keeps the first 10 in view with the rest a
+  // scroll away — no infinite data-dump, no pagination controls to babysit.
+  var scrollable = all.length > MEMBERS_VISIBLE;
+  el.innerHTML =
+    '<div class="members-list' + (scrollable ? ' members-list--scroll' : '') + '">' + rows + '</div>' +
+    (scrollable
+      ? '<p class="members-foot">Showing all ' + total + ' contributors · scroll for more</p>'
+      : '');
 }
 
 // ── Share / Export ────────────────────────────────────────────────────────────

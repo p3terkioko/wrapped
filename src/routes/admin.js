@@ -105,19 +105,23 @@ async function runRefreshPipeline(triggeredBy = 'admin') {
       .sort(([, a], [, b]) => b - a)
       .slice(0, 5)
       .map(async ([userId, count]) => {
-        if (userId === playlist.owner.id) return { userId, count, displayName: playlist.owner.display_name || playlist.owner.id };
-        if (userId === 'unknown') return { userId, count, displayName: 'Unknown User' };
+        if (userId === playlist.owner.id) return { userId, count, displayName: playlist.owner.display_name || playlist.owner.id, avatarUrl: playlist.owner.images?.[0]?.url || null };
+        if (userId === 'unknown') return { userId, count, displayName: 'Unknown User', avatarUrl: null };
         const profile = await spotify.getUserProfile(userId, accessToken);
-        return { userId, count, displayName: profile?.display_name || `User ${userId.slice(-4)}` };
+        return { userId, count, displayName: profile?.display_name || `User ${userId.slice(-4)}`, avatarUrl: profile?.images?.[0]?.url || null };
       })
   );
 
-  // All contributor profiles for advanced analytics
+  // All contributor profiles for advanced analytics (display name + avatar)
   const allContributorIds = [...new Set(validTracks.map(item => item.added_by?.id).filter(id => id && id !== 'unknown'))];
   const allUserProfiles   = await Promise.all(
     allContributorIds.map(async userId => {
       const profile = await spotify.getUserProfile(userId, accessToken);
-      return { id: userId, displayName: profile?.display_name || `User ${userId.slice(-4)}` };
+      return {
+        id:          userId,
+        displayName: profile?.display_name || `User ${userId.slice(-4)}`,
+        avatarUrl:   profile?.images?.[0]?.url || null,
+      };
     })
   );
 
