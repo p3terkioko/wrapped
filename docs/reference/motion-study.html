@@ -1,0 +1,566 @@
+<title>Inthe.Ears Motion Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;800&family=Hind+Guntur:wght@300;400;500&display=swap">
+<style>
+/* Layout: one continuous film. A vinyl disc never leaves the screen and changes role per chapter; type and data move on a 104 BPM beat grid. */
+:root {
+  color-scheme: dark;
+  --bg: #050606;
+  --ink: #f4f6ee;
+  --ink-2: rgba(244, 246, 238, 0.62);
+  --ink-3: rgba(244, 246, 238, 0.32);
+  --line: rgba(244, 246, 238, 0.09);
+  --teal: #00b4c2;
+  --teal-hi: #4dd0da;
+  --teal-deep: #003d42;
+  --gamboge: #eaa000;
+  --display: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+  --body: 'Hind Guntur', 'Segoe UI', system-ui, sans-serif;
+  --gutter: clamp(16px, 5vw, 72px);
+}
+html { background: var(--bg); }
+body { background: var(--bg); color: var(--ink); font: 400 18px/1.55 var(--body); overflow-x: hidden; }
+::selection { background: var(--teal); color: var(--bg); }
+a { color: var(--teal-hi); }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--teal-hi); outline-offset: 4px; }
+
+/* film layers */
+.grain { position: fixed; inset: -50%; pointer-events: none; z-index: 50; opacity: 0.07; background-size: 160px 160px; }
+.vignette { position: fixed; inset: 0; pointer-events: none; z-index: 49; background: radial-gradient(120% 90% at 50% 45%, transparent 55%, rgba(0, 0, 0, 0.75) 100%); }
+
+/* the disc that never cuts */
+.disc { position: fixed; left: 50%; top: 50%; width: min(76vmin, 640px); aspect-ratio: 1; z-index: 0; pointer-events: none; transform: translate(-50%, -50%) translateX(22vw); will-change: transform, opacity; max-width: 100%; }
+.disc svg { width: 100%; height: 100%; display: block; overflow: visible; }
+.groove { fill: none; stroke: var(--ink); stroke-opacity: 0.07; stroke-width: 0.35; }
+.disc-body { fill: #0b0d0d; }
+.disc-label { fill: var(--teal-deep); }
+.disc-text { fill: var(--teal-hi); font: 600 5.2px var(--display); letter-spacing: 1.6px; }
+.disc-hole { fill: var(--bg); }
+.disc-arc { fill: none; stroke: var(--teal-hi); stroke-width: 2.2; stroke-linecap: round; }
+.disc-track { fill: none; stroke: var(--ink); stroke-opacity: 0.12; stroke-width: 0.6; }
+
+main { position: relative; z-index: 2; }
+section { position: relative; padding-inline: var(--gutter); }
+
+.eyebrow { font: 600 12px/1 var(--display); letter-spacing: 0.22em; text-transform: uppercase; color: var(--teal-hi); }
+.caption { font: 400 13px/1.5 var(--display); color: var(--ink-3); letter-spacing: 0.02em; }
+
+/* kinetic type */
+.kinetic { font: 800 clamp(2.1rem, 6.2vw, 5.6rem)/0.98 var(--display); letter-spacing: -0.045em; text-wrap: balance; max-width: 16ch; will-change: transform; }
+.kinetic em { font-style: normal; color: var(--teal-hi); }
+.w { display: inline-block; overflow: hidden; vertical-align: top; padding-bottom: 0.06em; margin-bottom: -0.06em; }
+.wi { display: inline-block; will-change: transform; }
+
+/* hero */
+.hero { min-height: 100svh; display: grid; align-content: center; gap: 28px; padding-block: 12svh 10svh; }
+.title { font: 800 clamp(3.1rem, 12.5vw, 11.5rem)/0.84 var(--display); letter-spacing: -0.06em; }
+.title .line { display: block; white-space: nowrap; }
+.title .ch { display: inline-block; will-change: transform, opacity; }
+.title .dim { color: var(--ink-3); }
+.lede { max-width: 34ch; font-size: clamp(1.05rem, 1.6vw, 1.35rem); color: var(--ink-2); }
+.cue { display: flex; align-items: center; gap: 14px; margin-top: 3svh; }
+.cue-line { width: 1px; height: 54px; background: var(--line); position: relative; overflow: hidden; }
+.cue-line::after { content: ""; position: absolute; inset: 0; background: var(--teal-hi); transform-origin: top; animation: cue 1.73s cubic-bezier(.7,0,.3,1) infinite; }
+@keyframes cue { 0% { transform: scaleY(0); transform-origin: top; } 49% { transform: scaleY(1); transform-origin: top; } 51% { transform: scaleY(1); transform-origin: bottom; } 100% { transform: scaleY(0); transform-origin: bottom; } }
+
+/* mosaic */
+.mosaic { height: 100svh; overflow: hidden; padding-block: 0; }
+.mosaic canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.mosaic-copy { position: relative; z-index: 1; padding-top: 9svh; display: grid; gap: 14px; }
+.mosaic .kinetic { max-width: 20ch; font-size: clamp(1.8rem, 4.4vw, 3.9rem); }
+.legend { position: absolute; z-index: 1; left: var(--gutter); right: var(--gutter); bottom: 5svh; display: flex; flex-wrap: wrap; gap: 8px 22px; font: 400 13px/1 var(--display); color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.legend b { font-weight: 600; color: var(--ink-2); margin-right: 6px; }
+.legend .now b, .legend .now { color: var(--teal-hi); }
+.callout { position: absolute; z-index: 1; right: var(--gutter); bottom: 11svh; font: 800 clamp(1.4rem, 3.2vw, 2.6rem)/1 var(--display); letter-spacing: -0.03em; text-align: right; max-width: 14ch; }
+.callout em { font-style: normal; color: var(--teal-hi); }
+
+/* runtime */
+.runtime { min-height: 120svh; display: grid; align-content: center; gap: 7svh; padding-block: 16svh; }
+.weekend { position: relative; display: grid; gap: 14px; max-width: 1100px; }
+.track { position: relative; height: 3px; background: var(--line); }
+.fill { position: absolute; inset: 0; background: linear-gradient(90deg, var(--teal-deep), var(--teal-hi)); transform-origin: left; transform: scaleX(1); }
+.head { position: absolute; top: 50%; left: 100%; width: 13px; height: 13px; margin: -6.5px 0 0 -6.5px; border-radius: 50%; background: var(--teal-hi); box-shadow: 0 0 0 6px rgba(77, 208, 218, 0.15), 0 0 28px rgba(77, 208, 218, 0.6); }
+.ticks { display: flex; justify-content: space-between; font: 400 12px/1 var(--display); color: var(--ink-3); }
+.clock { font: 600 clamp(1rem, 1.8vw, 1.25rem)/1 var(--display); color: var(--teal-hi); font-variant-numeric: tabular-nums; }
+.stats { display: flex; flex-wrap: wrap; gap: 5svh clamp(32px, 7vw, 110px); }
+.stat { display: grid; gap: 10px; }
+.big { font: 800 clamp(2.8rem, 8.5vw, 7.4rem)/1 var(--display); letter-spacing: -0.05em; font-variant-numeric: tabular-nums; }
+.odo { display: inline-flex; height: 1em; overflow: hidden; line-height: 1; vertical-align: top; }
+.odo .col { display: flex; flex-direction: column; will-change: transform; }
+.odo .col span, .odo .fix { display: block; height: 1em; line-height: 1; }
+
+/* people */
+.people { min-height: 100svh; display: grid; align-content: center; padding-block: 10svh; }
+.people-inner { margin-left: auto; width: min(100%, 640px); display: grid; gap: 4svh; }
+.share { font: 400 14px/1.4 var(--display); color: var(--ink-2); }
+.share b { font: 800 clamp(2.4rem, 5vw, 4rem)/1 var(--display); letter-spacing: -0.04em; color: var(--ink); margin-right: 10px; font-variant-numeric: tabular-nums; }
+.ranks { list-style: none; padding: 0; margin: 0; display: grid; gap: 14px; }
+.rank { display: grid; grid-template-columns: minmax(0, 11ch) minmax(0, 1fr) 4ch; gap: 16px; align-items: center; font: 400 14px/1.2 var(--display); }
+.rank .name { color: var(--ink-2); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.rank .bar { height: 10px; background: var(--ink-3); transform-origin: left; }
+.rank:first-child .bar { background: var(--teal-hi); }
+.rank:first-child .name { color: var(--ink); }
+.rank .n { text-align: right; font-variant-numeric: tabular-nums; color: var(--ink); }
+
+/* genres */
+.genres { padding-inline: 0; padding-block: 18svh 14svh; overflow: hidden; display: grid; gap: 4svh; }
+.genres-head { padding-inline: var(--gutter); display: grid; gap: 14px; }
+.rows { display: grid; gap: 0.6svh; }
+.row { overflow: hidden; white-space: nowrap; }
+.row .track-x { display: inline-flex; will-change: transform; }
+.row span.item { font: 800 var(--fs, 3rem)/1.02 var(--display); letter-spacing: -0.05em; padding-right: 0.5em; color: var(--ink-3); }
+.row span.item i { font-style: normal; font-weight: 300; color: var(--ink-3); font-size: 0.42em; letter-spacing: 0; vertical-align: 0.9em; margin-left: 0.25em; }
+.row.lead span.item { color: var(--ink); }
+.row.lead span.item i { color: var(--teal-hi); }
+.genres .caption { padding-inline: var(--gutter); }
+
+/* rhythm */
+.rhythm { min-height: 110svh; display: grid; align-content: center; gap: 6svh; padding-block: 14svh; }
+.eq { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: clamp(6px, 1.4vw, 18px); height: 42svh; align-items: end; max-width: 1100px; }
+.day { height: 100%; display: grid; grid-template-rows: auto 1fr auto; gap: 10px; text-align: center; font: 400 13px/1 var(--display); min-width: 0; }
+.day .n { color: var(--ink-2); font-variant-numeric: tabular-nums; align-self: end; }
+.day .well { position: relative; display: flex; align-items: flex-end; transform-origin: bottom; }
+.day .b { width: 100%; height: var(--h); background: var(--ink-3); transform-origin: bottom; }
+.day.peak .b { background: var(--teal-hi); box-shadow: 0 0 40px rgba(77, 208, 218, 0.35); }
+.day.peak .n, .day.peak .d { color: var(--teal-hi); }
+.day .d { color: var(--ink-3); }
+
+/* outro */
+.outro { min-height: 100svh; display: grid; align-content: center; gap: 26px; padding-block: 14svh; }
+.outro .count { font: 400 clamp(1.05rem, 1.6vw, 1.35rem)/1.4 var(--body); color: var(--ink-2); }
+.btn { justify-self: start; display: inline-flex; align-items: center; gap: 12px; padding: 16px 26px; border: 1px solid var(--teal-hi); color: var(--ink); text-decoration: none; font: 600 14px/1 var(--display); letter-spacing: 0.08em; text-transform: uppercase; transition: background .3s, color .3s; }
+.btn:hover { background: var(--teal-hi); color: var(--bg); }
+.note { max-width: 60ch; }
+
+@media (max-width: 720px) {
+  .people-inner { margin-left: 0; }
+  .callout { bottom: 13svh; }
+  .rank { grid-template-columns: minmax(0, 9ch) minmax(0, 1fr) 4ch; gap: 10px; }
+  .day { font-size: 11px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cue-line::after { animation: none; transform: scaleY(1); }
+}
+</style>
+
+<div class="grain" aria-hidden="true"></div>
+<div class="vignette" aria-hidden="true"></div>
+
+<div class="disc" aria-hidden="true">
+  <svg viewBox="-100 -100 200 200">
+    <defs>
+      <path id="labelPath" d="M 0,-19 A 19,19 0 1 1 -0.01,-19"></path>
+      <linearGradient id="sheen" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0.3" stop-color="#ffffff" stop-opacity="0"></stop>
+        <stop offset="0.5" stop-color="#ffffff" stop-opacity="0.07"></stop>
+        <stop offset="0.7" stop-color="#ffffff" stop-opacity="0"></stop>
+      </linearGradient>
+    </defs>
+    <circle class="disc-track" r="98"></circle>
+    <circle class="disc-arc" r="98" transform="rotate(-90)"></circle>
+    <g id="spin">
+      <circle class="disc-body" r="92"></circle>
+      <g id="grooves"></g>
+      <circle class="disc-label" r="27"></circle>
+      <text class="disc-text"><textPath href="#labelPath">KAMILIMU · INTHE · EARS · 515 SONGS ·</textPath></text>
+      <circle class="disc-hole" r="2.6"></circle>
+    </g>
+    <circle r="92" fill="url(#sheen)"></circle>
+  </svg>
+</div>
+
+<main>
+  <section class="hero" id="hero" aria-label="Opening">
+    <p class="eyebrow">A community playlist, since 13 March 2024</p>
+    <h1 class="title" aria-label="KamiLimu.inthe.Ears"><span class="line" data-chars>KamiLimu</span><span class="line dim" data-chars>.inthe.Ears</span></h1>
+    <p class="lede">Two and a half years of a community, told in 515 songs. Scroll to play.</p>
+    <div class="cue" aria-hidden="true"><span class="cue-line"></span><span class="caption">Scroll</span></div>
+  </section>
+
+  <section class="mosaic" id="mosaic" aria-label="Every song by release decade">
+    <canvas id="mosaicCanvas" aria-hidden="true"></canvas>
+    <div class="mosaic-copy">
+      <p class="eyebrow">The collection</p>
+      <h2 class="kinetic" data-words>515 songs, lined up by the decade they came out.</h2>
+    </div>
+    <p class="callout" id="callout"><em>6 in 10</em> are from the 2020s.</p>
+    <div class="legend" id="legend"></div>
+  </section>
+
+  <section class="runtime" id="runtime" aria-label="Runtime">
+    <p class="eyebrow">The runtime</p>
+    <h2 class="kinetic" data-words>Press play Friday at 6pm. It's still going at <em>2:45am Sunday.</em></h2>
+    <div class="weekend">
+      <div class="clock" id="clock">Sun 02:45</div>
+      <div class="track"><div class="fill" id="fill"></div><div class="head" id="head"></div></div>
+      <div class="ticks"><span>Fri 18:00</span><span>Sat 00:00</span><span>Sat 12:00</span><span>Sun 00:00</span><span>Sun 02:45</span></div>
+    </div>
+    <div class="stats">
+      <div class="stat"><span class="big"><span class="odo" data-odo="32h 45m">32h 45m</span></span><span class="caption">of music, back to back</span></div>
+      <div class="stat"><span class="big"><span class="odo" data-odo="494">494</span></span><span class="caption">artists</span></div>
+      <div class="stat"><span class="big"><span class="odo" data-odo="168">168</span></span><span class="caption">genres</span></div>
+    </div>
+  </section>
+
+  <section class="people" id="people" aria-label="Contributors">
+    <div class="people-inner">
+      <p class="eyebrow">The people</p>
+      <h2 class="kinetic" data-words>Dr. C added <em>1 in 5</em> songs.</h2>
+      <p class="share"><b><span id="drcCount">114</span></b>of 515 tracks, the ring traces the share</p>
+      <ol class="ranks" id="ranks"></ol>
+      <p class="caption">Top five contributors by songs added</p>
+    </div>
+  </section>
+
+  <section class="genres" id="genres" aria-label="Genres">
+    <div class="genres-head">
+      <p class="eyebrow">The sound</p>
+      <h2 class="kinetic" data-words>Afropop leads by a <em>single artist.</em></h2>
+    </div>
+    <div class="rows" id="rows"></div>
+    <p class="caption">Artists per genre, top eight. Scroll faster and the room moves faster.</p>
+  </section>
+
+  <section class="rhythm" id="rhythm" aria-label="Weekday rhythm">
+    <p class="eyebrow">The rhythm</p>
+    <h2 class="kinetic" data-words>Thursday is <em>drop day.</em></h2>
+    <div class="eq" id="eq"></div>
+    <p class="caption">Songs added per weekday since March 2024. The bars breathe at the playlist's tempo.</p>
+  </section>
+
+  <section class="outro" id="outro" aria-label="Closing">
+    <h2 class="title" aria-label="KamiLimu.inthe.Ears"><span class="line" data-chars>KamiLimu</span><span class="line dim" data-chars>.inthe.Ears</span></h2>
+    <p class="count">515 songs and counting. The record keeps spinning.</p>
+    <a class="btn" href="https://wrapped-beige.vercel.app/" target="_blank" rel="noopener">Open the live dashboard</a>
+    <p class="caption note">Motion study built on live data read 13 October 2026. The beat grid runs at 104 BPM as a placeholder until audio features return.</p>
+  </section>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.1.20/dist/lenis.min.js"></script>
+<script>
+(function () {
+  // ── Live data (wrapped-beige.vercel.app/api/public/data, 13 Oct 2026) ──
+  const DATA = {
+    decades: [['1960s', 2], ['1970s', 8], ['1980s', 13], ['1990s', 11], ['2000s', 40], ['2010s', 132], ['2020s', 309]],
+    ranks: [['Dr. C', 114], ['Tams 🦋🌺', 50], ['Pepp🍂', 43], ['Viv Mwirigi', 28], ['0xFidel', 20]],
+    genres: [['afropop', 69], ['afro soul', 68], ['afrobeats', 54], ['amapiano', 52], ['gengetone', 50], ['afro r&b', 50], ['afropiano', 47], ['afrobeat', 43]],
+    days: [['Sun', 49], ['Mon', 76], ['Tue', 46], ['Wed', 71], ['Thu', 115], ['Fri', 105], ['Sat', 53]],
+    total: 515
+  };
+  const BPM = 104;               // placeholder tempo until audio features return
+  const BEAT = 60 / BPM;         // 0.577s: every duration and stagger is a fraction of this
+
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const hasGsap = !!(window.gsap && window.ScrollTrigger);
+
+  // ── Static build (runs for everyone) ──
+  const grooves = document.getElementById('grooves');
+  for (let r = 31; r <= 90; r += 2.4) {
+    const c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    c.setAttribute('r', r.toFixed(1)); c.setAttribute('class', 'groove');
+    grooves.appendChild(c);
+  }
+  const arc = document.querySelector('.disc-arc');
+  const CIRC = 2 * Math.PI * 98;
+  arc.style.strokeDasharray = CIRC;
+  arc.style.strokeDashoffset = CIRC;
+
+  const legend = document.getElementById('legend');
+  DATA.decades.forEach(([d, n], i) => {
+    const s = document.createElement('span');
+    if (i === DATA.decades.length - 1) s.className = 'now';
+    s.innerHTML = '<b>' + d + '</b>' + n;
+    legend.appendChild(s);
+  });
+
+  const ranks = document.getElementById('ranks');
+  const maxRank = DATA.ranks[0][1];
+  DATA.ranks.forEach(([name, n]) => {
+    const li = document.createElement('li'); li.className = 'rank';
+    li.innerHTML = '<span class="name"></span><span class="bar"></span><span class="n" data-n="' + n + '">' + n + '</span>';
+    li.querySelector('.name').textContent = name;
+    li.querySelector('.bar').style.width = (n / maxRank * 100) + '%';
+    ranks.appendChild(li);
+  });
+
+  const rows = document.getElementById('rows');
+  const maxGenre = DATA.genres[0][1];
+  DATA.genres.forEach(([g, n], i) => {
+    const row = document.createElement('div');
+    row.className = 'row' + (i === 0 ? ' lead' : '');
+    row.dataset.dir = i % 2 ? '1' : '-1';
+    row.style.setProperty('--fs', 'clamp(1.6rem, ' + (2.2 + 7 * (n / maxGenre) ** 3).toFixed(2) + 'vw, 7.5rem)');
+    const track = document.createElement('div'); track.className = 'track-x';
+    let html = '';
+    for (let k = 0; k < 10; k++) html += '<span class="item">' + g + '<i>' + n + '</i></span>';
+    track.innerHTML = html;
+    row.appendChild(track);
+    rows.appendChild(row);
+  });
+
+  const eq = document.getElementById('eq');
+  const maxDay = Math.max(...DATA.days.map(d => d[1]));
+  DATA.days.forEach(([d, n]) => {
+    const el = document.createElement('div');
+    el.className = 'day' + (n === maxDay ? ' peak' : '');
+    el.innerHTML = '<span class="n">' + n + '</span><div class="well"><div class="b" style="--h:' + (n / maxDay * 100).toFixed(1) + '%"></div></div><span class="d">' + d + '</span>';
+    eq.appendChild(el);
+  });
+
+  // grain tile
+  (function () {
+    const c = document.createElement('canvas'); c.width = c.height = 160;
+    const x = c.getContext('2d'); const img = x.createImageData(160, 160);
+    for (let i = 0; i < img.data.length; i += 4) { const v = Math.random() * 255; img.data[i] = img.data[i + 1] = img.data[i + 2] = v; img.data[i + 3] = 255; }
+    x.putImageData(img, 0, 0);
+    const g = document.querySelector('.grain');
+    g.style.backgroundImage = 'url(' + c.toDataURL() + ')';
+    if (!reduce) setInterval(() => { g.style.transform = 'translate(' + (Math.random() * 10 - 5) + '%,' + (Math.random() * 10 - 5) + '%)'; }, 80);
+  })();
+
+  // ── Mosaic: 515 tiles, sorted by decade, scatter → grid ──
+  const canvas = document.getElementById('mosaicCanvas');
+  const ctx = canvas.getContext('2d');
+  const tiles = [];
+  const ALPHAS = [0.14, 0.18, 0.23, 0.28, 0.36, 0.5, 1];
+  DATA.decades.forEach(([d, n], di) => { for (let k = 0; k < n; k++) tiles.push({ di }); });
+  let rng = 7;
+  const rand = () => (rng = (rng * 16807) % 2147483647) / 2147483647;
+  tiles.forEach(t => { t.sx = rand(); t.sy = rand(); t.sr = (rand() - 0.5) * 2.4; t.ss = 0.35 + rand() * 0.6; t.d = rand(); });
+  let W = 0, H = 0, DPR = 1, mosaicP = 0;
+
+  function sizeCanvas() {
+    DPR = Math.min(window.devicePixelRatio || 1, 2);
+    W = canvas.clientWidth; H = canvas.clientHeight;
+    canvas.width = W * DPR; canvas.height = H * DPR;
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    drawMosaic(mosaicP);
+  }
+  const ease = t => 1 - Math.pow(1 - t, 4);
+  function drawMosaic(p) {
+    mosaicP = p;
+    ctx.clearRect(0, 0, W, H);
+    const narrow = W < 720;
+    const top = H * (narrow ? 0.36 : 0.33), bottom = H * (narrow ? 0.8 : 0.86);
+    const cols = narrow ? 19 : 31;
+    const rowsN = Math.ceil(tiles.length / cols);
+    const cell = Math.min((W * (narrow ? 0.92 : 0.62)) / cols, (bottom - top) / rowsN);
+    const gw = cell * cols, gx = narrow ? (W - gw) / 2 : W - gw - Math.max(16, W * 0.05), gy = top;
+    const gap = Math.max(1, cell * 0.14);
+    tiles.forEach((t, i) => {
+      const local = ease(Math.min(1, Math.max(0, (p - t.d * 0.45) / 0.55)));
+      const tx = gx + (i % cols) * cell, ty = gy + Math.floor(i / cols) * cell;
+      const sx = t.sx * W, sy = t.sy * H;
+      const x = sx + (tx - sx) * local, y = sy + (ty - sy) * local;
+      const s = (cell - gap) * (t.ss + (1 - t.ss) * local);
+      const r = t.sr * (1 - local);
+      const a = ALPHAS[t.di];
+      ctx.save();
+      ctx.translate(x + s / 2, y + s / 2); ctx.rotate(r);
+      ctx.fillStyle = t.di === 6 ? 'rgba(77,208,218,' + (0.35 + 0.65 * local) + ')' : 'rgba(0,180,194,' + a + ')';
+      ctx.fillRect(-s / 2, -s / 2, s, s);
+      ctx.restore();
+    });
+  }
+  window.addEventListener('resize', sizeCanvas);
+  sizeCanvas();
+
+  // ── Disc state ──
+  const disc = document.querySelector('.disc');
+  const spin = document.getElementById('spin');
+  const D = { x: 22, y: 0, s: 1, o: 1, arc: 0 };
+  let angle = 0;
+  function renderDisc() {
+    const f = window.innerWidth < 720 ? 0.3 : 1;
+    disc.style.transform = 'translate(-50%,-50%) translate(' + (D.x * f) + 'vw,' + D.y + 'vh) scale(' + D.s + ')';
+    disc.style.opacity = D.o * (window.innerWidth < 720 ? 0.55 : 1);
+    arc.style.strokeDashoffset = CIRC * (1 - D.arc);
+    spin.setAttribute('transform', 'rotate(' + angle.toFixed(2) + ')');
+  }
+
+  if (!hasGsap || reduce) {
+    // complete, still version
+    D.x = 22; renderDisc();
+    drawMosaic(1);
+    return;
+  }
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Smooth scroll, fed into ScrollTrigger
+  let lenis = null;
+  if (window.Lenis) {
+    lenis = new Lenis({ lerp: 0.085, smoothWheel: true });
+    lenis.on('scroll', ScrollTrigger.update);
+    gsap.ticker.add(t => lenis.raf(t * 1000));
+    gsap.ticker.lagSmoothing(0);
+  }
+  let vel = 0;
+  const velocity = () => lenis ? lenis.velocity : 0;
+
+  // ── Splitters ──
+  function splitChars(el) {
+    const text = el.textContent; el.textContent = '';
+    return [...text].map(ch => { const s = document.createElement('span'); s.className = 'ch'; s.textContent = ch; el.appendChild(s); return s; });
+  }
+  function splitWords(root) {
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+    const nodes = []; while (walker.nextNode()) nodes.push(walker.currentNode);
+    nodes.forEach(node => {
+      const frag = document.createDocumentFragment();
+      node.textContent.split(/(\s+)/).forEach(part => {
+        if (!part) return;
+        if (/^\s+$/.test(part)) { frag.append(' '); return; }
+        const w = document.createElement('span'); w.className = 'w';
+        const i = document.createElement('span'); i.className = 'wi'; i.textContent = part;
+        w.append(i); frag.append(w);
+      });
+      node.replaceWith(frag);
+    });
+    return root.querySelectorAll('.wi');
+  }
+
+  // ── Hero: the title arrives on the beat ──
+  const heroLines = document.querySelectorAll('#hero [data-chars]');
+  const heroChars = [...heroLines].map(splitChars);
+  const intro = gsap.timeline({ defaults: { ease: 'expo.out' } });
+  intro
+    .from(D, { o: 0, s: 0.8, duration: BEAT * 4, ease: 'power3.out' }, 0)
+    .from(heroChars[0], { yPercent: 110, opacity: 0, letterSpacing: '0.3em', duration: BEAT * 2.2, stagger: BEAT / 8 }, BEAT * 0.5)
+    .from(heroChars[1], { yPercent: 110, opacity: 0, letterSpacing: '0.3em', duration: BEAT * 2.2, stagger: BEAT / 8 }, BEAT * 1.5)
+    .from('#hero .eyebrow, #hero .lede, #hero .cue', { y: 24, opacity: 0, duration: BEAT * 2, stagger: BEAT / 2 }, BEAT * 3);
+
+  // ── Kinetic headlines ──
+  document.querySelectorAll('[data-words]').forEach(h => {
+    const words = splitWords(h);
+    gsap.from(words, {
+      yPercent: 118, rotate: 5, duration: BEAT * 1.6, ease: 'expo.out', stagger: BEAT / 4,
+      scrollTrigger: { trigger: h, start: 'top 82%', toggleActions: 'play none none reverse' }
+    });
+  });
+  document.querySelectorAll('section:not(#hero) .eyebrow').forEach(e => {
+    gsap.from(e, { opacity: 0, x: -16, duration: BEAT * 1.5, ease: 'expo.out', scrollTrigger: { trigger: e, start: 'top 85%', toggleActions: 'play none none reverse' } });
+  });
+
+  // Velocity skew on every headline (the web's motion blur)
+  const skewTargets = document.querySelectorAll('.kinetic');
+  const skewSetters = [...skewTargets].map(el => gsap.quickTo(el, 'skewY', { duration: 0.5, ease: 'power3.out' }));
+
+  // ── Mosaic: pinned, scrubbed ──
+  gsap.set('#callout', { opacity: 0, y: 30 });
+  gsap.set('#legend span', { opacity: 0, y: 12 });
+  const proxy = { p: 0 };
+  const mt = gsap.timeline({
+    scrollTrigger: { trigger: '#mosaic', start: 'top top', end: '+=170%', pin: true, scrub: 0.8, onRefresh: sizeCanvas }
+  });
+  mt.to(proxy, { p: 1, duration: 1, ease: 'none', onUpdate: () => drawMosaic(proxy.p) }, 0)
+    .to('#legend span', { opacity: 1, y: 0, stagger: 0.04, duration: 0.15 }, 0.55)
+    .to('#callout', { opacity: 1, y: 0, duration: 0.18 }, 0.78)
+    .to({}, { duration: 0.12 });
+
+  // ── Runtime: a weekend scrubbed by scroll ──
+  const fill = document.getElementById('fill'), head = document.getElementById('head'), clock = document.getElementById('clock');
+  const DAYS = ['Fri', 'Sat', 'Sun'];
+  function setWeekend(p) {
+    fill.style.transform = 'scaleX(' + p + ')';
+    head.style.left = (p * 100) + '%';
+    const m = Math.round(18 * 60 + p * 1965);
+    const day = DAYS[Math.min(2, Math.floor(m / 1440))];
+    const hh = String(Math.floor((m % 1440) / 60)).padStart(2, '0'), mm = String(m % 60).padStart(2, '0');
+    clock.textContent = day + ' ' + hh + ':' + mm;
+  }
+  setWeekend(0);
+  ScrollTrigger.create({ trigger: '.weekend', start: 'top 80%', end: 'bottom 30%', scrub: true, onUpdate: s => setWeekend(s.progress) });
+
+  // Odometers: digits roll like a fare board, right to left
+  document.querySelectorAll('[data-odo]').forEach(el => {
+    const text = el.dataset.odo; el.textContent = ''; el.setAttribute('aria-label', text);
+    const cols = [];
+    [...text].forEach(ch => {
+      if (/\d/.test(ch)) {
+        const col = document.createElement('span'); col.className = 'col';
+        let h = ''; for (let k = 0; k < 20; k++) h += '<span>' + (k % 10) + '</span>';
+        col.innerHTML = h; col.dataset.d = ch; el.appendChild(col); cols.push(col);
+      } else {
+        const s = document.createElement('span'); s.className = 'fix'; s.textContent = ch === ' ' ? ' ' : ch; el.appendChild(s);
+      }
+    });
+    gsap.fromTo(cols.reverse(), { yPercent: 0 }, {
+      yPercent: i => -(10 + +cols[i].dataset.d) * 5,
+      duration: BEAT * 3, ease: 'power4.out', stagger: BEAT / 3,
+      scrollTrigger: { trigger: el, start: 'top 85%', toggleActions: 'play none none reverse' }
+    });
+  });
+
+  // ── People: pinned, the ring draws the share ──
+  const drc = document.getElementById('drcCount');
+  const cnt = { n: 0 };
+  const pt = gsap.timeline({ scrollTrigger: { trigger: '#people', start: 'top top', end: '+=130%', pin: true, scrub: 0.8 } });
+  pt.to(D, { arc: DATA.ranks[0][1] / DATA.total, duration: 0.5, ease: 'power2.inOut', onUpdate: renderDisc }, 0)
+    .fromTo(cnt, { n: 0 }, { n: 114, duration: 0.5, ease: 'power2.inOut', onUpdate: () => { drc.textContent = Math.round(cnt.n); } }, 0)
+    .from('#ranks .bar', { scaleX: 0, duration: 0.3, stagger: 0.07, ease: 'power3.out' }, 0.15)
+    .from('#ranks .n', { opacity: 0, duration: 0.2, stagger: 0.07 }, 0.2)
+    .to({}, { duration: 0.2 });
+
+  // ── Rhythm: bars rise, then breathe on the beat ──
+  gsap.from('#eq .b', { scaleY: 0, duration: BEAT * 2, ease: 'expo.out', stagger: BEAT / 4, scrollTrigger: { trigger: '#eq', start: 'top 75%', toggleActions: 'play none none reverse' } });
+  const pulse = gsap.timeline({ repeat: -1, paused: true });
+  pulse.to('#eq .well', { scaleY: 1.045, duration: BEAT * 0.18, ease: 'power2.out' })
+       .to('#eq .well', { scaleY: 1, duration: BEAT * 0.82, ease: 'power2.in' });
+  ScrollTrigger.create({ trigger: '#eq', start: 'top 60%', end: 'bottom top', onToggle: s => s.isActive ? pulse.play() : pulse.pause() });
+
+  // ── Outro: the last frame matches the first ──
+  const outroChars = [...document.querySelectorAll('#outro [data-chars]')].map(splitChars);
+  gsap.from(outroChars.flat(), { yPercent: 110, opacity: 0, duration: BEAT * 2, ease: 'expo.out', stagger: BEAT / 10, scrollTrigger: { trigger: '#outro', start: 'top 60%', toggleActions: 'play none none reverse' } });
+
+  // ── The disc travels between chapters (created after the pins) ──
+  const states = [
+    ['#hero', { x: 22, y: 0, s: 1, o: 1 }],
+    ['#mosaic', { x: -40, y: -6, s: 0.32, o: 0 }],
+    ['#runtime', { x: 34, y: 18, s: 0.55, o: 0.35 }],
+    ['#people', { x: -24, y: 0, s: 0.82, o: 1 }],
+    ['#genres', { x: 0, y: 0, s: 1.7, o: 0.18 }],
+    ['#rhythm', { x: 30, y: -8, s: 0.5, o: 0.5 }],
+    ['#outro', { x: 22, y: 0, s: 1, o: 1 }]
+  ];
+  for (let k = 1; k < states.length; k++) {
+    const from = states[k - 1][1], to = Object.assign({}, states[k][1]);
+    if (states[k][0] === '#outro') to.arc = 0;
+    gsap.fromTo(D, Object.assign({}, from), Object.assign(to, {
+      ease: 'power2.inOut', immediateRender: false, onUpdate: renderDisc,
+      scrollTrigger: { trigger: states[k][0], start: 'top bottom', end: 'top top', scrub: 1 }
+    }));
+  }
+
+  // ── Genres marquee + global ticker (spin, skew, marquee) ──
+  const rowEls = [...document.querySelectorAll('.row')].map(r => ({ el: r.querySelector('.track-x'), dir: +r.dataset.dir, x: 0, w: 0 }));
+  function measureRows() { rowEls.forEach(r => { r.w = r.el.scrollWidth / 2; }); }
+  measureRows(); window.addEventListener('resize', measureRows);
+  let genresActive = false;
+  ScrollTrigger.create({ trigger: '#genres', start: 'top bottom', end: 'bottom top', onToggle: s => { genresActive = s.isActive; } });
+
+  gsap.ticker.add((time, dt) => {
+    const v = velocity();
+    vel += (v - vel) * 0.12;
+    const sec = dt / 1000;
+    // disc: 33⅓ rpm feel, faster with scroll
+    angle = (angle + (60 + Math.min(Math.abs(vel), 60) * 9) * sec) % 360;
+    renderDisc();
+    const skew = gsap.utils.clamp(-5, 5, vel * -0.18);
+    skewSetters.forEach(set => set(skew));
+    if (genresActive) {
+      rowEls.forEach((r, i) => {
+        if (!r.w) return;
+        r.x += r.dir * (28 + i * 3 + Math.abs(vel) * 14) * sec;
+        r.x = gsap.utils.wrap(-r.w, 0, r.x);
+        r.el.style.transform = 'translate3d(' + r.x + 'px,0,0)';
+      });
+    }
+  });
+
+  document.fonts && document.fonts.ready.then(() => { measureRows(); ScrollTrigger.refresh(); });
+})();
+</script>
