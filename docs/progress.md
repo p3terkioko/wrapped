@@ -20,3 +20,19 @@ See `docs/audit.md`. Story-mode baseline in `docs/baseline/story/`, old landing 
 - Committed production's uncommitted WIP, unchanged, on branch **`prod-snapshot`** (`172e8c5`), so the live state is preserved.
 - Rebuild branch **`dashboard-rebuild`** created from `prod-snapshot`. `main` is untouched.
 - Moved `motion-study.html` → `docs/reference/motion-study.html`.
+
+## Stage 2 — Research (done)
+
+Wrote `docs/research.md`: 21 rules, 12 conflicts between the brief and the research with fixes, inspiration notes, a measured tool table, and data-source constraints.
+
+Decisions:
+- **Native scroll, no Lenis.** Smooth-wheel interpolation changes the scroll rate, which is NN/g's definition of scrolljacking. It also breaks over the Spotify player iframe.
+- **GSAP 3.15.0 + ScrollTrigger + SplitText** (≈ 50 KB gz, licence allows commercial websites). Motion, Scrollama, Rive, d3/Plot in the browser, three.js and Chart.js were rejected; layouts get computed server-side.
+- **Spotify artwork is never animated, cropped, blurred or overlaid**, per Spotify's design guidelines. The brief's "covers assembling into one image" becomes one tile per song in its cover's extracted colour. Grain never covers artwork. Spotify logo attribution plus link-backs are required.
+- **A persistent motion on/off control** (WCAG 2.2.2) for the looping motion: record spin and beat pulses.
+- **Counters scrub against the timeline**, so every intermediate value is true at some date. No odometers rolling through false digits.
+- **The persistent shape is a 7-inch 45 rpm single**, following East African singles culture, rather than an LP.
+
+Check later:
+- **essentia.js is AGPL-3.0.** It's only used in the local backfill script as an optional dependency and is never deployed. Confirm you're comfortable with that.
+- Spotify's guidelines require their logo where Spotify content appears. The current site doesn't show it; the rebuild will.
