@@ -82,11 +82,29 @@ ${renderPicks(film)}
 ${renderCredits(film)}
 </main>
 <button type="button" class="motion-toggle" id="motion-toggle" aria-pressed="true">Motion</button>
+
+<!-- Story mode (unchanged markup from the old page) -->
+<div id="story-container" class="story-container hidden">
+  <div class="story-progress-track">
+    <div class="story-progress-bar" id="story-progress-bar"></div>
+  </div>
+
+  <div class="story-slides" id="story-slides"></div>
+
+  <div class="story-ui">
+    <button type="button" class="story-nav-text" id="story-prev-btn">← Prev</button>
+    <span class="story-counter" id="story-counter">1 / 12</span>
+    <button type="button" class="story-nav-text primary" id="story-next-btn">Next →</button>
+  </div>
+
+  <button type="button" class="story-close" id="story-exit-btn">✕</button>
+</div>
 <script id="film-data" type="application/json">${inlineJson(film)}</script>
 <script defer src="/vendor/gsap-3.15.0/gsap.min.js"></script>
 <script defer src="/vendor/gsap-3.15.0/ScrollTrigger.min.js"></script>
 <script defer src="/vendor/gsap-3.15.0/SplitText.min.js"></script>
 <script type="module" src="/js/film.js?v=${ASSET_VERSION}"></script>
+<script defer src="/story/loader.js?v=${ASSET_VERSION}"></script>
 </body>
 </html>`;
 }

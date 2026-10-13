@@ -52,3 +52,71 @@ Fixes found while looking at the frames:
 - The record's ring text needs fitting to its circumference.
 
 Check later: Fraunces + Schibsted Grotesk + JetBrains Mono is three families. The font budget gets measured in Stage 8.
+
+## Stage 4 — Data foundation (done)
+
+- **Dev database:** PGlite on 127.0.0.1:5433 (`npm run dev:db`), seeded from a read-only Spotify pull (`dev:pull`, `dev:seed`). `.env.local` overrides `.env`. Write scripts refuse non-local databases (`scripts/lib/guard.js`). The local scheduler won't start against a non-local database.
+- **Spotify client:** works under the 2026 Development Mode rules, with the old endpoints as a fast path (`/items` then `/tracks`; batch then single artists; profiles optional). Verified: the pull used `/items` and batch artists.
+- **Enrichment:** per-source status on every track, final coverage of 487 tracks:
+  - tempo 475 (ReccoBeats 404, essentia 66, Deezer 5); key 475;
+  - lyric numbers 389 counted + 5 instrumental (no lyric text stored anywhere);
+  - artwork colour 487/487; Deezer match 485/487;
+  - MusicBrainz country for 248/494 artists.
+- **Payloads:** film (≈ 70 KB raw / 15 KB br, inlined in the page), people, tracks (lazy), legacy (story mode). Rules in `docs/data.md`.
+- **Admin:** password typed by the operator (the old page had `admin123` hard-coded in client code), name map, artist genre/country corrections, track corrections, community events, genre-family overrides, coverage report.
+- **Cron:** rejects any request without `CRON_SECRET`, including when it isn't set.
+
+Check later:
+- **`CRON_SECRET` and `ADMIN_PASSWORD` must be set in Vercel** before deploy, or cron and admin will refuse everything.
+- Production needs `prisma db push` and a backfill. Steps in `docs/data.md` § "Going to production". Both write to production, so they're yours to run.
+- Under Development Mode rules, playlist contents are only returned to the playlist owner or a collaborator. The token is Peter's; the owner is tanuiii.
+
+## Stage 5 — Motion system (done)
+
+- `docs/motion.md`: GSAP 3.15 (self-hosted), native scroll, a beat grid from the median tempo (113 BPM), three easing families, scrub vs trigger vs pin rules, velocity caps, the reduced-motion and toggle behaviour, and a budget.
+- **The page is rendered on the server**, so it's complete without JS: all numbers, charts as SVG with titles and descriptions. Scripts only add motion and lazy layers.
+- **Fonts self-hosted:** 79 KB for four faces. The body face changed from Schibsted Grotesk (a 47 KB variable file) to a Fraunces text cut; recorded in `direction.md`.
+- **Peter's feedback, applied:**
+  - **No eyebrow labels anywhere.** Rule added to `direction.md`.
+  - **Text clipping.** SplitText masks clipped italic overhangs and descenders; masks are now padded.
+  - **The opening was too thin.** It's now a title sequence: the record with all 42 names pressed around the rim, a tonearm that drops on the beat, a label strip, a live latest-add readout, "Add a song", and "It started with one song".
+  - **The mosaic should show real cover art.** It now shows the covers themselves, lazy-loaded in add order. They're never animated (Spotify rule); tiles appear by cut and Data Saver is respected.
+  - **Scrolling was jumpy.** Measured with rAF frame timings, long-animation-frame attribution and CPU profiles. Fixes: direct scrubs, anticipatePin, ignoreMobileResize, trigger sort, isolated record layers, incremental mosaic drawing without per-tile clipping, and deduped DOM writes.
+    - Desktop: frames over 50 ms went from 67 to 6 per scroll.
+    - 4×-throttled phone: median frame went from 66 ms to 17 ms.
+
+## Stage 6 — Chapters (done, first full pass)
+
+The film now runs about 32,700 px on desktop (the motion study: 10,140), every chapter with real data and motion:
+- **The opening:** title sequence, "It started with one song", the cover mosaic (pinned and scrubbed day by day), and the runtime weekend.
+- **The people:**
+  - ranking (whole-playlist shares, ties share a rank, unknown adders stated);
+  - the month-by-month race (pinned scrub, re-sorting rows);
+  - taste twins;
+  - great minds (30 songs added twice);
+  - 13 badges, with the four audio badges restored.
+- **The sound:** genre families with the coverage rule stated, eras, the mood map (dots in cover colours), the 113 BPM heartbeat, the Camelot key wheel plus a 10-song "perfect mix" by 10 people, the language mix (with honest coverage), and geography as a ranked list (coverage under 60%, so no map).
+- **The rhythm:** weekdays in Nairobi time (Thursday 119), the 24-hour radial clock (10am), a weekday × hour heatmap, a calendar, and binges and silences.
+- **The picks:** song of the day (fixed at each refresh, the same for everyone that day), crowd favourite, hidden gem, deepest cut, oldest, newest (all playable in place), the nostalgia gap (3.7 years), and the longest musical conversation.
+- **The credits:** all 42 names in order of appearance, then a finale whose closing frame rhymes with the opening (the record returns and the tonearm drops).
+
+Decisions:
+- Every claim in a headline is computed. "More than one in every five" is now provably true (ceil); the mood headline says "of the songs with audio data".
+- "Hidden gem" excludes duplicates, zero-popularity copies and songs added within six months of release.
+- "Deepest cut" is the song whose lead artist has the fewest followers.
+
+## Story mode (moved, minimal fixes, compared)
+
+- Moved unchanged into `public/story/story.js`. `story.css` is untouched. `story-base.css` holds the few old base rules, scoped with `:where()` so specificity matches the old global rules. The old fonts load only when story mode opens.
+- Reachable from the opening ("Play the 12-slide story") and the finale. Closing it returns to the same place in the film.
+- **Code changes (3, approved):** "Built from N worlds" and the summary genre count use `totalGenres`; "Musical era" uses `musicTimeSpan` (whole playlist).
+- **Compared with `docs/baseline/story/`** (new captures in `docs/baseline/story-after/`). 0.02–1.7% of pixels differ per slide. Every visible difference is data:
+  - Slide 2: "Built from 6 worlds" → "168 worlds"; genres counted by songs (afro soul, afro r&b, afropop, gengetone, rumba congolaise, afrobeats).
+  - Slide 4: "Treat You Better" → "End of Beginning" (Djo), both at 94/100 (the tie is broken differently); the artist line and "Listen on Spotify" now appear (they were blank before).
+  - Slide 5: hidden gem "Tuendelee" 0/100 (a duplicate copy) → "Deborah", The Black Vaccine, 1/100; the artist line now appears.
+  - Slide 6: "43 curators" → "42".
+  - Slide 7: "afropop throne" → "afro soul throne".
+  - Slide 9: vibe bars go from 50% placeholders to real values (energy 62, happiness 53, danceability 66, acoustic 29).
+  - Slide 11: Genres 8 → 168, Curators 43 → 42, "afro soul sets the mood", energy 50% → 62%.
+  - Slide 12: confetti positions vary (random, as before).
+  - Slides 1, 3, 8, 10: unchanged.
