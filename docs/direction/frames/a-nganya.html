@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Direction A — Nganya — style frame</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Martian+Mono:wght@400;600&display=swap">
+<style>
+/* Nganya: a matatu at night. LED strips, airbrushed label, condensed signage type shouting the finding. */
+:root {
+  --night: #07060b;
+  --ink: #f6f2ec;
+  --ink-2: rgba(246, 242, 236, 0.66);
+  --ink-3: rgba(246, 242, 236, 0.36);
+  --magenta: #ff2e88;
+  --uv: #7a5cff;
+  --amber: #ffb52e;
+  --display: 'Archivo', 'Arial Narrow', sans-serif;
+  --data: 'Martian Mono', ui-monospace, monospace;
+  --gutter: clamp(20px, 5vw, 80px);
+}
+* { box-sizing: border-box; margin: 0; }
+html, body { background: var(--night); color: var(--ink); }
+body { font: 400 17px/1.5 var(--display); font-stretch: 100%; min-height: 100svh; overflow-x: hidden; }
+.strips { position: fixed; inset: 0; pointer-events: none; overflow: hidden; }
+.strips i { position: absolute; height: 3px; width: 140vmax; left: -20vmax; border-radius: 3px; filter: blur(.4px); }
+.strips i:nth-child(1) { top: 16%; background: var(--magenta); box-shadow: 0 0 18px 4px rgba(255,46,136,.55), 0 0 80px 20px rgba(255,46,136,.18); transform: rotate(-8deg); }
+.strips i:nth-child(2) { top: 88%; background: var(--uv); box-shadow: 0 0 18px 4px rgba(122,92,255,.55), 0 0 90px 24px rgba(122,92,255,.2); transform: rotate(-8deg); }
+.haze { position: fixed; inset: 0; pointer-events: none; background: radial-gradient(50% 45% at 70% 45%, rgba(122,92,255,.16), transparent 70%), radial-gradient(40% 40% at 15% 20%, rgba(255,46,136,.10), transparent 70%); }
+.chapter { position: relative; min-height: 100svh; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); align-items: center; gap: clamp(24px, 4vw, 72px); padding: 9svh var(--gutter); }
+.copy { display: grid; gap: 24px; max-width: 660px; }
+.eyebrow { font: 600 11px/1 var(--data); letter-spacing: .2em; text-transform: uppercase; color: var(--amber); }
+h2 { font-family: var(--display); font-weight: 900; font-stretch: 62%; font-size: clamp(3rem, 7vw, 7rem); line-height: .86; text-transform: uppercase; letter-spacing: -0.005em; }
+h2 .n { color: var(--magenta); text-shadow: 0 0 24px rgba(255,46,136,.55); }
+h2 .quiet { display: block; font-weight: 500; font-stretch: 100%; font-size: .3em; letter-spacing: .02em; color: var(--ink-2); text-transform: none; margin-top: .6em; line-height: 1.2; }
+.sub { color: var(--ink-2); max-width: 46ch; }
+.ranks { list-style: none; padding: 0; display: grid; gap: 10px; }
+.rank { display: grid; grid-template-columns: minmax(0, 12ch) minmax(0, 1fr) 8.5ch; gap: 14px; align-items: center; font: 400 12.5px/1.2 var(--data); }
+.rank .who { color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rank .bar { height: 10px; background: var(--ink-3); }
+.rank .val { text-align: right; font-variant-numeric: tabular-nums; }
+.rank .val small { color: var(--ink-3); margin-left: 6px; font-size: 10px; }
+.rank.lead .who { color: var(--ink); }
+.rank.lead .bar { background: linear-gradient(90deg, var(--uv), var(--magenta)); box-shadow: 0 0 16px rgba(255,46,136,.5); }
+.rank.you .who, .rank.you .val { color: var(--amber); }
+.rank.you .bar { background: var(--amber); }
+.rank.gap { grid-template-columns: 1fr; color: var(--ink-3); letter-spacing: .3em; }
+.you-line { font: 800 1.2rem/1.2 var(--display); font-stretch: 75%; text-transform: uppercase; color: var(--amber); letter-spacing: .02em; }
+.caption { font: 400 11px/1.6 var(--data); color: var(--ink-3); max-width: 62ch; }
+.stage { position: relative; aspect-ratio: 1; width: min(100%, 660px); justify-self: center; }
+.stage svg { width: 100%; height: 100%; overflow: visible; display: block; filter: drop-shadow(0 0 40px rgba(122,92,255,.35)); }
+.share-label { position: absolute; left: 0; bottom: 2%; font: 900 clamp(2.4rem, 5vw, 4.6rem)/1 var(--display); font-stretch: 62%; color: var(--magenta); text-shadow: 0 0 30px rgba(255,46,136,.6); }
+.share-label small { display: block; font: 400 10px/1.4 var(--data); color: var(--ink-3); letter-spacing: .12em; text-shadow: none; }
+@media (max-width: 760px) {
+  .chapter { grid-template-columns: 1fr; padding-top: 6svh; gap: 18px; }
+  .stage { order: -1; width: 76vw; margin-bottom: -6vw; }
+  .rank { grid-template-columns: minmax(0, 10ch) minmax(0, 1fr) 8ch; font-size: 11.5px; }
+}
+</style>
+</head>
+<body>
+<div class="haze"></div>
+<div class="strips"><i></i><i></i></div>
+<section class="chapter" aria-labelledby="people-h">
+  <div class="copy">
+    <p class="eyebrow">The people</p>
+    <h2 id="people-h">Dr. C added <span class="n">114</span> of 515 songs <span class="quiet">More than one in every five. 42 people have added songs since March 2024.</span></h2>
+    <ol class="ranks" id="ranks"></ol>
+    <p class="you-line">You, Peter: 19 songs · 3.7% · 7th of 42</p>
+    <p class="caption">Share of all 515 playlist entries, Nairobi time. 30 songs were added twice, by different people, and count for each. 6 entries have no recorded adder.</p>
+  </div>
+  <div class="stage" aria-hidden="true">
+    <svg viewBox="-110 -110 220 220" id="record"></svg>
+    <p class="share-label">22.1%<small>OF EVERY SONG ADDED</small></p>
+  </div>
+</section>
+<script>
+const RANKS = [['Dr. C', 114, 22.1], ['Tams 🦋🌺', 50, 9.7], ['Pepp🍂', 43, 8.3], ['Viv Mwirigi', 28, 5.4], ['0xFidel', 20, 3.9], ['Nchekukathryn', 20, 3.9]];
+const ol = document.getElementById('ranks');
+RANKS.forEach(([who, n, p], i) => {
+  const li = document.createElement('li'); li.className = 'rank' + (i === 0 ? ' lead' : '');
+  li.innerHTML = '<span class="who"></span><span class="bar" style="width:' + (n / 114 * 100) + '%"></span><span class="val">' + n + '<small>' + p + '%</small></span>';
+  li.querySelector('.who').textContent = who; ol.appendChild(li);
+});
+ol.insertAdjacentHTML('beforeend', '<li class="rank gap">· · ·</li><li class="rank you"><span class="who">Peter (you)</span><span class="bar" style="width:' + (19 / 114 * 100) + '%"></span><span class="val">19<small>3.7%</small></span></li>');
+const s = document.getElementById('record'); const NS = 'http://www.w3.org/2000/svg';
+const el = (t, a, p = s) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); p.appendChild(e); return e; };
+const defs = el('defs', {});
+const lg = el('linearGradient', { id: 'air', x1: '0', y1: '0', x2: '1', y2: '1' }, defs);
+el('stop', { offset: '0', 'stop-color': '#ff2e88' }, lg); el('stop', { offset: '.55', 'stop-color': '#ffb52e' }, lg); el('stop', { offset: '1', 'stop-color': '#7a5cff' }, lg);
+el('path', { id: 'ring', d: 'M 0,-34 A 34,34 0 1 1 -0.01,-34' }, defs);
+const C = 2 * Math.PI * 101;
+el('circle', { r: 101, fill: 'none', stroke: 'rgba(246,242,236,.08)', 'stroke-width': 1.2 });
+el('circle', { r: 101, fill: 'none', stroke: '#ff2e88', 'stroke-width': 3, 'stroke-dasharray': (C * 0.221) + ' ' + C, transform: 'rotate(-90)', style: 'filter: drop-shadow(0 0 4px #ff2e88)' });
+el('circle', { r: 92, fill: '#0c0a12', stroke: '#7a5cff', 'stroke-opacity': .7, 'stroke-width': .8 });
+for (let r = 47; r <= 90; r += 1.8) el('circle', { r: r.toFixed(1), fill: 'none', stroke: '#fff', 'stroke-opacity': .04, 'stroke-width': .35 });
+el('circle', { r: 44, fill: 'url(#air)' });
+const t = el('text', { fill: '#07060b', 'font-family': 'Martian Mono', 'font-size': 3.9, 'font-weight': 600, 'letter-spacing': 1.1 });
+el('textPath', { href: '#ring' }, t).textContent = 'KAMILIMU · INTHE · EARS · NGANYA · 45 RPM · 515 · ';
+el('text', { x: 0, y: -18, 'text-anchor': 'middle', fill: '#07060b', 'font-family': 'Archivo', 'font-weight': 900, 'font-stretch': '62%', 'font-size': 9 }).textContent = 'THE PEOPLE';
+el('circle', { r: 19, fill: '#07060b' });
+el('circle', { r: 7, fill: '#f6f2ec' }); el('circle', { r: 2.2, fill: '#07060b' });
+</script>
+</body>
+</html>

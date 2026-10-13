@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Direction B — Seven Inch — style frame</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..900,0..100,0..1;1,9..144,300..900,0..100,0..1&family=Schibsted+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Seven Inch: a 1970s East African 45 on a lacquer-black night. Warm cream label, vermilion and gold, a soft wonky serif performing the headlines. */
+:root {
+  --lacquer: #0e0b09;
+  --lacquer-2: #17120e;
+  --cream: #f3e9d6;
+  --cream-2: rgba(243, 233, 214, 0.66);
+  --cream-3: rgba(243, 233, 214, 0.56);
+  --hair: rgba(243, 233, 214, 0.12);
+  --vermilion: #ff5b33;
+  --gold: #e9b44c;
+  --label-green: #1d5c45;
+  --display: 'Fraunces', 'Georgia', serif;
+  --body: 'Schibsted Grotesk', 'Segoe UI', system-ui, sans-serif;
+  --data: 'JetBrains Mono', ui-monospace, monospace;
+  --gutter: clamp(20px, 5vw, 80px);
+}
+* { box-sizing: border-box; margin: 0; }
+html, body { background: var(--lacquer); color: var(--cream); }
+body { font: 400 17px/1.5 var(--body); min-height: 100svh; overflow-x: hidden; }
+
+.light { position: fixed; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(60% 55% at 72% 46%, rgba(233, 180, 76, 0.16), transparent 70%),
+    radial-gradient(40% 40% at 18% 90%, rgba(255, 91, 51, 0.08), transparent 70%); }
+.grain { position: fixed; inset: 0; pointer-events: none; opacity: .09; mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+.vignette { position: fixed; inset: 0; pointer-events: none; background: radial-gradient(120% 95% at 50% 45%, transparent 55%, rgba(0,0,0,.6) 100%); }
+
+.chapter { position: relative; min-height: 100svh; display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); align-items: center; gap: clamp(24px, 4vw, 72px); padding: 9svh var(--gutter); }
+.copy { display: grid; gap: 26px; max-width: 640px; }
+.eyebrow { font: 600 12px/1 var(--data); letter-spacing: .24em; text-transform: uppercase; color: var(--gold); }
+h2 { font: 800 clamp(2.6rem, 5.6vw, 5.4rem)/0.95 var(--display); font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144; letter-spacing: -0.02em; text-wrap: balance; }
+h2 .n { color: var(--vermilion); font-style: italic; font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144; }
+h2 .quiet { display: block; font-weight: 400; font-style: italic; color: var(--cream-2); font-size: .62em; margin-top: .25em; }
+.sub { color: var(--cream-2); max-width: 46ch; font-size: clamp(1rem, 1.3vw, 1.15rem); }
+
+.ranks { list-style: none; padding: 0; display: grid; gap: 12px; }
+.rank { display: grid; grid-template-columns: minmax(0, 12ch) minmax(0, 1fr) 7.5ch; gap: 14px; align-items: center; font: 400 14px/1.2 var(--data); }
+.rank .who { color: var(--cream-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rank .bar { height: 12px; background: var(--cream-3); border-radius: 0 6px 6px 0; }
+.rank .val { text-align: right; color: var(--cream); font-variant-numeric: tabular-nums; }
+.rank .val small { color: var(--cream-3); margin-left: 6px; font-size: 11px; }
+.rank.lead .who { color: var(--cream); }
+.rank.lead .bar { background: var(--vermilion); }
+.rank.you .who, .rank.you .val { color: var(--gold); }
+.rank.you .bar { background: transparent; border: 1.5px solid var(--gold); }
+.rank.gap { grid-template-columns: 1fr; color: var(--cream-3); font-size: 12px; letter-spacing: .3em; padding-left: 2px; }
+.caption { font: 400 12.5px/1.55 var(--data); color: var(--cream-3); max-width: 60ch; }
+.you-line { display: flex; gap: 10px; align-items: baseline; padding: 12px 16px; border: 1px solid var(--hair); border-left: 3px solid var(--gold); background: rgba(233,180,76,.05); font-size: 15px; color: var(--cream-2); }
+.you-line b { font-family: var(--display); font-variation-settings: "SOFT" 100, "WONK" 1; font-weight: 700; font-size: 1.25rem; color: var(--gold); }
+
+.stage { position: relative; aspect-ratio: 1; width: min(100%, 680px); justify-self: center; }
+.stage svg { width: 100%; height: 100%; overflow: visible; display: block; }
+.share-label { position: absolute; left: 63%; top: -7%; text-align: right; font: 700 clamp(2rem, 4vw, 3.6rem)/1 var(--display); font-variation-settings: "SOFT" 100, "WONK" 1, "opsz" 144; color: var(--vermilion); font-style: italic; }
+.share-label small { display: block; font: 400 12px/1.4 var(--data); font-style: normal; color: var(--cream-3); letter-spacing: .08em; }
+
+@media (max-width: 760px) {
+  .chapter { grid-template-columns: 1fr; padding-top: 6svh; gap: 18px; }
+  .stage { order: -1; width: 78vw; margin-bottom: -8vw; }
+  .share-label { left: 58%; top: -9%; }
+  .rank { grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: 'who val' 'bar bar'; row-gap: 6px; font-size: 13px; }
+  .rank .who { grid-area: who; } .rank .val { grid-area: val; } .rank .bar { grid-area: bar; }
+  .rank.gap { grid-template-areas: none; }
+}
+</style>
+</head>
+<body>
+<div class="light"></div>
+<section class="chapter" aria-labelledby="people-h">
+  <div class="copy">
+    <p class="eyebrow">The people</p>
+    <h2 id="people-h">Dr. C added <span class="n">114</span> of the 515 songs. <span class="quiet">More than one in every five.</span></h2>
+    <p class="sub">42 people have added songs since March 2024. The next five, together, added 161.</p>
+    <ol class="ranks" id="ranks"></ol>
+    <p class="you-line"><b>19</b> songs from you, Peter. 3.7% of the playlist, seventh of 42.</p>
+    <p class="caption">Share of all 515 playlist entries, Nairobi time. 30 songs were added twice, by different people, and count for each. 6 entries have no recorded adder.</p>
+  </div>
+  <div class="stage" aria-hidden="true">
+    <svg viewBox="-110 -110 220 220" id="record"></svg>
+    <p class="share-label">22.1%<small>OF EVERY SONG ADDED</small></p>
+  </div>
+</section>
+<div class="grain"></div>
+<div class="vignette"></div>
+<script>
+const RANKS = [['Dr. C', 114, 22.1], ['Tams 🦋🌺', 50, 9.7], ['Pepp🍂', 43, 8.3], ['Viv Mwirigi', 28, 5.4], ['0xFidel', 20, 3.9], ['Nchekukathryn', 20, 3.9]];
+const ol = document.getElementById('ranks');
+RANKS.forEach(([who, n, p], i) => {
+  const li = document.createElement('li'); li.className = 'rank' + (i === 0 ? ' lead' : '');
+  li.innerHTML = '<span class="who"></span><span class="bar" style="width:' + (n / 114 * 100) + '%"></span><span class="val">' + n + '<small>' + p + '%</small></span>';
+  li.querySelector('.who').textContent = who; ol.appendChild(li);
+});
+ol.insertAdjacentHTML('beforeend', '<li class="rank gap">· · ·</li><li class="rank you"><span class="who">Peter (you)</span><span class="bar" style="width:' + (19 / 114 * 100) + '%"></span><span class="val">19<small>3.7%</small></span></li>');
+
+// The seven-inch single: lacquer, grooves, cream paper label, large centre hole with a spider adapter.
+const s = document.getElementById('record'); const NS = 'http://www.w3.org/2000/svg';
+const el = (t, a, p = s) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); p.appendChild(e); return e; };
+const defs = el('defs', {});
+const g1 = el('radialGradient', { id: 'lac', cx: '50%', cy: '50%', r: '50%' }, defs);
+el('stop', { offset: '0.55', 'stop-color': '#16110d' }, g1); el('stop', { offset: '1', 'stop-color': '#0a0806' }, g1);
+const sheen = el('linearGradient', { id: 'sheen', x1: '0', y1: '0', x2: '1', y2: '1' }, defs);
+el('stop', { offset: '0.28', 'stop-color': '#fff', 'stop-opacity': 0 }, sheen); el('stop', { offset: '0.46', 'stop-color': '#ffe7b8', 'stop-opacity': 0.13 }, sheen); el('stop', { offset: '0.62', 'stop-color': '#fff', 'stop-opacity': 0 }, sheen);
+el('path', { id: 'labelRing', d: 'M 0,-38.5 A 38.5,38.5 0 1 1 -0.01,-38.5' }, defs);
+el('circle', { r: 101, fill: 'none', stroke: 'rgba(243,233,214,.08)', 'stroke-width': 1.2 });
+const C = 2 * Math.PI * 101;
+el('circle', { r: 101, fill: 'none', stroke: '#ff5b33', 'stroke-width': 3.2, 'stroke-linecap': 'round', 'stroke-dasharray': (C * 0.221) + ' ' + C, transform: 'rotate(-90)' });
+const head = 2 * Math.PI * 0.221 - Math.PI / 2; el('circle', { cx: 101 * Math.cos(head), cy: 101 * Math.sin(head), r: 3.4, fill: '#ff5b33' });
+el('circle', { r: 92, fill: 'url(#lac)' });
+for (let r = 47; r <= 90; r += 1.6) el('circle', { r: r.toFixed(1), fill: 'none', stroke: '#f3e9d6', 'stroke-opacity': r > 88 ? 0.05 : 0.035 + (Math.sin(r * 1.7) + 1) * 0.012, 'stroke-width': 0.35 });
+el('circle', { r: 92, fill: 'url(#sheen)' });
+el('circle', { r: 44, fill: '#f3e9d6' });
+el('circle', { r: 41.5, fill: 'none', stroke: '#ff5b33', 'stroke-width': 1.1 });
+el('circle', { r: 34.5, fill: 'none', stroke: '#1d5c45', 'stroke-width': 0.5 });
+const t = el('text', { fill: '#1d5c45', 'font-family': 'JetBrains Mono', 'font-size': 3.7, 'font-weight': 600, 'letter-spacing': 1.05 });
+const tp = el('textPath', { href: '#labelRing' }, t); tp.textContent = 'KAMILIMU · INTHE · EARS · 45 RPM · SIDE A · 515 ENTRIES · ';
+el('text', { x: 0, y: -24.5, 'text-anchor': 'middle', fill: '#0e0b09', 'font-family': 'Fraunces', 'font-weight': 800, 'font-size': 6.2, 'font-style': 'italic' }).textContent = 'The People';
+el('text', { x: 0, y: 28.5, 'text-anchor': 'middle', fill: '#ff5b33', 'font-family': 'JetBrains Mono', 'font-size': 3.2, 'letter-spacing': .7 }).textContent = 'KLE · 2024–2026';
+el('circle', { r: 19, fill: '#0e0b09' });
+// spider adapter: three arms and a hub
+const spider = el('g', { fill: '#e9b44c' });
+for (let k = 0; k < 3; k++) { const a = k * 120; el('path', { d: 'M -4.2,-3 L -6.5,-18.5 Q 0,-20.5 6.5,-18.5 L 4.2,-3 Z', transform: 'rotate(' + a + ')' }, spider); }
+el('circle', { r: 7.5 }, spider); el('circle', { r: 2.2, fill: '#0e0b09' });
+</script>
+</body>
+</html>

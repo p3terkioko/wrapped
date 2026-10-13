@@ -36,3 +36,19 @@ Decisions:
 Check later:
 - **essentia.js is AGPL-3.0.** It's only used in the local backfill script as an optional dependency and is never deployed. Confirm you're comfortable with that.
 - Spotify's guidelines require their logo where Spotify content appears. The current site doesn't show it; the rebuild will.
+
+## Stage 3 — Direction (done)
+
+Built three style frames of "The people" chapter with real data, rendered at desktop and phone widths (`docs/direction/`):
+- A Nganya (matatu night)
+- B Seven Inch (1970s East African single)
+- C Signal (current teal and mono, refined)
+
+**Chosen: B "Seven Inch".** It's warm, cinematic and community-specific (the 7-inch single with a spider-adapter centre) without pastiche, and the record changes role cleanly. A read as nightlife/esports and its neon fights the data. C is the cold analytics look we're leaving behind. Reasoning and brand rules are in `docs/direction.md`.
+
+Fixes found while looking at the frames:
+- Phone bar charts truncated names in every direction → names go above bars on phones.
+- Caption alpha 0.38 fails contrast → 0.56.
+- The record's ring text needs fitting to its circumference.
+
+Check later: Fraunces + Schibsted Grotesk + JetBrains Mono is three families. The font budget gets measured in Stage 8.
