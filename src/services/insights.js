@@ -53,10 +53,10 @@ function generateInsights(playlist, tracks, audioFeatures, artists) {
 
   // Audio feature averages
   const validFeatures = audioFeatures.filter(f => f !== null);
-  const avgFeatures = { valence: 0.5, energy: 0.5, danceability: 0.5, acousticness: 0.5, instrumentalness: 0.5, speechiness: 0.5, tempo: 120 };
+  const avgFeatures = { valence: 0.5, energy: 0.5, danceability: 0.5, acousticness: 0.5, instrumentalness: 0.5, liveness: 0.5, speechiness: 0.5, tempo: 120 };
 
   if (validFeatures.length > 0) {
-    ['valence', 'energy', 'danceability', 'acousticness', 'instrumentalness', 'speechiness', 'tempo'].forEach(f => {
+    ['valence', 'energy', 'danceability', 'acousticness', 'instrumentalness', 'liveness', 'speechiness', 'tempo'].forEach(f => {
       avgFeatures[f] = validFeatures.reduce((sum, item) => sum + (item[f] || 0), 0) / validFeatures.length;
     });
   }
@@ -142,6 +142,34 @@ function generateInsights(playlist, tracks, audioFeatures, artists) {
     { label: 'Very Fast', range: '> 160 BPM',    count: tempoZones.veryFast, pct: Math.round((tempoZones.veryFast / tempoTotal) * 100) },
   ];
 
+  // Mood-over-time timeline: bucket tracks by add-month, cross-referenced with
+  // valence (happiness) + energy so the front-end can plot emotional/vibrancy
+  // shifts. audioFeatures is index-aligned with `tracks`; buckets without any
+  // valid feature data are still emitted (count only) so the axis stays honest.
+  const moodBuckets = {};
+  tracks.forEach((item, i) => {
+    const d = new Date(item.added_at);
+    if (isNaN(d)) return;
+    const key = d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+    if (!moodBuckets[key]) moodBuckets[key] = { key, count: 0, valence: [], energy: [] };
+    moodBuckets[key].count++;
+    const f = audioFeatures[i];
+    if (f) {
+      if (typeof f.valence === 'number') moodBuckets[key].valence.push(f.valence);
+      if (typeof f.energy === 'number')  moodBuckets[key].energy.push(f.energy);
+    }
+  });
+  const avg = arr => (arr.length ? arr.reduce((s, v) => s + v, 0) / arr.length : null);
+  const moodTimeline = Object.values(moodBuckets)
+    .sort((a, b) => a.key.localeCompare(b.key))
+    .map(b => {
+      const [y, m] = b.key.split('-');
+      const label = new Date(Number(y), Number(m) - 1, 1)
+        .toLocaleDateString('en-US', { month: 'short', year: '2-digit' });
+      return { month: b.key, label, count: b.count, valence: avg(b.valence), energy: avg(b.energy) };
+    });
+  const moodHasFeatures = moodTimeline.some(b => b.valence !== null || b.energy !== null);
+
   return {
     playlist: {
       id:          playlist.id,
@@ -167,6 +195,8 @@ function generateInsights(playlist, tracks, audioFeatures, artists) {
     dayOfWeek,
     peakDay,
     tempoBreakdown,
+    moodTimeline,
+    moodHasFeatures,
   };
 }
 
@@ -186,7 +216,11 @@ function generateAdvancedContributorAnalytics(tracks, audioFeatures, artists, us
   });
 
   const userDisplayNames = {};
-  userProfiles.forEach(({ id, displayName }) => { if (displayName) userDisplayNames[id] = displayName; });
+  const userAvatars = {};
+  userProfiles.forEach(({ id, displayName, avatarUrl }) => {
+    if (displayName) userDisplayNames[id] = displayName;
+    if (avatarUrl) userAvatars[id] = avatarUrl;
+  });
 
   tracks.forEach(item => {
     const contributorId = item.added_by?.id || 'unknown';
@@ -202,12 +236,13 @@ function generateAdvancedContributorAnalytics(tracks, audioFeatures, artists, us
       contributorStats[contributorId] = {
         id: contributorId,
         name: displayName,
+        avatarUrl: userAvatars[contributorId] || null,
         tracksAdded: 0,
         totalPopularity: 0,
         genres: new Set(),
         artists: new Set(),
         tracks: [],
-        audioFeatures: { energy: [], danceability: [], valence: [], acousticness: [], speechiness: [], tempo: [] },
+        audioFeatures: { energy: [], danceability: [], valence: [], acousticness: [], instrumentalness: [], liveness: [], speechiness: [], tempo: [] },
         addedDates: [],
         releaseYears: [],
       };
@@ -398,8 +433,9 @@ function calculateGenreMaestros(tracks, artists, userProfiles) {
 
     maestros.push({
       genre,
-      contributorId:   topId,
-      contributorName: profile?.displayName || `User ${topId.slice(-4)}`,
+      contributorId:     topId,
+      contributorName:   profile?.displayName || `User ${topId.slice(-4)}`,
+      contributorAvatar: profile?.avatarUrl || null,
       songCount:       topData.count,
       totalGenreTracks: total,
       percentage:      Math.round((topData.count / total) * 100),
@@ -448,6 +484,7 @@ function generatePlaylistMembers(tracks, userProfiles, followerCount = 0) {
     return {
       ...member,
       name:        profile?.displayName || `User ${member.id.slice(-4)}`,
+      avatarUrl:   profile?.avatarUrl || null,
       description: `Added ${member.tracksAdded} track${member.tracksAdded !== 1 ? 's' : ''}`,
     };
   }).sort((a, b) => b.tracksAdded - a.tracksAdded);

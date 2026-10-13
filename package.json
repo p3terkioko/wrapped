@@ -8,7 +8,12 @@
     "dev": "nodemon backend/server.js",
     "postinstall": "prisma generate",
     "db:push": "prisma db push",
-    "db:generate": "prisma generate"
+    "db:generate": "prisma generate",
+    "dev:db": "node scripts/dev-db.mjs",
+    "dev:push": "node scripts/with-dev-env.js prisma db push",
+    "dev:pull": "node scripts/pull-snapshot.js",
+    "dev:seed": "node scripts/seed-dev.js",
+    "backfill": "node scripts/backfill.js"
   },
   "dependencies": {
     "@prisma/client": "^6.16.3",
@@ -18,10 +23,13 @@
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "express": "^4.18.2",
+    "jpeg-js": "0.4.4",
     "node-cron": "^4.2.1",
     "prisma": "^6.16.3"
   },
   "devDependencies": {
+    "@electric-sql/pglite": "0.5.8",
+    "@electric-sql/pglite-socket": "0.2.11",
     "nodemon": "^3.0.1"
   },
   "keywords": [

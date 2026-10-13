@@ -1,0 +1,211 @@
+/* KamiLimu.inthe.Ears — the film. Direction: Seven Inch (docs/direction.md). */
+
+@font-face { font-family: 'Fraunces'; font-style: normal; font-weight: 800; font-display: swap; src: url(/fonts/fraunces-800.woff2) format('woff2'); }
+@font-face { font-family: 'Fraunces'; font-style: italic; font-weight: 600; font-display: swap; src: url(/fonts/fraunces-italic.woff2) format('woff2'); }
+@font-face { font-family: 'Fraunces Text'; font-style: normal; font-weight: 400; font-display: swap; src: url(/fonts/fraunces-text.woff2) format('woff2'); }
+@font-face { font-family: 'JetBrains Mono'; font-style: normal; font-weight: 400; font-display: swap; src: url(/fonts/jetbrains-mono.woff2) format('woff2'); }
+/* Size-adjusted fallbacks keep layout steady while fonts load (CLS). */
+@font-face { font-family: 'Fraunces Fallback'; src: local('Georgia'); size-adjust: 104%; ascent-override: 92%; descent-override: 24%; }
+@font-face { font-family: 'Mono Fallback'; src: local('Consolas'), local('Menlo'), local('Courier New'); size-adjust: 100%; }
+
+:root {
+  color-scheme: dark;
+  --lacquer: #0e0b09;
+  --lacquer-2: #17120e;
+  --lacquer-3: #211a14;
+  --cream: #f3e9d6;
+  --cream-2: rgba(243, 233, 214, 0.70);
+  --cream-3: rgba(243, 233, 214, 0.58);
+  --cream-4: rgba(243, 233, 214, 0.22);
+  --hair: rgba(243, 233, 214, 0.12);
+  --vermilion: #ff5b33;
+  --gold: #e9b44c;
+  --label-green: #1d5c45;
+  --bar: rgba(243, 233, 214, 0.36);
+  --music: #e9b44c;            /* light tinted by the music in view (set by script) */
+  --display: 'Fraunces', 'Fraunces Fallback', Georgia, serif;
+  --text: 'Fraunces Text', 'Fraunces Fallback', Georgia, serif;
+  --data: 'JetBrains Mono', 'Mono Fallback', ui-monospace, monospace;
+  --gutter: clamp(20px, 5.5vw, 88px);
+  --measure: 34rem;
+  --beat: 0.53s;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { background: var(--lacquer); -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--lacquer); color: var(--cream); font: 400 1.0625rem/1.55 var(--text); overflow-x: clip; -webkit-font-smoothing: antialiased; }
+img, svg, canvas { display: block; max-width: 100%; }
+a { color: inherit; text-decoration-thickness: 1px; text-underline-offset: 0.2em; }
+a:hover { color: var(--cream); text-decoration-color: var(--vermilion); }
+button { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; border-radius: 2px; }
+.sr-only { position: absolute !important; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+.hidden { display: none !important; }
+.skip { position: absolute; left: 12px; top: -60px; z-index: 100; background: var(--cream); color: var(--lacquer); padding: 10px 14px; border-radius: 4px; font: 600 14px/1 var(--data); }
+.skip:focus { top: 12px; }
+
+/* ── Film layers ─────────────────────────────────────────────────────────── */
+.light, .grain, .vignette { position: fixed; inset: 0; pointer-events: none; }
+.light { z-index: 0; background: radial-gradient(60% 50% at 75% 40%, rgba(233, 180, 76, 0.13), transparent 70%); }
+.light::after { content: ''; position: absolute; inset: 0; background: radial-gradient(60% 50% at 18% 82%, var(--music), transparent 70%); opacity: 0.16; }
+.grain { z-index: 1; opacity: 0.06; background-image: url(/img/grain.png); background-size: 128px 128px; }
+.vignette { z-index: 2; background: radial-gradient(120% 95% at 50% 45%, transparent 58%, rgba(0, 0, 0, 0.55) 100%); }
+
+/* The record: fixed layer behind the text, never over it. */
+.record { position: fixed; z-index: 3; left: 0; top: 0; width: min(112vh, 76vw, 1000px); aspect-ratio: 1; pointer-events: none; transform: translate(calc(68vw - 50%), calc(50vh - 50%)); will-change: transform, opacity; }
+.record > svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+/* Layers that change get their own compositing layer, so a ring update or the
+   spinning label never repaints the grooves and the names. */
+.record__ring, .record__label, .record__arm { will-change: transform; }
+.record__label { will-change: transform; }
+@media (max-width: 759px) {
+  .record { width: 132vw; transform: translate(calc(62vw - 50%), calc(27svh - 50%)); }
+}
+
+main.film { position: relative; z-index: 4; }
+
+/* ── Type ───────────────────────────────────────────────────────────────── */
+.headline { margin: 0; font: 800 clamp(2.4rem, 7.2vw, 5.6rem)/0.95 var(--display); letter-spacing: -0.02em; text-wrap: balance; font-variation-settings: 'SOFT' 100, 'WONK' 1; }
+.headline .n, .n { font-family: var(--display); font-style: italic; font-weight: 600; color: var(--vermilion); font-variant-numeric: tabular-nums; }
+.headline .aside { display: block; margin-top: 0.3em; font-style: italic; font-weight: 600; font-size: 0.56em; color: var(--cream-2); line-height: 1.05; }
+.sub { margin: 0; max-width: var(--measure); color: var(--cream-2); font-size: clamp(1.05rem, 1.5vw, 1.2rem); }
+.caption { margin: 0; max-width: 62ch; font: 400 0.78rem/1.6 var(--data); color: var(--cream-3); }
+.caption b { color: var(--cream-2); font-weight: 400; }
+.mono { font-family: var(--data); }
+
+/* ── Chapters ───────────────────────────────────────────────────────────── */
+.chapter { position: relative; padding: 14svh var(--gutter); display: grid; grid-template-columns: minmax(0, 1fr); gap: 28px; }
+.chapter__head { display: grid; gap: 18px; max-width: 46rem; }
+.chapter__body { display: grid; gap: 28px; }
+@media (min-width: 760px) {
+  .chapter__head, .chapter__narrow { max-width: 52%; }
+}
+
+/* Opening */
+.opening { min-height: 100svh; align-content: center; padding-top: 10svh; padding-bottom: 10svh; }
+.opening__copy { display: grid; gap: 22px; max-width: 46rem; }
+@media (max-width: 759px) {
+  .opening { align-content: end; padding-top: 50svh; padding-bottom: 8svh; }
+  .title { font-size: clamp(3rem, 15vw, 4.6rem); }
+}
+.title { margin: 0; font: 800 clamp(3.3rem, 8.6vw, 8.6rem)/0.86 var(--display); letter-spacing: -0.035em; font-variation-settings: 'SOFT' 100, 'WONK' 1; }
+.title .line { display: block; white-space: nowrap; }
+.title .dim { color: var(--cream-2); font-style: italic; font-weight: 600; letter-spacing: -0.02em; margin-left: 0.04em; }
+.opening .lede { margin: 0; max-width: 26ch; font-size: clamp(1.2rem, 2.1vw, 1.55rem); line-height: 1.35; color: var(--cream); }
+.opening .lede .n { font-size: 1.12em; }
+.actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+.btn { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 12px 20px; border: 1px solid var(--hair); border-radius: 999px; background: transparent; color: var(--cream); font: 400 0.82rem/1 var(--data); letter-spacing: 0.06em; text-transform: uppercase; text-decoration: none; cursor: pointer; transition: border-color 0.2s, background 0.2s, color 0.2s; }
+.btn:hover { border-color: var(--cream-3); }
+.btn--primary { background: var(--vermilion); border-color: var(--vermilion); color: #1a0d07; }
+.btn--primary:hover { background: #ff7451; color: #1a0d07; }
+.pulse-line { margin: 0; font: 400 0.78rem/1.5 var(--data); color: var(--cream-3); }
+.pulse-line .dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; background: var(--vermilion); margin-right: 8px; vertical-align: 1px; }
+.scroll-cue { display: flex; align-items: center; gap: 12px; font: 400 0.72rem/1 var(--data); letter-spacing: 0.2em; text-transform: uppercase; color: var(--cream-3); }
+.scroll-cue i { width: 1px; height: 46px; background: var(--hair); position: relative; overflow: hidden; }
+.scroll-cue i::after { content: ''; position: absolute; inset: 0; background: var(--gold); transform-origin: top; animation: cue calc(var(--beat) * 4) cubic-bezier(.7, 0, .3, 1) infinite; }
+@keyframes cue { 0% { transform: scaleY(0); transform-origin: top; } 49% { transform: scaleY(1); transform-origin: top; } 51% { transform: scaleY(1); transform-origin: bottom; } 100% { transform: scaleY(0); transform-origin: bottom; } }
+
+/* Growth: the mosaic of every add */
+.growth { min-height: 100svh; }
+.growth__stage { position: relative; display: grid; gap: 18px; }
+.mosaic { position: relative; width: 100%; }
+@media (min-width: 760px) { .mosaic { width: min(62svh, 44vw); } }
+.mosaic svg, .mosaic canvas { width: 100%; height: auto; }
+.mosaic canvas { position: absolute; inset: 0; height: 100%; }
+.clock-date { margin: 0; font: 800 clamp(2rem, 6vw, 4.2rem)/1 var(--display); font-variation-settings: 'SOFT' 100, 'WONK' 1; font-variant-numeric: tabular-nums; }
+.clock-count { margin: 0; font: 400 0.9rem/1.3 var(--data); color: var(--cream-2); }
+.clock-count .n { font-size: 1.6em; margin-right: 6px; }
+.milestones { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.milestones li { display: grid; grid-template-columns: 4.5ch 1fr; gap: 12px; align-items: baseline; font-size: 0.98rem; color: var(--cream-2); }
+.milestones .k { font: 600 1.1rem/1 var(--display); font-style: italic; color: var(--gold); text-align: right; }
+.milestones strong { color: var(--cream); font-weight: 400; }
+.growth-line { width: 100%; height: auto; overflow: visible; }
+.growth-line .axis { font: 400 11px var(--data); fill: var(--cream-3); }
+.growth-line .grid { stroke: var(--hair); stroke-width: 1; }
+.growth-line .line { fill: none; stroke: var(--vermilion); stroke-width: 2.4; stroke-linejoin: round; }
+.growth-line .area { fill: url(#growth-fill); }
+.growth__clock { display: grid; gap: 8px; align-content: start; contain: layout style; }
+.clock-date, .clock-count { contain: layout style paint; white-space: nowrap; }
+.clock-mark { margin: 0; min-height: 3em; font-size: 0.95rem; color: var(--cream-2); max-width: 30ch; }
+.clock-mark strong { color: var(--cream); font-weight: 400; }
+.growth__detail { display: grid; gap: 28px; }
+@media (min-width: 760px) {
+  .growth__stage { grid-template-columns: auto minmax(0, 1fr); align-items: center; column-gap: 56px; }
+  .growth__detail { grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr); align-items: start; column-gap: 56px; }
+}
+
+/* Motion toggle (WCAG 2.2.2) */
+.motion-toggle { position: fixed; z-index: 50; right: max(14px, env(safe-area-inset-right)); bottom: max(14px, env(safe-area-inset-bottom)); display: inline-flex; align-items: center; gap: 8px; min-height: 40px; padding: 8px 14px; border: 1px solid var(--hair); border-radius: 999px; background: rgba(14, 11, 9, 0.82); color: var(--cream-2); font: 400 0.7rem/1 var(--data); letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer; backdrop-filter: blur(6px); }
+.motion-toggle::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--gold); }
+.motion-toggle[aria-pressed='false']::before { background: transparent; border: 1px solid var(--cream-3); }
+
+/* Kinetic headlines: words rise out of a mask on the beat when the headline
+   comes into view. The mask is padded so italic overhangs and descenders are
+   never clipped once a word has landed. */
+.headline .w { display: inline-block; overflow: clip; vertical-align: top; padding: 0.14em 0.22em 0.24em 0.06em; margin: -0.14em -0.22em -0.24em -0.06em; }
+.headline .wi { display: inline-block; }
+html.reveal-ready:not(.motion-off) .headline[data-split] .wi { transform: translateY(112%); transition: transform calc(var(--beat) * 1.5) cubic-bezier(0.16, 1, 0.3, 1); transition-delay: calc(var(--i, 0) * var(--beat) / 8); }
+html.reveal-ready:not(.motion-off) .headline[data-split].is-in .wi { transform: none; }
+
+/* Reduced motion / motion off: the server-rendered final state, still. */
+@media (prefers-reduced-motion: reduce) {
+  .scroll-cue i::after { animation: none; transform: scaleY(1); }
+  .light::after { transition: none; }
+}
+html.motion-off .scroll-cue i::after { animation: none; transform: scaleY(1); }
+
+/* Find yourself (works without script: a list of links to ?me=) */
+.find { position: relative; }
+.find > summary { list-style: none; }
+.find > summary::-webkit-details-marker { display: none; }
+.find__list { position: absolute; z-index: 20; top: calc(100% + 8px); left: 0; width: min(88vw, 340px); max-height: 50svh; overflow: auto; margin: 0; padding: 8px; list-style: none; background: var(--lacquer-2); border: 1px solid var(--hair); border-radius: 12px; box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5); }
+.find__list a { display: flex; justify-content: space-between; gap: 12px; padding: 10px 12px; border-radius: 8px; text-decoration: none; color: var(--cream-2); }
+.find__list a:hover, .find__list a:focus-visible { background: var(--lacquer-3); color: var(--cream); }
+.find__list .mono { color: var(--cream-3); font-size: 0.8rem; }
+.milestones li { transition: opacity calc(var(--beat) / 2) linear; }
+.milestones li.is-future { opacity: 0.35; }
+
+/* Label strip: the record's catalogue line, under the lede (not an eyebrow). */
+.label-strip { margin: 0; display: flex; flex-wrap: wrap; gap: 6px 0; font: 400 0.74rem/1 var(--data); letter-spacing: 0.14em; text-transform: uppercase; color: var(--cream-3); }
+.label-strip span + span::before { content: '·'; margin: 0 0.9em; color: var(--vermilion); }
+
+/* Now playing: the live latest add, like a turntable display. */
+.now-playing { margin: 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; max-width: 40rem; padding-top: 16px; border-top: 1px solid var(--hair); font: 400 0.78rem/1.5 var(--data); color: var(--cream-3); }
+.now-playing .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--vermilion); box-shadow: 0 0 0 4px rgba(255, 91, 51, 0.16); align-self: center; }
+.now-playing__k { color: var(--gold); letter-spacing: 0.14em; text-transform: uppercase; }
+.now-playing a { color: var(--cream); }
+
+/* It started with one song */
+.first { min-height: 90svh; align-content: center; }
+.first__grid { display: grid; gap: 28px; align-items: center; }
+.song-card { margin: 0; display: grid; gap: 14px; width: min(100%, 300px); }
+.song-card img { width: 100%; height: auto; aspect-ratio: 1; border-radius: 8px; background: var(--lacquer-3); }
+.song-card figcaption { display: grid; gap: 4px; }
+.song-card__name { font: 600 1.35rem/1.15 var(--display); font-style: italic; text-decoration: none; }
+.song-card__name:hover { text-decoration: underline; text-decoration-color: var(--vermilion); }
+.song-card__artist { font: 400 0.8rem/1.4 var(--data); color: var(--cream-3); }
+.first__note { font-size: clamp(1.1rem, 1.6vw, 1.3rem); }
+@media (min-width: 760px) {
+  .first__grid { grid-template-columns: minmax(220px, 300px) minmax(0, 34rem); grid-template-areas: 'card head' 'card note'; column-gap: 56px; max-width: 64rem; }
+  .first__grid .headline { grid-area: head; align-self: end; }
+  .song-card { grid-area: card; }
+  .first__note { grid-area: note; align-self: start; }
+}
+
+.attribution { margin: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; font: 400 0.74rem/1.5 var(--data); color: var(--cream-3); }
+.attribution img { width: 70px; height: auto; }
+
+/* Runtime: a weekend, scrubbed */
+.weekend { display: grid; gap: 14px; max-width: 980px; }
+.weekend__clock { margin: 0; font: 600 clamp(1.4rem, 2.6vw, 2rem)/1 var(--display); font-style: italic; color: var(--gold); font-variant-numeric: tabular-nums; }
+.weekend__track { position: relative; height: 3px; background: var(--hair); }
+.weekend__fill { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(255, 91, 51, 0.25), var(--vermilion)); transform-origin: left; }
+.weekend__head { position: absolute; top: 50%; left: 100%; width: 13px; height: 13px; margin: -6.5px 0 0 -6.5px; border-radius: 50%; background: var(--vermilion); box-shadow: 0 0 0 6px rgba(255, 91, 51, 0.16), 0 0 24px rgba(255, 91, 51, 0.5); }
+.weekend__ticks { display: flex; justify-content: space-between; font: 400 0.7rem/1 var(--data); color: var(--cream-3); }
+@media (max-width: 559px) { .weekend__ticks span:nth-child(2), .weekend__ticks span:nth-child(4) { display: none; } }
+.stats { margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 28px 40px; max-width: 980px; }
+.stats > div { display: grid; gap: 6px; align-content: start; }
+.stats dt { order: 2; font: 400 0.8rem/1 var(--data); letter-spacing: 0.12em; text-transform: uppercase; color: var(--cream-2); }
+.stats dd { margin: 0; }
+.stats dd.n { order: 1; font-size: clamp(3rem, 7vw, 5.4rem); line-height: 1; letter-spacing: -0.02em; color: var(--cream); }
+.stats dd.caption { order: 3; }

@@ -1,8 +1,9 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+// Prisma schema for KamiLimu.inthe.Ears
+//
+// Two existing tables (PlaylistData, UpdateLog) are unchanged so the current
+// production deployment keeps working if the rebuild is rolled back.
+// The rest store the playlist once per track, remember where every enriched
+// value came from, and hold admin corrections and the precomputed payloads.
 
 generator client {
   provider = "prisma-client-js"
@@ -14,24 +15,170 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Legacy snapshot read by story mode and /api/public/data. Still written on
+// every refresh, in the same shape as before.
 model PlaylistData {
   id          String   @id @default(cuid())
   playlistId  String   @unique
   data        Json
   lastUpdated DateTime @default(now()) @updatedAt
   createdAt   DateTime @default(now())
-  
+
   @@map("playlist_data")
 }
 
 model UpdateLog {
   id          String   @id @default(cuid())
   playlistId  String
-  triggeredBy String?  // Admin who triggered the update
-  status      String   // "success", "failed", "in_progress"
+  triggeredBy String?
+  status      String
   message     String?
-  tracksCount Int?     // Number of tracks processed
+  tracksCount Int?
   createdAt   DateTime @default(now())
-  
+
   @@map("update_logs")
+}
+
+// One row per Spotify track, enriched once and kept.
+model Track {
+  id               String   @id // Spotify track id
+  isrc             String?
+  name             String
+  artistIds        String[]
+  artistNames      String[]
+  albumId          String?
+  albumName        String?
+  albumType        String?
+  imageUrl         String? // largest artwork
+  imageMedium      String? // ~300 px artwork, used for cards
+  imageSmall       String? // smallest artwork (used for colour extraction)
+  releaseDate      String?
+  releasePrecision String?
+  durationMs       Int
+  explicit         Boolean  @default(false)
+  popularity       Int? // Spotify 0-100, null once Spotify stops sending it
+  colour           String? // dominant artwork colour, #rrggbb
+
+  // Audio features. Each group records which source supplied it.
+  tempo            Float?
+  tempoSource      String? // reccobeats | deezer | essentia | admin
+  key              Int? // pitch class 0-11
+  mode             Int? // 1 major, 0 minor
+  keySource        String? // reccobeats | essentia | admin
+  energy           Float?
+  valence          Float?
+  danceability     Float?
+  acousticness     Float?
+  instrumentalness Float?
+  speechiness      Float?
+  liveness         Float?
+  loudness         Float?
+  featuresSource   String? // reccobeats | admin
+
+  // Deezer (joined on ISRC). Previews are analysed in memory, never stored.
+  deezerId   String?
+  deezerRank Int?
+  deezerBpm  Float?
+  deezerGain Float?
+
+  // Numbers derived from lyrics. Lyric text is never stored.
+  lyricsStatus   String? // counted | instrumental | not_found
+  wordCount      Int?
+  wordsPerMinute Float?
+  linesSwahili   Int? // Swahili and Sheng
+  linesEnglish   Int?
+  linesMixed     Int?
+  linesOther     Int?
+
+  // Per-source attempt log: { reccobeats: { at, status }, deezer: {...}, ... }
+  enrichment Json     @default("{}")
+  // Admin corrections, applied over the stored values: { field: value }
+  overrides  Json     @default("{}")
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  entries PlaylistEntry[]
+
+  @@index([isrc])
+  @@map("tracks")
+}
+
+// The playlist as it stands at the last refresh, in order.
+model PlaylistEntry {
+  id         String   @id @default(cuid())
+  playlistId String
+  position   Int
+  trackId    String
+  track      Track    @relation(fields: [trackId], references: [id])
+  addedAt    DateTime
+  addedBy    String? // Spotify user id; null when Spotify has no record
+  isLocal    Boolean  @default(false)
+
+  @@unique([playlistId, position])
+  @@index([playlistId])
+  @@map("playlist_entries")
+}
+
+model Artist {
+  id         String    @id // Spotify artist id
+  name       String
+  genres     String[]
+  genresAt   DateTime?
+  popularity Int?
+  followers  Int?
+  imageUrl   String?
+  // MusicBrainz
+  mbid       String?
+  country    String? // ISO 3166-1 alpha-2
+  area       String? // city or region name
+  kind       String? // Person | Group | ...
+  beginYear  Int?
+  enrichment Json      @default("{}")
+  // Admin corrections, e.g. { "genres": ["afro soul", "kenyan pop"], "country": "KE" }
+  overrides  Json      @default("{}")
+  updatedAt  DateTime  @updatedAt
+
+  @@map("artists")
+}
+
+// Spotify user id → display name. Admin names win over Spotify's.
+model Contributor {
+  id          String   @id
+  displayName String?
+  avatarUrl   String?
+  adminName   String?
+  hidden      Boolean  @default(false)
+  updatedAt   DateTime @updatedAt
+
+  @@map("contributors")
+}
+
+// Admin-editable community moments shown on the rhythm timeline.
+model CommunityEvent {
+  id        String   @id @default(cuid())
+  date      DateTime
+  title     String
+  kind      String?
+  createdAt DateTime @default(now())
+
+  @@map("community_events")
+}
+
+// Small admin-editable settings, e.g. genre → family overrides.
+model Setting {
+  key       String   @id
+  value     Json
+  updatedAt DateTime @updatedAt
+
+  @@map("settings")
+}
+
+// Precomputed payloads served by the public API: film, people, tracks, legacy.
+model Payload {
+  key       String   @id
+  data      Json
+  version   String
+  updatedAt DateTime @updatedAt
+
+  @@map("payloads")
 }

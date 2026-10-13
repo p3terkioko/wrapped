@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Direction C — Signal — style frame</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;800&family=Hind+Guntur:wght@300;400;500&display=swap">
+<style>
+/* Signal: the existing teal-on-black identity, refined into a precise Swiss grid. Mono display, hairlines, metronomic motion. */
+:root {
+  --bg: #050606;
+  --ink: #f4f6ee;
+  --ink-2: rgba(244, 246, 238, 0.62);
+  --ink-3: rgba(244, 246, 238, 0.32);
+  --line: rgba(244, 246, 238, 0.09);
+  --teal: #00b4c2;
+  --teal-hi: #4dd0da;
+  --teal-deep: #003d42;
+  --gamboge: #eaa000;
+  --display: 'JetBrains Mono', ui-monospace, monospace;
+  --body: 'Hind Guntur', 'Segoe UI', system-ui, sans-serif;
+  --gutter: clamp(20px, 5vw, 80px);
+}
+* { box-sizing: border-box; margin: 0; }
+html, body { background: var(--bg); color: var(--ink); }
+body { font: 400 18px/1.55 var(--body); min-height: 100svh; overflow-x: hidden;
+  background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px); background-size: 100% 25svh, calc((100vw - 2 * var(--gutter)) / 12) 100%; background-position: 0 0, var(--gutter) 0; }
+.chapter { position: relative; min-height: 100svh; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); align-items: center; gap: clamp(24px, 4vw, 72px); padding: 9svh var(--gutter); }
+.copy { display: grid; gap: 26px; max-width: 640px; }
+.eyebrow { font: 600 12px/1 var(--display); letter-spacing: .22em; text-transform: uppercase; color: var(--teal-hi); }
+h2 { font: 800 clamp(2.2rem, 4.8vw, 4.6rem)/.98 var(--display); letter-spacing: -0.045em; text-wrap: balance; }
+h2 .n { color: var(--teal-hi); }
+h2 .quiet { display: block; font-weight: 300; font-size: .45em; letter-spacing: -0.01em; color: var(--ink-2); margin-top: .5em; }
+.ranks { list-style: none; padding: 0; display: grid; gap: 12px; border-top: 1px solid var(--line); padding-top: 18px; }
+.rank { display: grid; grid-template-columns: minmax(0, 12ch) minmax(0, 1fr) 8ch; gap: 16px; align-items: center; font: 400 13px/1.2 var(--display); }
+.rank .who { color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.rank .bar { height: 8px; background: var(--ink-3); }
+.rank .val { text-align: right; font-variant-numeric: tabular-nums; }
+.rank .val small { color: var(--ink-3); margin-left: 6px; font-size: 11px; }
+.rank.lead .bar { background: var(--teal-hi); }
+.rank.lead .who { color: var(--ink); }
+.rank.you .who, .rank.you .val { color: var(--gamboge); }
+.rank.you .bar { background: var(--gamboge); }
+.rank.gap { grid-template-columns: 1fr; color: var(--ink-3); letter-spacing: .3em; }
+.you-line { font: 400 14px/1.4 var(--display); color: var(--gamboge); }
+.caption { font: 400 12px/1.6 var(--display); color: var(--ink-3); max-width: 62ch; }
+.stage { position: relative; aspect-ratio: 1; width: min(100%, 620px); justify-self: center; }
+.stage svg { width: 100%; height: 100%; overflow: visible; display: block; }
+.share-label { position: absolute; right: 0; bottom: 0; font: 800 clamp(1.8rem, 3.4vw, 3rem)/1 var(--display); letter-spacing: -0.04em; color: var(--teal-hi); text-align: right; }
+.share-label small { display: block; font: 400 11px/1.4 var(--display); color: var(--ink-3); letter-spacing: .1em; }
+@media (max-width: 760px) {
+  .chapter { grid-template-columns: 1fr; padding-top: 6svh; gap: 18px; }
+  .stage { order: -1; width: 74vw; }
+  .rank { grid-template-columns: minmax(0, 10ch) minmax(0, 1fr) 7.5ch; font-size: 12px; }
+}
+</style>
+</head>
+<body>
+<section class="chapter" aria-labelledby="people-h">
+  <div class="copy">
+    <p class="eyebrow">The people</p>
+    <h2 id="people-h">Dr. C added <span class="n">114</span> of 515 songs. <span class="quiet">More than one in every five. 42 people have added songs since March 2024.</span></h2>
+    <ol class="ranks" id="ranks"></ol>
+    <p class="you-line">→ You, Peter: 19 songs · 3.7% · 7th of 42</p>
+    <p class="caption">Share of all 515 playlist entries, Nairobi time. 30 songs were added twice, by different people, and count for each. 6 entries have no recorded adder.</p>
+  </div>
+  <div class="stage" aria-hidden="true">
+    <svg viewBox="-110 -110 220 220" id="record"></svg>
+    <p class="share-label">22.1%<small>OF EVERY SONG ADDED</small></p>
+  </div>
+</section>
+<script>
+const RANKS = [['Dr. C', 114, 22.1], ['Tams 🦋🌺', 50, 9.7], ['Pepp🍂', 43, 8.3], ['Viv Mwirigi', 28, 5.4], ['0xFidel', 20, 3.9], ['Nchekukathryn', 20, 3.9]];
+const ol = document.getElementById('ranks');
+RANKS.forEach(([who, n, p], i) => {
+  const li = document.createElement('li'); li.className = 'rank' + (i === 0 ? ' lead' : '');
+  li.innerHTML = '<span class="who"></span><span class="bar" style="width:' + (n / 114 * 100) + '%"></span><span class="val">' + n + '<small>' + p + '%</small></span>';
+  li.querySelector('.who').textContent = who; ol.appendChild(li);
+});
+ol.insertAdjacentHTML('beforeend', '<li class="rank gap">· · ·</li><li class="rank you"><span class="who">Peter (you)</span><span class="bar" style="width:' + (19 / 114 * 100) + '%"></span><span class="val">19<small>3.7%</small></span></li>');
+const s = document.getElementById('record'); const NS = 'http://www.w3.org/2000/svg';
+const el = (t, a, p = s) => { const e = document.createElementNS(NS, t); for (const k in a) e.setAttribute(k, a[k]); p.appendChild(e); return e; };
+const defs = el('defs', {});
+el('path', { id: 'ring', d: 'M 0,-19 A 19,19 0 1 1 -0.01,-19' }, defs);
+const C = 2 * Math.PI * 100;
+el('circle', { r: 100, fill: 'none', stroke: 'rgba(244,246,238,.12)', 'stroke-width': .6 });
+el('circle', { r: 100, fill: 'none', stroke: '#4dd0da', 'stroke-width': 2.2, 'stroke-linecap': 'round', 'stroke-dasharray': (C * 0.221) + ' ' + C, transform: 'rotate(-90)' });
+for (let k = 0; k < 60; k++) { const a = k / 60 * Math.PI * 2; el('line', { x1: 104 * Math.sin(a), y1: -104 * Math.cos(a), x2: (k % 5 ? 106 : 109) * Math.sin(a), y2: -(k % 5 ? 106 : 109) * Math.cos(a), stroke: 'rgba(244,246,238,.25)', 'stroke-width': .4 }); }
+el('circle', { r: 92, fill: '#0b0d0d' });
+for (let r = 31; r <= 90; r += 2.4) el('circle', { r: r.toFixed(1), fill: 'none', stroke: '#f4f6ee', 'stroke-opacity': .07, 'stroke-width': .35 });
+el('circle', { r: 27, fill: '#003d42' });
+const t = el('text', { fill: '#4dd0da', 'font-family': 'JetBrains Mono', 'font-size': 5.2, 'font-weight': 600, 'letter-spacing': 1.6 });
+el('textPath', { href: '#ring' }, t).textContent = 'KAMILIMU · INTHE · EARS · 515 SONGS ·';
+el('circle', { r: 2.6, fill: '#050606' });
+</script>
+</body>
+</html>
