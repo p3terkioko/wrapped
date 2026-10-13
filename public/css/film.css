@@ -52,11 +52,14 @@ button { font: inherit; color: inherit; }
 .vignette { z-index: 2; background: radial-gradient(120% 95% at 50% 45%, transparent 58%, rgba(0, 0, 0, 0.55) 100%); }
 
 /* The record: fixed layer behind the text, never over it. */
-.record { position: fixed; z-index: 3; left: 0; top: 0; width: min(84vmin, 640px); aspect-ratio: 1; pointer-events: none; transform: translate(calc(100vw - 72%), 12vh); will-change: transform, opacity; }
-.record > svg, .record__label { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+.record { position: fixed; z-index: 3; left: 0; top: 0; width: min(112vh, 76vw, 1000px); aspect-ratio: 1; pointer-events: none; transform: translate(calc(68vw - 50%), calc(50vh - 50%)); will-change: transform, opacity; }
+.record > svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+/* Layers that change get their own compositing layer, so a ring update or the
+   spinning label never repaints the grooves and the names. */
+.record__ring, .record__label, .record__arm { will-change: transform; }
 .record__label { will-change: transform; }
 @media (max-width: 759px) {
-  .record { width: 70vw; transform: translate(15vw, calc(25svh - 35vw)); }
+  .record { width: 132vw; transform: translate(calc(62vw - 50%), calc(27svh - 50%)); }
 }
 
 main.film { position: relative; z-index: 4; }
@@ -79,15 +82,16 @@ main.film { position: relative; z-index: 4; }
 }
 
 /* Opening */
-.opening { min-height: 100svh; align-content: center; padding-top: 10svh; }
+.opening { min-height: 100svh; align-content: center; padding-top: 10svh; padding-bottom: 10svh; }
+.opening__copy { display: grid; gap: 22px; max-width: 46rem; }
 @media (max-width: 759px) {
   .opening { align-content: end; padding-top: 50svh; padding-bottom: 8svh; }
   .title { font-size: clamp(3rem, 15vw, 4.6rem); }
 }
 .title { margin: 0; font: 800 clamp(3.3rem, 8.6vw, 8.6rem)/0.86 var(--display); letter-spacing: -0.035em; font-variation-settings: 'SOFT' 100, 'WONK' 1; }
 .title .line { display: block; white-space: nowrap; }
-.title .dim { color: var(--cream-4); font-style: italic; font-weight: 600; letter-spacing: -0.02em; }
-.opening .lede { margin: 0; max-width: 30ch; font-size: clamp(1.15rem, 2vw, 1.45rem); color: var(--cream-2); }
+.title .dim { color: var(--cream-2); font-style: italic; font-weight: 600; letter-spacing: -0.02em; margin-left: 0.04em; }
+.opening .lede { margin: 0; max-width: 26ch; font-size: clamp(1.2rem, 2.1vw, 1.55rem); line-height: 1.35; color: var(--cream); }
 .opening .lede .n { font-size: 1.12em; }
 .actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
 .btn { display: inline-flex; align-items: center; gap: 10px; min-height: 44px; padding: 12px 20px; border: 1px solid var(--hair); border-radius: 999px; background: transparent; color: var(--cream); font: 400 0.82rem/1 var(--data); letter-spacing: 0.06em; text-transform: uppercase; text-decoration: none; cursor: pointer; transition: border-color 0.2s, background 0.2s, color 0.2s; }
@@ -120,7 +124,8 @@ main.film { position: relative; z-index: 4; }
 .growth-line .grid { stroke: var(--hair); stroke-width: 1; }
 .growth-line .line { fill: none; stroke: var(--vermilion); stroke-width: 2.4; stroke-linejoin: round; }
 .growth-line .area { fill: url(#growth-fill); }
-.growth__clock { display: grid; gap: 8px; align-content: start; }
+.growth__clock { display: grid; gap: 8px; align-content: start; contain: layout style; }
+.clock-date, .clock-count { contain: layout style paint; white-space: nowrap; }
 .clock-mark { margin: 0; min-height: 3em; font-size: 0.95rem; color: var(--cream-2); max-width: 30ch; }
 .clock-mark strong { color: var(--cream); font-weight: 400; }
 .growth__detail { display: grid; gap: 28px; }
@@ -155,3 +160,48 @@ html.motion-off .scroll-cue i::after { animation: none; transform: scaleY(1); }
 .find__list .mono { color: var(--cream-3); font-size: 0.8rem; }
 .milestones li { transition: opacity calc(var(--beat) / 2) linear; }
 .milestones li.is-future { opacity: 0.35; }
+
+/* Label strip: the record's catalogue line, under the lede (not an eyebrow). */
+.label-strip { margin: 0; display: flex; flex-wrap: wrap; gap: 6px 0; font: 400 0.74rem/1 var(--data); letter-spacing: 0.14em; text-transform: uppercase; color: var(--cream-3); }
+.label-strip span + span::before { content: '·'; margin: 0 0.9em; color: var(--vermilion); }
+
+/* Now playing: the live latest add, like a turntable display. */
+.now-playing { margin: 0; display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; max-width: 40rem; padding-top: 16px; border-top: 1px solid var(--hair); font: 400 0.78rem/1.5 var(--data); color: var(--cream-3); }
+.now-playing .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--vermilion); box-shadow: 0 0 0 4px rgba(255, 91, 51, 0.16); align-self: center; }
+.now-playing__k { color: var(--gold); letter-spacing: 0.14em; text-transform: uppercase; }
+.now-playing a { color: var(--cream); }
+
+/* It started with one song */
+.first { min-height: 90svh; align-content: center; }
+.first__grid { display: grid; gap: 28px; align-items: center; }
+.song-card { margin: 0; display: grid; gap: 14px; width: min(100%, 300px); }
+.song-card img { width: 100%; height: auto; aspect-ratio: 1; border-radius: 8px; background: var(--lacquer-3); }
+.song-card figcaption { display: grid; gap: 4px; }
+.song-card__name { font: 600 1.35rem/1.15 var(--display); font-style: italic; text-decoration: none; }
+.song-card__name:hover { text-decoration: underline; text-decoration-color: var(--vermilion); }
+.song-card__artist { font: 400 0.8rem/1.4 var(--data); color: var(--cream-3); }
+.first__note { font-size: clamp(1.1rem, 1.6vw, 1.3rem); }
+@media (min-width: 760px) {
+  .first__grid { grid-template-columns: auto minmax(0, 1fr); grid-template-areas: 'card head' 'card note'; column-gap: 56px; max-width: 58%; }
+  .first__grid .headline { grid-area: head; align-self: end; }
+  .song-card { grid-area: card; }
+  .first__note { grid-area: note; align-self: start; }
+}
+
+.attribution { margin: 0; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; font: 400 0.74rem/1.5 var(--data); color: var(--cream-3); }
+.attribution img { width: 70px; height: auto; }
+
+/* Runtime: a weekend, scrubbed */
+.weekend { display: grid; gap: 14px; max-width: 980px; }
+.weekend__clock { margin: 0; font: 600 clamp(1.4rem, 2.6vw, 2rem)/1 var(--display); font-style: italic; color: var(--gold); font-variant-numeric: tabular-nums; }
+.weekend__track { position: relative; height: 3px; background: var(--hair); }
+.weekend__fill { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(255, 91, 51, 0.25), var(--vermilion)); transform-origin: left; }
+.weekend__head { position: absolute; top: 50%; left: 100%; width: 13px; height: 13px; margin: -6.5px 0 0 -6.5px; border-radius: 50%; background: var(--vermilion); box-shadow: 0 0 0 6px rgba(255, 91, 51, 0.16), 0 0 24px rgba(255, 91, 51, 0.5); }
+.weekend__ticks { display: flex; justify-content: space-between; font: 400 0.7rem/1 var(--data); color: var(--cream-3); }
+@media (max-width: 559px) { .weekend__ticks span:nth-child(2), .weekend__ticks span:nth-child(4) { display: none; } }
+.stats { margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 28px 40px; max-width: 980px; }
+.stats > div { display: grid; gap: 6px; align-content: start; }
+.stats dt { order: 2; font: 400 0.8rem/1 var(--data); letter-spacing: 0.12em; text-transform: uppercase; color: var(--cream-2); }
+.stats dd { margin: 0; }
+.stats dd.n { order: 1; font-size: clamp(3rem, 7vw, 5.4rem); line-height: 1; letter-spacing: -0.02em; color: var(--cream); }
+.stats dd.caption { order: 3; }

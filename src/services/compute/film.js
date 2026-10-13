@@ -79,6 +79,7 @@ function opening(ctx) {
       colours: E.map(e => (e.track.colour || '').replace('#', '')),
       years: E.map(e => e.track.year),
       days: E.map(e => nbo.daysBetween(first, e.at)),
+      songs: E.map(e => ctx.songIndex.get(e.track.songKey)),
     },
     growth,
     milestones: marks.map(milestone),

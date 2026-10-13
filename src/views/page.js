@@ -6,7 +6,7 @@
 
 const { esc, fmt } = require('./util');
 const { renderRecord } = require('./record');
-const { renderOpening, renderGrowth } = require('./chapters/opening');
+const { renderOpening, renderFirst, renderGrowth, renderRuntime } = require('./chapters/opening');
 
 const ASSET_VERSION = '1';
 const FAVICON = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="-50 -50 100 100"><circle r="48" fill="#0e0b09"/><circle r="22" fill="#f3e9d6"/><circle r="9" fill="#0e0b09"/><circle r="4" fill="#e9b44c"/></svg>');
@@ -49,14 +49,16 @@ function renderPage(film, { url = '/', me = null } = {}) {
   const years = `${new Date(t.firstAddedAt).getUTCFullYear()}–${new Date(t.lastAddedAt).getUTCFullYear()}`;
   return `${head(film, { url })}
 <body>
-<a class="skip" href="#growth">Skip to the story of the playlist</a>
+<a class="skip" href="#first">Skip to the story of the playlist</a>
 <div class="light" aria-hidden="true"></div>
 <div class="grain" aria-hidden="true"></div>
 <div class="vignette" aria-hidden="true"></div>
-${renderRecord({ ringText: `KAMILIMU · INTHE · EARS · 45 RPM · SIDE A · ${fmt(t.entries)} SONGS · `, title: 'Side A', catalogue: `KLE · ${years}` })}
+${renderRecord({ ringText: `KAMILIMU · INTHE · EARS · 45 RPM · SIDE A · ${fmt(t.entries)} SONGS · `, title: 'Side A', catalogue: `KLE · ${years}`, names: [...film.credits.roll].map(c => c.name) })}
 <main class="film" id="dashboard" data-version="${esc(film.version || '')}"${me ? ` data-me="${esc(me)}"` : ''}>
 ${renderOpening(film)}
+${renderFirst(film)}
 ${renderGrowth(film)}
+${renderRuntime(film)}
 </main>
 <button type="button" class="motion-toggle" id="motion-toggle" aria-pressed="true">Motion</button>
 <script id="film-data" type="application/json">${inlineJson(film)}</script>

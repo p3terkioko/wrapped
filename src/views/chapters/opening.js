@@ -3,7 +3,7 @@
 // The opening (what is this?) and the growth mosaic (how it grew).
 
 const nbo = require('../../lib/nairobi');
-const { esc, fmt, date, time12, spotifyTrack } = require('../util');
+const { esc, fmt, date, time12, spotifyTrack, artwork } = require('../util');
 
 const COLS = 23;
 
@@ -57,18 +57,70 @@ function renderOpening(film, { storyAvailable = true } = {}) {
   const t = film.totals;
   const p = film.pulse;
   const people = film.people.ranking;
+  const rt = film.runtime;
   return `<section class="chapter opening" id="opening" aria-labelledby="opening-title" data-chapter="opening">
-  <h1 class="title" id="opening-title" aria-label="KamiLimu.inthe.Ears"><span class="line" data-split>KamiLimu</span><span class="line dim" data-split>.inthe.Ears</span></h1>
-  <p class="lede"><span class="n">${fmt(t.entries)}</span> songs, added by <span class="n">${fmt(t.contributors)}</span> people of the KamiLimu community since ${esc(date(t.firstAddedAt))}. Scroll to play it back.</p>
-  <div class="actions">
-    ${storyAvailable ? '<button type="button" class="btn btn--primary" id="view-story-btn" data-story-open>Play the 12-slide story</button>' : ''}
-    <details class="find" id="find">
-      <summary class="btn">Find yourself</summary>
-      <ul class="find__list">${people.map(r => `<li><a href="/?me=${encodeURIComponent(r.id)}" data-me="${esc(r.id)}">${esc(r.name)} <span class="mono">${fmt(r.n)}</span></a></li>`).join('')}</ul>
-    </details>
+  <div class="opening__copy">
+    <h1 class="title" id="opening-title" aria-label="KamiLimu.inthe.Ears"><span class="line" data-split>KamiLimu</span><span class="line dim" data-split>.inthe.Ears</span></h1>
+    <p class="lede"><span class="n">${fmt(t.entries)}</span> songs, pressed by <span class="n">${fmt(t.contributors)}</span> people of the KamiLimu community since ${esc(date(t.firstAddedAt))}.</p>
+    <p class="label-strip"><span>Side A</span><span>${rt.hours}h ${String(rt.minutes).padStart(2, '0')}m</span><span>${fmt(t.artists)} artists</span><span>${fmt(t.genres)} genres</span><span>45 rpm</span></p>
+    <div class="actions">
+      ${storyAvailable ? '<button type="button" class="btn btn--primary" id="view-story-btn" data-story-open>Play the 12-slide story</button>' : ''}
+      <details class="find" id="find">
+        <summary class="btn">Find yourself</summary>
+        <ul class="find__list">${people.map(r => `<li><a href="/?me=${encodeURIComponent(r.id)}" data-me="${esc(r.id)}">${esc(r.name)} <span class="mono">${fmt(r.n)}</span></a></li>`).join('')}</ul>
+      </details>
+      <a class="btn" href="${esc(film.playlist.url || 'https://open.spotify.com/playlist/' + film.playlist.id)}" rel="noopener">Add a song ↗</a>
+    </div>
+    <p class="now-playing" id="pulse-line"><span class="dot" aria-hidden="true"></span><span class="now-playing__k">Latest add</span> <span>${esc(date(p.at, { month: 'short' }))}, ${esc(time12(p.at))}</span> <span>${esc(p.name)} added <a href="${spotifyTrack(p.song.id)}">${esc(p.song.name)}</a> by ${esc(p.song.artists)}</span></p>
   </div>
-  <p class="pulse-line" id="pulse-line"><span class="dot" aria-hidden="true"></span>Latest add: <a href="${spotifyTrack(p.song.id)}">${esc(p.song.name)}</a> by ${esc(p.song.artists)}, added by ${esc(p.name)} on ${esc(date(p.at))} at ${esc(time12(p.at))}.</p>
   <p class="scroll-cue" aria-hidden="true"><i></i>Scroll</p>
+</section>`;
+}
+
+function renderFirst(film) {
+  const t = film.totals;
+  const first = film.opening.milestones.find(m => m.n === 1);
+  const later = t.contributors - 1;
+  const w = nbo.wall(first.at);
+  return `<section class="chapter first" id="first" aria-labelledby="first-h" data-chapter="first">
+  <div class="first__grid">
+    <h2 class="headline" id="first-h" data-split>It started with <span class="n">one</span> song.</h2>
+    <figure class="song-card">
+      ${first.song.image ? `<img src="${artwork(first.song.image)}" width="640" height="640" alt="Album artwork for ${esc(first.song.name)} by ${esc(first.song.artists)}" loading="lazy" decoding="async">` : ''}
+      <figcaption>
+        <a class="song-card__name" href="${spotifyTrack(first.song.id)}">${esc(first.song.name)}</a>
+        <span class="song-card__artist">${esc(first.song.artists)}${first.song.year ? ' · ' + first.song.year : ''}</span>
+      </figcaption>
+    </figure>
+    <p class="sub first__note">${esc(first.name)} added it on a ${nbo.DAYS[w.getUTCDay()]}, ${esc(date(first.at))}, at ${esc(time12(first.at))}. Then ${fmt(later)} more people joined in.</p>
+  </div>
+  ${spotifyAttribution()}
+</section>`;
+}
+
+function spotifyAttribution() {
+  return `<p class="attribution"><img src="/img/spotify-logo.png" width="140" height="38" alt="Spotify"> <span>Songs, artwork and data from Spotify. Every song links back to it.</span></p>`;
+}
+
+function renderRuntime(film) {
+  const t = film.totals;
+  const rt = film.runtime;
+  const gc = t.genreCoverage;
+  return `<section class="chapter runtime" id="runtime" aria-labelledby="runtime-h" data-chapter="runtime">
+  <div class="chapter__head">
+    <h2 class="headline" id="runtime-h" data-split>Press play on a Friday at 6pm. It's still going at <span class="n">${esc(rt.end.label)}</span>.</h2>
+    <p class="sub">${rt.hours} hours and ${rt.minutes} minutes of music, back to back, if you play all ${fmt(t.entries)} entries in a row.</p>
+  </div>
+  <div class="weekend" id="weekend" role="img" aria-label="A timeline from Friday 6pm to ${esc(rt.end.label)}, the length of the playlist.">
+    <p class="weekend__clock" id="weekend-clock">${esc(rt.end.day.slice(0, 3))} ${esc(rt.end.time)}</p>
+    <div class="weekend__track"><div class="weekend__fill" id="weekend-fill"></div><div class="weekend__head" id="weekend-head"></div></div>
+    <div class="weekend__ticks"><span>Fri 18:00</span><span>Sat 00:00</span><span>Sat 12:00</span><span>Sun 00:00</span><span>${esc(rt.end.day.slice(0, 3))} ${esc(rt.end.time)}</span></div>
+  </div>
+  <dl class="stats">
+    <div><dt>unique songs</dt><dd class="n">${fmt(t.uniqueSongs)}</dd><dd class="caption">${fmt(t.duplicateEntries)} were added twice, so the playlist has ${fmt(t.entries)} entries</dd></div>
+    <div><dt>artists</dt><dd class="n">${fmt(t.artists)}</dd><dd class="caption">everyone credited on a song</dd></div>
+    <div><dt>genres</dt><dd class="n">${fmt(t.genres)}</dd><dd class="caption">Spotify's genre tags; ${fmt(gc.songs)} of ${fmt(gc.of)} songs have one</dd></div>
+  </dl>
 </section>`;
 }
 
@@ -100,4 +152,4 @@ function renderGrowth(film) {
 </section>`;
 }
 
-module.exports = { renderOpening, renderGrowth, COLS };
+module.exports = { renderOpening, renderFirst, renderGrowth, renderRuntime, spotifyAttribution, COLS };

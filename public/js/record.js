@@ -15,9 +15,10 @@ let tickerFn = null;
 // Positions are fractions of the viewport (centre of the record) plus a size
 // in px; phone and desktop have their own layouts.
 const ROLES = {
-  opening: { desk: { cx: 0.76, cy: 0.5, s: 1, o: 1 }, phone: { cx: 0.5, cy: 0.25, s: 1, o: 1 } },
-  growth: { desk: { cx: 0.9, cy: 0.86, s: 0.42, o: 0.5 }, phone: { cx: 0.9, cy: 0.1, s: 0.38, o: 0.55 } },
-  runtime: { desk: { cx: 0.76, cy: 0.5, s: 0.9, o: 1 }, phone: { cx: 0.5, cy: 0.3, s: 0.9, o: 0.4 } },
+  opening: { desk: { cx: 0.7, cy: 0.5, s: 1, o: 1 }, phone: { cx: 0.62, cy: 0.27, s: 1, o: 1 } },
+  first: { desk: { cx: 0.86, cy: 0.52, s: 0.7, o: 0.9 }, phone: { cx: 0.9, cy: 0.13, s: 0.42, o: 0.85 } },
+  growth: { desk: { cx: 0.92, cy: 0.84, s: 0.36, o: 0.55 }, phone: { cx: 0.9, cy: 0.07, s: 0.3, o: 0.6 } },
+  runtime: { desk: { cx: 0.8, cy: 0.42, s: 0.8, o: 1 }, phone: { cx: 0.5, cy: 0.16, s: 0.62, o: 0.35 } },
 };
 
 function size() { return el.getBoundingClientRect().width / (state.s || 1); }
@@ -29,10 +30,20 @@ export function roleState(name) {
   return { x: v.cx * innerWidth - w / 2, y: v.cy * innerHeight - w / 2, s: v.s, o: v.o };
 }
 
+let last = { t: '', o: '', a: '', arc: -1 };
 export function render() {
-  el.style.transform = `translate3d(${state.x.toFixed(1)}px, ${state.y.toFixed(1)}px, 0) scale(${state.s.toFixed(4)})`;
-  el.style.opacity = state.o.toFixed(3);
-  label.style.transform = `rotate(${state.angle.toFixed(2)}deg)`;
+  const t = `translate3d(${state.x.toFixed(1)}px, ${state.y.toFixed(1)}px, 0) scale(${state.s.toFixed(4)})`;
+  if (t !== last.t) { el.style.transform = t; last.t = t; }
+  const o = state.o.toFixed(3);
+  if (o !== last.o) { el.style.opacity = o; last.o = o; }
+  const a = `rotate(${state.angle.toFixed(1)}deg)`;
+  if (a !== last.a) { label.style.transform = a; last.a = a; }
+  const arcNow = Math.round(state.arc * 1000);
+  if (arcNow === last.arc) return;
+  last.arc = arcNow;
+  return renderArc();
+}
+function renderArc() {
   arc.setAttribute('stroke-dasharray', `${(CIRC * state.arc).toFixed(2)} ${CIRC.toFixed(2)}`);
   if (state.arc > 0) {
     const a = 2 * Math.PI * state.arc - Math.PI / 2;
@@ -46,6 +57,12 @@ export function place(name) {
   Object.assign(state, roleState(name));
   render();
 }
+
+// Tonearm angle: 15 = on the outer grooves, 0 = parked off the record.
+const arm = document.getElementById('tonearm');
+const armAttr = arm ? arm.getAttribute('transform') || '' : '';
+export const armState = { angle: parseFloat(armAttr.slice(armAttr.indexOf('(') + 1)) || 15 };
+export function renderArm() { arm?.setAttribute('transform', `rotate(${armState.angle.toFixed(2)} 112 -100)`); }
 
 export function setLabel({ title, cat }) {
   if (title != null) document.getElementById('label-title').textContent = title;
