@@ -120,3 +120,15 @@ Decisions:
   - Slide 11: Genres 8 → 168, Curators 43 → 42, "afro soul sets the mood", energy 50% → 62%.
   - Slide 12: confetti positions vary (random, as before).
   - Slides 1, 3, 8, 10: unchanged.
+
+## Stage 7 — Signature moments (done)
+
+- **Find yourself.** Pick a name in the opening (works without JS as plain `?me=` links), or open a shared `?me=` link. The film re-centres:
+  - **Marked in gold:** your bar (a "you" row is added when you're outside the top 10), your race row, your badges, your credits line, your mosaic tiles, your mood-map dots.
+  - **Personal lines,** computed, under each headline. For Peter: first add was the 203rd song; 7th of 42; best month-end position 6th; taste twin Viv Mwirigi (6 shared artists); typical song from 2021; median 122 BPM; 11.6% Swahili/Sheng lines; Thursday; biggest session 5 songs.
+  - A "Centred on …" chip clears it; the choice is remembered on the device.
+  - **Personal link previews:** for `?me=` links the server writes the Open Graph title, e.g. "Peter added 19 songs to KamiLimu.inthe.Ears".
+- **Musical conversations:** the longest reply chain is in the picks chapter (5 songs in 4 minutes); the rule is stated.
+- **Colour follows the music.** The second light layer takes the cover colour in view (the first song, the newest mosaic tile while scrubbing, song cards, a song you press play on). It's scoped to the light layer, so nothing else restyles.
+- **Live pulse.** The latest add is server-rendered from the last refresh. On idle the page asks `/api/public/pulse` (CDN-cached for five minutes), which reads the playlist's last page from Spotify, and updates the line if something newer has arrived.
+- **Share cards.** "Share this" on every chapter draws a 1080×1920 card: the record (with the ring where the chapter has a share), the chapter's own headline with vermilion numbers, your personal line, and the link. It uses the native share sheet with the image where supported, otherwise downloads. No album artwork on cards (Spotify rule).

@@ -57,7 +57,7 @@ async function choose(id, { quiet = false } = {}) {
 
 function line(sectionId, html) {
   const sec = document.getElementById(sectionId);
-  const head = sec?.querySelector('.chapter__head');
+  const head = sec?.querySelector('.chapter__head, .opening__copy');
   if (!head) return;
   const p = document.createElement('p');
   p.className = 'you-line';

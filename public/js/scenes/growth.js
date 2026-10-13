@@ -3,6 +3,7 @@
 
 import { film, isPhone, clamp } from '../motion.js';
 import * as record from '../record.js';
+import { setMusic } from './chapters.js';
 
 const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 const DAY = 86400000, EAT = 3 * 3600000;
@@ -51,6 +52,8 @@ export function setupGrowth(mosaic) {
         lastMark = mk;
       }
       lastDay = dayInt;
+      const c = film.opening.tiles.colours[Math.max(0, count - 1)];
+      if (c) setMusic('#' + c);
     }
     clipRect.setAttribute('width', Math.max(0, xOf(day)));
     record.state.arc = clamp(day / span, 0, 1);

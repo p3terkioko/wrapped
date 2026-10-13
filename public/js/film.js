@@ -9,12 +9,20 @@ import { setupGrowth } from './scenes/growth.js';
 import { setupRuntime } from './scenes/runtime.js';
 import { setupReveals } from './scenes/reveals.js';
 import { setupRace } from './scenes/race.js';
-import { setupChapters, setupPlay } from './scenes/chapters.js';
+import { setupChapters, setupPlay, setupLight } from './scenes/chapters.js';
+import { setupFind } from './find.js';
+import { setupPulse } from './pulse.js';
+import { setupShare } from './share.js';
 
 let teardown = [];
 setupPlay();
 const mosaic = createMosaic();
 mosaic.setDay(Infinity, 0);
+
+setupFind(mosaic);
+setupShare();
+setupLight();
+setupPulse();
 
 // Covers load when the mosaic is about a screen away, motion or not.
 new IntersectionObserver((entries, io) => {

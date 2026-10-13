@@ -111,6 +111,24 @@ export function setupPlay() {
     frame.src = `https://open.spotify.com/embed/track/${encodeURIComponent(id)}?theme=0`;
     btn.replaceWith(frame);
     const colour = btn.closest('[data-song]')?.style.getPropertyValue('--song');
-    if (colour) document.documentElement.style.setProperty('--music', colour.trim());
+    if (colour) setMusic(colour.trim());
   });
+}
+
+// Colour follows the music: the room's second light takes the colour of the
+// cover in view (song cards, the first song, the newest tile in the mosaic).
+// The variable is set on the light layer only, so nothing else restyles.
+const lightEl = document.querySelector('.light');
+let lastMusic = '';
+export function setMusic(colour) {
+  if (!colour || colour === lastMusic) return;
+  lastMusic = colour;
+  lightEl?.style.setProperty('--music', colour);
+}
+
+export function setupLight() {
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) setMusic(e.target.style.getPropertyValue('--song').trim() || e.target.dataset.colour); });
+  }, { rootMargin: '-40% 0px -40% 0px' });
+  document.querySelectorAll('[data-song], [data-colour]').forEach(el => io.observe(el));
 }

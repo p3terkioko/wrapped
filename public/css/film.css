@@ -47,7 +47,7 @@ button { font: inherit; color: inherit; }
 /* ── Film layers ─────────────────────────────────────────────────────────── */
 .light, .grain, .vignette { position: fixed; inset: 0; pointer-events: none; }
 .light { z-index: 0; background: radial-gradient(60% 50% at 75% 40%, rgba(233, 180, 76, 0.13), transparent 70%); }
-.light::after { content: ''; position: absolute; inset: 0; background: radial-gradient(55% 45% at 20% 85%, var(--music), transparent 70%); opacity: 0.12; transition: opacity calc(var(--beat) / 2) linear; }
+.light::after { content: ''; position: absolute; inset: 0; background: radial-gradient(60% 50% at 18% 82%, var(--music), transparent 70%); opacity: 0.16; }
 .grain { z-index: 1; opacity: 0.06; background-image: url(/img/grain.png); background-size: 128px 128px; }
 .vignette { z-index: 2; background: radial-gradient(120% 95% at 50% 45%, transparent 58%, rgba(0, 0, 0, 0.55) 100%); }
 

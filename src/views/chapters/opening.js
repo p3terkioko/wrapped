@@ -82,7 +82,7 @@ function renderFirst(film) {
   const first = film.opening.milestones.find(m => m.n === 1);
   const later = t.contributors - 1;
   const w = nbo.wall(first.at);
-  return `<section class="chapter first" id="first" aria-labelledby="first-h" data-chapter="first">
+  return `<section class="chapter first" id="first" aria-labelledby="first-h" data-chapter="first"${first.song.colour ? ` data-colour="${esc(first.song.colour)}"` : ''}>
   <div class="first__grid">
     <h2 class="headline" id="first-h" data-split>It started with <span class="n">one</span> song.</h2>
     <figure class="song-card">

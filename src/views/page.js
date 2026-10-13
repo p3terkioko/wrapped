@@ -22,10 +22,12 @@ const LS = String.fromCharCode(0x2028);
 const PS = String.fromCharCode(0x2029);
 const inlineJson = obj => JSON.stringify(obj).split('<').join(BS + 'u003c').split(LS).join(BS + 'u2028').split(PS).join(BS + 'u2029');
 
-function head(film, { url }) {
+function head(film, { url, me }) {
   const t = film.totals;
-  const title = `${film.playlist.name || 'KamiLimu.inthe.Ears'}: ${fmt(t.entries)} songs from ${fmt(t.contributors)} people`;
-  const desc = `The KamiLimu community's shared playlist, played back: who added what, when, and what it sounds like. ${fmt(t.entries)} songs, ${fmt(t.artists)} artists, since March 2024.`;
+  const person = me ? film.people.ranking.find(r => r.id === me) : null;
+  // A shared ?me= link previews as that person's line.
+  const title = person ? `${person.name} added ${fmt(person.n)} songs to ${film.playlist.name || 'KamiLimu.inthe.Ears'}` : `${film.playlist.name || 'KamiLimu.inthe.Ears'}: ${fmt(t.entries)} songs from ${fmt(t.contributors)} people`;
+  const desc = person ? `${person.share}% of the KamiLimu community playlist, ranked ${person.rank} of ${fmt(t.contributors)}. Find yourself in the film of all ${fmt(t.entries)} songs.` : `The KamiLimu community's shared playlist, played back: who added what, when, and what it sounds like. ${fmt(t.entries)} songs, ${fmt(t.artists)} artists, since March 2024.`;
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -52,7 +54,7 @@ ${film.playlist.image ? `<meta property="og:image" content="${esc(film.playlist.
 function renderPage(film, { url = '/', me = null } = {}) {
   const t = film.totals;
   const years = `${new Date(t.firstAddedAt).getUTCFullYear()}–${new Date(t.lastAddedAt).getUTCFullYear()}`;
-  return `${head(film, { url })}
+  return `${head(film, { url, me })}
 <body>
 <a class="skip" href="#first">Skip to the story of the playlist</a>
 <div class="light" aria-hidden="true"></div>
