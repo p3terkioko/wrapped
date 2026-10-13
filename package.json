@@ -8,7 +8,12 @@
     "dev": "nodemon backend/server.js",
     "postinstall": "prisma generate",
     "db:push": "prisma db push",
-    "db:generate": "prisma generate"
+    "db:generate": "prisma generate",
+    "dev:db": "node scripts/dev-db.mjs",
+    "dev:push": "node scripts/with-dev-env.js prisma db push",
+    "dev:pull": "node scripts/pull-snapshot.js",
+    "dev:seed": "node scripts/seed-dev.js",
+    "backfill": "node scripts/backfill.js"
   },
   "dependencies": {
     "@prisma/client": "^6.16.3",

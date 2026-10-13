@@ -1,519 +1,252 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin — KamiLimu.inthe.Ears</title>
-  <link rel="stylesheet" href="/style.css">
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&family=Hind+Guntur:wght@300;400;500;600&display=swap" rel="stylesheet">
-  <style>
-    .admin-page {
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-
-    .admin-header {
-      border-bottom: 1px solid var(--teal-500);
-      padding: 0 var(--page-pad);
-    }
-    .admin-header-inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      height: 4rem;
-      max-width: 900px;
-      margin: 0 auto;
-    }
-    .admin-brand {
-      font-family: var(--font-mono);
-      font-size: .9375rem;
-      font-weight: 600;
-      color: var(--text-primary);
-    }
-    .admin-brand span { color: var(--teal-500); }
-
-    .admin-body {
-      flex: 1;
-      max-width: 900px;
-      width: 100%;
-      margin: 0 auto;
-      padding: 3rem var(--page-pad);
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
-    }
-
-    .admin-page-title {
-      font-family: var(--font-mono);
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--text-primary);
-      margin-bottom: .25rem;
-    }
-    .admin-page-sub {
-      font-family: var(--font-body);
-      font-size: .9375rem;
-      color: var(--text-secondary);
-    }
-
-    /* Status grid */
-    .admin-status-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-      gap: 1px;
-      background: var(--border);
-    }
-    .admin-status-cell {
-      background: var(--surface);
-      padding: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: .375rem;
-    }
-    .admin-status-value {
-      font-family: var(--font-mono);
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--teal-500);
-      line-height: 1;
-    }
-    .admin-status-label {
-      font-family: var(--font-body);
-      font-size: .8125rem;
-      color: var(--text-muted);
-    }
-
-    /* Cards */
-    .admin-card {
-      border: 1px solid var(--border);
-      background: var(--surface);
-    }
-    .admin-card-head {
-      padding: 1.25rem 1.5rem;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: baseline;
-      gap: 1rem;
-    }
-    .admin-card-title {
-      font-family: var(--font-mono);
-      font-size: .9375rem;
-      font-weight: 600;
-      color: var(--text-primary);
-    }
-    .admin-card-sub {
-      font-family: var(--font-body);
-      font-size: .8125rem;
-      color: var(--text-muted);
-    }
-    .admin-card-body {
-      padding: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-
-    /* Auth indicator */
-    .auth-indicator {
-      display: flex;
-      align-items: center;
-      gap: .75rem;
-      padding: .875rem 1rem;
-      border: 1px solid var(--border);
-      font-family: var(--font-mono);
-      font-size: .8125rem;
-    }
-    .auth-dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: var(--text-muted);
-      flex-shrink: 0;
-    }
-    .auth-indicator.ok  .auth-dot { background: var(--teal-500); }
-    .auth-indicator.err .auth-dot { background: var(--auburn); }
-    .auth-indicator.ok  { border-color: rgba(0,180,194,0.2); color: var(--teal-500); }
-    .auth-indicator.err { border-color: rgba(172,57,49,0.2);  color: var(--auburn); }
-
-    /* Button row */
-    .admin-btn-row {
-      display: flex;
-      gap: .75rem;
-      flex-wrap: wrap;
-    }
-
-    .btn-admin {
-      display: inline-flex;
-      align-items: center;
-      gap: .5rem;
-      padding: .625rem 1.25rem;
-      font-family: var(--font-mono);
-      font-size: .8125rem;
-      font-weight: 600;
-      border: none;
-      cursor: pointer;
-      transition: background .15s, opacity .15s;
-      white-space: nowrap;
-      text-decoration: none;
-    }
-    .btn-admin:disabled { opacity: .35; cursor: not-allowed; }
-    .btn-admin--primary  { background: var(--teal-500);    color: var(--black); }
-    .btn-admin--primary:hover:not(:disabled) { background: var(--teal-300); }
-    .btn-admin--ghost    { background: transparent; color: var(--text-secondary); border: 1px solid var(--border-strong); }
-    .btn-admin--ghost:hover:not(:disabled) { color: var(--text-primary); border-color: var(--teal-500); }
-    .btn-admin--danger   { background: var(--auburn); color: var(--white); }
-
-    /* Spinner inline */
-    .spin {
-      display: inline-block;
-      width: .875rem;
-      height: .875rem;
-      border: 2px solid rgba(5,5,5,0.2);
-      border-top-color: var(--black);
-      border-radius: 50%;
-      animation: spin .6s linear infinite;
-    }
-
-    /* Log */
-    .admin-log {
-      background: var(--black);
-      border: 1px solid var(--border);
-      padding: 1rem;
-      max-height: 260px;
-      overflow-y: auto;
-      font-family: var(--font-mono);
-      font-size: .75rem;
-      color: var(--text-muted);
-      line-height: 1.6;
-    }
-    .log-line { display: flex; gap: 1rem; }
-    .log-time { color: var(--teal-700); flex-shrink: 0; }
-    .log-line.ok   .log-msg { color: var(--teal-500); }
-    .log-line.err  .log-msg { color: var(--auburn); }
-    .log-line.info .log-msg { color: var(--text-secondary); }
-
-    /* Recent DB logs */
-    .db-logs {
-      display: flex;
-      flex-direction: column;
-      gap: 1px;
-      background: var(--border);
-    }
-    .db-log-row {
-      background: var(--surface-raised);
-      display: grid;
-      grid-template-columns: auto 1fr auto;
-      gap: 1rem;
-      padding: .75rem 1rem;
-      align-items: center;
-    }
-    .db-log-status {
-      font-family: var(--font-mono);
-      font-size: .6875rem;
-      text-transform: uppercase;
-      letter-spacing: .06em;
-      padding: .2rem .5rem;
-    }
-    .db-log-status.success { color: var(--teal-500); border: 1px solid rgba(0,180,194,0.3); }
-    .db-log-status.failed  { color: var(--auburn);   border: 1px solid rgba(172,57,49,0.3); }
-    .db-log-msg {
-      font-family: var(--font-body);
-      font-size: .8125rem;
-      color: var(--text-secondary);
-    }
-    .db-log-time {
-      font-family: var(--font-mono);
-      font-size: .6875rem;
-      color: var(--text-muted);
-      white-space: nowrap;
-    }
-
-    .admin-back-link {
-      font-family: var(--font-mono);
-      font-size: .8125rem;
-      padding: .5rem .875rem;
-      border: 1px solid var(--border-strong);
-      color: var(--text-secondary);
-      text-decoration: none;
-      transition: color .15s, border-color .15s;
-    }
-    .admin-back-link:hover { color: var(--text-primary); border-color: var(--teal-500); }
-
-    .admin-hint {
-      font-family: var(--font-body);
-      font-size: .8125rem;
-      color: var(--text-muted);
-    }
-
-    .admin-card--hidden { display: none; }
-    .admin-card-body--flush { padding: 0; }
-
-    @media (max-width: 600px) {
-      .admin-status-grid { grid-template-columns: 1fr 1fr; }
-    }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Admin — KamiLimu.inthe.Ears</title>
+<style>
+:root { --bg: #0e0b09; --panel: #17120e; --ink: #f3e9d6; --ink-2: rgba(243,233,214,.68); --ink-3: rgba(243,233,214,.56); --hair: rgba(243,233,214,.12); --accent: #ff5b33; --gold: #e9b44c; --ok: #6fcf97; --err: #ff6b6b; --mono: ui-monospace, 'JetBrains Mono', Menlo, monospace; }
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.5 system-ui, 'Segoe UI', sans-serif; }
+main { max-width: 1040px; margin: 0 auto; padding: 32px 20px 80px; display: grid; gap: 20px; }
+h1 { font: 700 22px/1.2 Georgia, serif; margin: 0; }
+h2 { font: 600 12px/1 var(--mono); letter-spacing: .18em; text-transform: uppercase; color: var(--gold); margin: 0 0 12px; }
+section { background: var(--panel); border: 1px solid var(--hair); border-radius: 8px; padding: 18px; }
+p.hint { color: var(--ink-3); font-size: 13px; margin: 6px 0 0; }
+button, input, select { font: inherit; color: inherit; }
+button { background: transparent; border: 1px solid var(--hair); border-radius: 6px; padding: 8px 14px; cursor: pointer; }
+button.primary { background: var(--accent); border-color: var(--accent); color: #140d09; font-weight: 600; }
+button:disabled { opacity: .5; cursor: wait; }
+button:focus-visible, input:focus-visible, select:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+input, select { background: #0b0907; border: 1px solid var(--hair); border-radius: 6px; padding: 7px 10px; min-width: 0; }
+.row { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; }
+.stat { border: 1px solid var(--hair); border-radius: 6px; padding: 10px; }
+.stat b { display: block; font: 600 20px/1.2 var(--mono); }
+.stat span { color: var(--ink-3); font-size: 12px; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th, td { text-align: left; padding: 7px 6px; border-bottom: 1px solid var(--hair); vertical-align: middle; }
+th { color: var(--ink-3); font-weight: 500; font-size: 12px; }
+td input { width: 100%; }
+.mono { font-family: var(--mono); font-size: 12.5px; }
+#log { font: 12.5px/1.6 var(--mono); max-height: 220px; overflow: auto; color: var(--ink-2); white-space: pre-wrap; }
+.ok { color: var(--ok); } .err { color: var(--err); }
+.hidden { display: none !important; }
+.table-wrap { overflow-x: auto; }
+</style>
 </head>
 <body>
-<div class="admin-page">
-
-  <header class="admin-header">
-    <div class="admin-header-inner">
-      <div class="admin-brand">KamiLimu<span>.inthe.Ears</span></div>
-      <a href="/" class="admin-back-link">Back to App</a>
-    </div>
+<main>
+  <header class="row" style="justify-content:space-between">
+    <h1>KamiLimu.inthe.Ears — admin</h1>
+    <a href="/" style="color:var(--ink-2)">Open the site</a>
   </header>
 
-  <div class="admin-body">
+  <section id="login">
+    <h2>Sign in</h2>
+    <form class="row" id="login-form">
+      <label for="pw" class="hidden">Admin password</label>
+      <input id="pw" type="password" autocomplete="current-password" placeholder="Admin password" required>
+      <button class="primary" type="submit">Sign in</button>
+    </form>
+    <p class="hint">The password is the <span class="mono">ADMIN_PASSWORD</span> environment variable. It is kept in this tab only.</p>
+  </section>
 
-    <div>
-      <div class="admin-page-title">Admin Panel</div>
-      <div class="admin-page-sub">Manage playlist data and cache.</div>
-    </div>
+  <div id="app" class="hidden" style="display:grid;gap:20px">
+    <section>
+      <h2>Status</h2>
+      <div class="grid" id="status"></div>
+      <div class="row" style="margin-top:14px">
+        <button class="primary" id="refresh">Refresh from Spotify</button>
+        <button id="recompute">Recompute only</button>
+        <button id="signout">Sign out</button>
+      </div>
+      <p class="hint">Refresh pulls the playlist, enriches new songs for up to ~40 seconds, then recomputes everything. The full enrichment run is <span class="mono">npm run backfill</span>, done locally. Public pages are cached for up to 10 minutes after a change.</p>
+      <div id="log" style="margin-top:12px"></div>
+    </section>
 
-    <!-- Status -->
-    <div class="admin-status-grid" id="status-grid">
-      <div class="admin-status-cell"><div class="admin-status-value" id="st-data">...</div><div class="admin-status-label">Data Available</div></div>
-      <div class="admin-status-cell"><div class="admin-status-value" id="st-tracks">...</div><div class="admin-status-label">Tracks Cached</div></div>
-      <div class="admin-status-cell"><div class="admin-status-value" id="st-updated">...</div><div class="admin-status-label">Last Updated</div></div>
-      <div class="admin-status-cell"><div class="admin-status-value" id="st-env">...</div><div class="admin-status-label">Environment</div></div>
-    </div>
+    <section>
+      <h2>Coverage</h2>
+      <div class="grid" id="coverage"></div>
+    </section>
 
-    <!-- Refresh -->
-    <div class="admin-card">
-      <div class="admin-card-head">
-        <span class="admin-card-title">Refresh Playlist Data</span>
-        <span class="admin-card-sub">Fetches fresh data from Spotify using the stored refresh token</span>
-      </div>
-      <div class="admin-card-body">
-        <div class="auth-indicator" id="auth-indicator">
-          <div class="auth-dot"></div>
-          <span id="auth-text">Checking auth status...</span>
-        </div>
-        <div class="admin-btn-row">
-          <button type="button" id="trigger-btn" class="btn-admin btn-admin--primary">
-            Trigger Update
-          </button>
-          <button type="button" id="auth-btn" class="btn-admin btn-admin--ghost">
-            Get Spotify Token
-          </button>
-          <button type="button" id="legacy-refresh-btn" class="btn-admin btn-admin--ghost" disabled>
-            Refresh (Token Auth)
-          </button>
-        </div>
-        <p class="admin-hint">
-          Trigger Update uses the stored SPOTIFY_REFRESH_TOKEN and requires no manual authentication.
-        </p>
-      </div>
-    </div>
+    <section>
+      <h2>Contributor names</h2>
+      <p class="hint">Spotify no longer returns names for new apps. A name set here wins over Spotify's.</p>
+      <div class="table-wrap"><table><thead><tr><th>Spotify name</th><th>Name shown</th><th>Songs</th><th>Spotify id</th><th></th></tr></thead><tbody id="people"></tbody></table></div>
+    </section>
 
-    <!-- Quick actions -->
-    <div class="admin-card">
-      <div class="admin-card-head">
-        <span class="admin-card-title">Quick Actions</span>
-      </div>
-      <div class="admin-card-body">
-        <div class="admin-btn-row">
-          <button type="button" id="view-data-btn" class="btn-admin btn-admin--ghost">View Public Data</button>
-        </div>
-      </div>
-    </div>
+    <section>
+      <h2>Artist genres and origin</h2>
+      <p class="hint">Correct mislabelled artists (for example Sauti Sol or Mutoriah tagged "rumba congolaise"). Genres are comma-separated; leave blank and save to return to Spotify's tags. Country is a two-letter code (KE, TZ, NG…).</p>
+      <form class="row" id="artist-search"><input id="artist-q" placeholder="Artist name or genre" aria-label="Search artists"><button type="submit">Search</button></form>
+      <div class="table-wrap"><table><thead><tr><th>Artist</th><th>Spotify genres</th><th>Corrected genres</th><th>Country</th><th></th></tr></thead><tbody id="artists"></tbody></table></div>
+    </section>
 
-    <!-- Activity log -->
-    <div class="admin-card">
-      <div class="admin-card-head">
-        <span class="admin-card-title">Activity Log</span>
-        <span class="admin-card-sub">This session</span>
-      </div>
-      <div class="admin-log" id="log"></div>
-    </div>
+    <section>
+      <h2>Track corrections</h2>
+      <p class="hint">Override tempo, key (0 = C … 11 = B), mode (1 major, 0 minor), energy/valence/danceability (0–1) or release date. Blank and save to remove a correction.</p>
+      <form class="row" id="track-search"><input id="track-q" placeholder="Song title or exact artist" aria-label="Search tracks"><button type="submit">Search</button></form>
+      <div class="table-wrap"><table><thead><tr><th>Song</th><th>Tempo</th><th>Key</th><th>Mode</th><th>Energy</th><th>Valence</th><th>Dance</th><th>Released</th><th></th></tr></thead><tbody id="tracks"></tbody></table></div>
+    </section>
 
-    <!-- DB update history -->
-    <div class="admin-card admin-card--hidden" id="db-log-card">
-      <div class="admin-card-head">
-        <span class="admin-card-title">Recent Updates</span>
-        <span class="admin-card-sub">From database</span>
-      </div>
-      <div class="admin-card-body admin-card-body--flush">
-        <div class="db-logs" id="db-logs"></div>
-      </div>
-    </div>
+    <section>
+      <h2>Community moments</h2>
+      <p class="hint">Cohort kickoffs, outdoor days and other events shown on the rhythm timeline.</p>
+      <form class="row" id="event-form">
+        <input type="date" id="ev-date" required aria-label="Date">
+        <input id="ev-title" placeholder="Title, e.g. Cohort 9 kickoff" required aria-label="Title">
+        <input id="ev-kind" placeholder="Kind (optional)" aria-label="Kind">
+        <button class="primary" type="submit">Add</button>
+      </form>
+      <div class="table-wrap"><table><thead><tr><th>Date</th><th>Title</th><th>Kind</th><th></th></tr></thead><tbody id="events"></tbody></table></div>
+    </section>
 
+    <section>
+      <h2>Genre families</h2>
+      <p class="hint">Move a genre into another family. Only the overrides are listed.</p>
+      <form class="row" id="family-form">
+        <input id="fam-genre" placeholder="Genre, e.g. bongo piano" required aria-label="Genre">
+        <select id="fam-family" aria-label="Family"></select>
+        <button class="primary" type="submit">Save</button>
+      </form>
+      <div class="table-wrap"><table><tbody id="families"></tbody></table></div>
+    </section>
   </div>
-</div>
-
+</main>
 <script>
 'use strict';
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const KEY = 'kle-admin';
+let password = sessionStorage.getItem(KEY) || '';
 
-const logEl       = document.getElementById('log');
-const triggerBtn  = document.getElementById('trigger-btn');
-const legacyBtn   = document.getElementById('legacy-refresh-btn');
-const authIndicator = document.getElementById('auth-indicator');
-const authText    = document.getElementById('auth-text');
-
-function ts() { return new Date().toLocaleTimeString('en-US', { hour12: false }); }
-
-function addLog(msg, type = 'info') {
+function log(msg, cls = '') {
   const line = document.createElement('div');
-  line.className = 'log-line ' + type;
-  line.innerHTML = '<span class="log-time">' + ts() + '</span><span class="log-msg">' + msg + '</span>';
-  logEl.appendChild(line);
-  logEl.scrollTop = logEl.scrollHeight;
+  line.className = cls;
+  line.textContent = new Date().toLocaleTimeString('en-GB') + '  ' + msg;
+  $('#log').prepend(line);
 }
 
-// ── Status ────────────────────────────────────────────────────────────────────
+async function api(path, opts = {}) {
+  const res = await fetch('/api/admin' + path, {
+    ...opts,
+    headers: { 'Content-Type': 'application/json', 'x-admin-password': password, ...(opts.headers || {}) },
+    body: opts.body ? JSON.stringify(opts.body) : undefined,
+  });
+  const data = await res.json().catch(() => ({}));
+  if (res.status === 401) { signOut(); throw new Error('Wrong password'); }
+  if (!res.ok) throw new Error(data.error || data.message || res.statusText);
+  return data;
+}
+
+function signOut() { password = ''; sessionStorage.removeItem(KEY); $('#app').classList.add('hidden'); $('#login').classList.remove('hidden'); }
+
+$('#login-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  password = $('#pw').value;
+  try { await loadAll(); sessionStorage.setItem(KEY, password); $('#login').classList.add('hidden'); $('#app').classList.remove('hidden'); }
+  catch (err) { alertLine(err.message); }
+});
+function alertLine(msg) { let p = $('#login .err'); if (!p) { p = document.createElement('p'); p.className = 'hint err'; $('#login').append(p); } p.textContent = msg; }
+$('#signout').addEventListener('click', signOut);
+
+async function loadAll() { await Promise.all([loadStatus(), loadCoverage(), loadPeople(), loadEvents(), loadFamilies()]); }
+
 async function loadStatus() {
-  try {
-    const res  = await fetch('/api/admin/status');
-    const data = await res.json();
-
-    document.getElementById('st-data').textContent    = data.hasData ? 'Yes' : 'No';
-    document.getElementById('st-tracks').textContent  = data.tracksCount || 0;
-    document.getElementById('st-updated').textContent = data.lastUpdated
-      ? new Date(data.lastUpdated).toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' })
-      : 'Never';
-    document.getElementById('st-env').textContent     = data.environment || 'unknown';
-
-    if (data.recentLogs && data.recentLogs.length) {
-      renderDbLogs(data.recentLogs);
-    }
-
-    addLog('Status loaded' + (data.hasData ? ', data available' : ', no data yet'), 'info');
-  } catch (err) {
-    addLog('Failed to load status: ' + err.message, 'err');
-  }
+  const s = await api('/status');
+  const cell = (v, l) => `<div class="stat"><b>${esc(v)}</b><span>${esc(l)}</span></div>`;
+  $('#status').innerHTML = cell(s.entries, 'playlist entries') + cell(s.uniqueSongs, 'unique songs') +
+    cell(s.lastUpdated ? new Date(s.lastUpdated).toLocaleString('en-GB', { timeZone: 'Africa/Nairobi', dateStyle: 'medium', timeStyle: 'short' }) + ' EAT' : 'never', 'last computed') +
+    cell(s.version || '—', 'payload version') + cell(s.environment, 'environment') + cell(s.cronSecretSet ? 'set' : 'MISSING', 'CRON_SECRET');
+  for (const l of (s.recentLogs || []).slice(0, 6).reverse()) log(`${l.status}: ${l.message}`, l.status === 'success' ? 'ok' : 'err');
 }
 
-function renderDbLogs(logs) {
-  const card = document.getElementById('db-log-card');
-  const wrap = document.getElementById('db-logs');
-  card.classList.remove('admin-card--hidden');
-  wrap.innerHTML = logs.map(log => {
-    const when = new Date(log.createdAt).toLocaleString('en-GB', { day:'2-digit', month:'short', hour:'2-digit', minute:'2-digit' });
-    return '<div class="db-log-row">' +
-      '<span class="db-log-status ' + log.status + '">' + log.status + '</span>' +
-      '<span class="db-log-msg">' + (log.message || '') + '</span>' +
-      '<span class="db-log-time">' + when + '</span>' +
-      '</div>';
-  }).join('');
+async function loadCoverage() {
+  const c = await api('/coverage');
+  const cell = (v, l) => `<div class="stat"><b>${esc(v)}</b><span>${esc(l)}</span></div>`;
+  const src = Object.entries(c.bySource).map(([k, v]) => cell(`${v.ok || 0} / ${c.tracks}`, `${k} ok (${v.not_found || 0} not found, ${v.error || 0} errors)`)).join('');
+  $('#coverage').innerHTML = src + cell(Object.entries(c.tempo).map(([k, v]) => `${k} ${v}`).join(' · '), 'tempo by source') +
+    cell(Object.entries(c.key).map(([k, v]) => `${k} ${v}`).join(' · '), 'key by source') +
+    cell(`${c.artistsWithCountry} / ${c.artists}`, 'artists with a country') + cell(`${c.artistsWithGenres} / ${c.artists}`, 'artists with genres') + cell(c.artistsCorrected, 'artists corrected');
 }
 
-// ── Auth status ───────────────────────────────────────────────────────────────
-async function checkAuth() {
-  try {
-    const res  = await fetch('/auth/status');
-    const data = await res.json();
-    if (data.authenticated) {
-      authIndicator.className = 'auth-indicator ok';
-      authText.textContent    = 'Authenticated with Spotify';
-      legacyBtn.disabled      = false;
-      addLog('Spotify authentication verified', 'ok');
-    } else {
-      authIndicator.className = 'auth-indicator err';
-      authText.textContent    = 'Not authenticated — use "Get Spotify Token" to authenticate';
-      legacyBtn.disabled      = true;
-      addLog('Not authenticated with Spotify', 'info');
-    }
-  } catch (err) {
-    authIndicator.className = 'auth-indicator err';
-    authText.textContent    = 'Could not check auth status';
-    addLog('Auth check failed: ' + err.message, 'err');
-  }
+async function loadPeople() {
+  const rows = await api('/contributors');
+  $('#people').innerHTML = rows.map(p => `<tr data-id="${esc(p.id)}"><td>${esc(p.displayName || '—')}</td><td><input value="${esc(p.adminName || '')}" placeholder="${esc(p.displayName || 'Set a name')}" aria-label="Name shown for ${esc(p.displayName || p.id)}"></td><td class="mono">${p.songs}</td><td class="mono">${esc(p.id)}</td><td><button>Save</button></td></tr>`).join('');
 }
-
-// ── Trigger update ────────────────────────────────────────────────────────────
-triggerBtn.addEventListener('click', async () => {
-  triggerBtn.disabled = true;
-  triggerBtn.innerHTML = '<span class="spin"></span> Updating...';
-  addLog('Triggering update with stored refresh token...', 'info');
-
-  try {
-    const res    = await fetch('/api/admin/trigger-update', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ password: 'admin123' }),
-    });
-    const result = await res.json();
-
-    if (res.ok && result.success) {
-      addLog('Update successful: ' + result.message, 'ok');
-      loadStatus();
-    } else {
-      addLog('Update failed: ' + (result.error || result.message), 'err');
-    }
-  } catch (err) {
-    addLog('Network error: ' + err.message, 'err');
-  }
-
-  triggerBtn.disabled = false;
-  triggerBtn.textContent = 'Trigger Update';
+$('#people').addEventListener('click', async e => {
+  if (e.target.tagName !== 'BUTTON') return;
+  const tr = e.target.closest('tr');
+  await run(e.target, () => api('/contributors/' + encodeURIComponent(tr.dataset.id), { method: 'PUT', body: { adminName: tr.querySelector('input').value } }), 'Name saved');
 });
 
-// ── Legacy refresh (uses session token) ───────────────────────────────────────
-legacyBtn.addEventListener('click', async () => {
-  const accessToken = document.cookie
-    .split('; ')
-    .find(r => r.startsWith('spotify_access_token='))
-    ?.split('=')[1];
-
-  if (!accessToken) {
-    addLog('No access token found, authenticate first', 'err');
-    return;
-  }
-
-  legacyBtn.disabled = true;
-  legacyBtn.innerHTML = '<span class="spin" style="border-top-color:var(--text-secondary)"></span> Fetching...';
-  addLog('Starting data fetch from Spotify...', 'info');
-
-  try {
-    const res    = await fetch('/api/admin/refresh', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ password: 'admin123', accessToken }),
-    });
-    const result = await res.json();
-
-    if (res.ok && result.success) {
-      addLog('Success: ' + result.message, 'ok');
-      loadStatus();
-    } else {
-      addLog('Error: ' + (result.error || result.message), 'err');
-    }
-  } catch (err) {
-    addLog('Network error: ' + err.message, 'err');
-  }
-
-  legacyBtn.disabled = false;
-  legacyBtn.textContent = 'Refresh (Token Auth)';
+$('#artist-search').addEventListener('submit', async e => {
+  e.preventDefault();
+  const rows = await api('/artists?q=' + encodeURIComponent($('#artist-q').value));
+  $('#artists').innerHTML = rows.map(a => `<tr data-id="${esc(a.id)}"><td>${esc(a.name)}</td><td class="mono">${esc((a.genres || []).join(', ') || '—')}</td><td><input class="g" value="${esc((a.overrides?.genres || []).join(', '))}" aria-label="Corrected genres for ${esc(a.name)}"></td><td><input class="c" value="${esc(a.overrides?.country ?? a.country ?? '')}" size="3" aria-label="Country for ${esc(a.name)}"></td><td><button>Save</button></td></tr>`).join('') || '<tr><td colspan="5">No artists found</td></tr>';
+});
+$('#artists').addEventListener('click', async e => {
+  if (e.target.tagName !== 'BUTTON') return;
+  const tr = e.target.closest('tr');
+  const g = tr.querySelector('.g').value.trim();
+  const c = tr.querySelector('.c').value.trim();
+  await run(e.target, () => api('/artists/' + tr.dataset.id, { method: 'PUT', body: { genres: g ? g.split(',') : null, country: c || null } }), 'Artist saved');
 });
 
-// ── Auth redirect ─────────────────────────────────────────────────────────────
-document.getElementById('auth-btn').addEventListener('click', () => {
-  addLog('Redirecting to Spotify auth...', 'info');
-  window.location.href = '/auth/login';
+const TF = ['tempo', 'key', 'mode', 'energy', 'valence', 'danceability', 'releaseDate'];
+$('#track-search').addEventListener('submit', async e => {
+  e.preventDefault();
+  const rows = await api('/tracks?q=' + encodeURIComponent($('#track-q').value));
+  $('#tracks').innerHTML = rows.map(t => `<tr data-id="${esc(t.id)}"><td>${esc(t.name)}<br><span class="mono" style="color:var(--ink-3)">${esc(t.artistNames.join(', '))}</span></td>` +
+    TF.map(f => { const v = t.overrides?.[f] ?? t[f]; return `<td><input data-f="${f}" value="${esc(v ?? '')}" size="${f === 'releaseDate' ? 9 : 4}" aria-label="${f}" title="${t.overrides?.[f] !== undefined ? 'corrected' : (f === 'tempo' ? t.tempoSource : f === 'key' || f === 'mode' ? t.keySource : t.featuresSource) || 'no value'}"></td>`; }).join('') +
+    '<td><button>Save</button></td></tr>').join('') || '<tr><td colspan="9">No songs found</td></tr>';
+});
+$('#tracks').addEventListener('click', async e => {
+  if (e.target.tagName !== 'BUTTON') return;
+  const tr = e.target.closest('tr');
+  const body = {};
+  tr.querySelectorAll('input').forEach(i => { body[i.dataset.f] = i.value.trim() === '' ? null : i.value.trim(); });
+  await run(e.target, () => api('/tracks/' + tr.dataset.id, { method: 'PUT', body }), 'Song saved');
 });
 
-// ── View public data ──────────────────────────────────────────────────────────
-document.getElementById('view-data-btn').addEventListener('click', async () => {
-  try {
-    const res    = await fetch('/api/public/data');
-    const result = await res.json();
-    if (res.ok) {
-      addLog('Public data: ' + result.data.playlist.name + ' (' + result.data.playlist.totalTracks + ' tracks)', 'ok');
-      addLog('Last updated: ' + new Date(result.lastUpdated).toLocaleString(), 'info');
-    } else {
-      addLog('Error: ' + result.error, 'err');
-    }
-  } catch (err) {
-    addLog('Error: ' + err.message, 'err');
-  }
+async function loadEvents() {
+  const rows = await api('/events');
+  $('#events').innerHTML = rows.map(ev => `<tr data-id="${esc(ev.id)}"><td class="mono">${esc(ev.date.slice(0, 10))}</td><td>${esc(ev.title)}</td><td>${esc(ev.kind || '')}</td><td><button>Remove</button></td></tr>`).join('') || '<tr><td colspan="4">No moments yet</td></tr>';
+}
+$('#event-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  await run(e.submitter, () => api('/events', { method: 'POST', body: { date: $('#ev-date').value, title: $('#ev-title').value, kind: $('#ev-kind').value } }), 'Moment added');
+  e.target.reset(); loadEvents();
+});
+$('#events').addEventListener('click', async e => {
+  if (e.target.tagName !== 'BUTTON') return;
+  await run(e.target, () => api('/events/' + e.target.closest('tr').dataset.id, { method: 'DELETE' }), 'Moment removed');
+  loadEvents();
 });
 
-// ── Init ──────────────────────────────────────────────────────────────────────
-addLog('Admin panel loaded', 'info');
-loadStatus();
-checkAuth();
-setInterval(() => { loadStatus(); checkAuth(); }, 30000);
+async function loadFamilies() {
+  const { families, overrides } = await api('/genre-families');
+  $('#fam-family').innerHTML = '<option value="">(remove override)</option>' + families.map(f => `<option>${esc(f)}</option>`).join('');
+  $('#families').innerHTML = Object.entries(overrides).map(([g, f]) => `<tr><td>${esc(g)}</td><td>→ ${esc(f)}</td></tr>`).join('') || '<tr><td>No overrides</td></tr>';
+}
+$('#family-form').addEventListener('submit', async e => {
+  e.preventDefault();
+  await run(e.submitter, () => api('/genre-families', { method: 'PUT', body: { genre: $('#fam-genre').value, family: $('#fam-family').value || null } }), 'Family saved');
+  loadFamilies();
+});
+
+async function run(btn, fn, okMsg) {
+  if (btn) btn.disabled = true;
+  try { const r = await fn(); log(r?.message || okMsg, 'ok'); return r; }
+  catch (err) { log(err.message, 'err'); }
+  finally { if (btn) btn.disabled = false; }
+}
+$('#refresh').addEventListener('click', async e => { log('Refreshing from Spotify…'); await run(e.target, () => api('/refresh', { method: 'POST' })); loadStatus(); loadCoverage(); });
+$('#recompute').addEventListener('click', async e => { await run(e.target, () => api('/recompute', { method: 'POST' })); loadStatus(); });
+
+if (password) loadAll().then(() => { $('#login').classList.add('hidden'); $('#app').classList.remove('hidden'); }).catch(() => signOut());
 </script>
 </body>
 </html>

@@ -109,6 +109,21 @@ async function getPlaylistItems(playlistId, token) {
   }
 }
 
+// The most recent page of the playlist (two requests), for the live pulse.
+async function getLastItems(playlistId, token, n = 50) {
+  for (const path of ['items', 'tracks']) {
+    try {
+      const head = await get(`/playlists/${playlistId}/${path}`, token, { limit: 1 });
+      const offset = Math.max(0, (head.total || 0) - n);
+      const page = await get(`/playlists/${playlistId}/${path}`, token, { limit: n, offset });
+      return { items: (page.items || []).map(normaliseItem), total: head.total };
+    } catch (err) {
+      if (!isGone(err)) throw err;
+    }
+  }
+  return { items: [], total: 0 };
+}
+
 // ── Artists ───────────────────────────────────────────────────────────────────
 
 // Batch lookup (50 per call) while it exists; single lookups otherwise.
@@ -154,6 +169,7 @@ module.exports = {
   refreshAccessToken,
   getPlaylist,
   getPlaylistItems,
+  getLastItems,
   getArtists,
   getUserProfile,
   normaliseItem,

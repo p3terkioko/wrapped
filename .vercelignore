@@ -1,0 +1,8 @@
+# Never upload secrets, local databases, caches, docs or local-only tools.
+.env
+.env.*
+!.env.local.example
+.devdb
+.cache
+docs
+scripts/audio

@@ -1,5 +1,7 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
+  "outputDirectory": "public",
   "functions": {
     "api/index.js": {
       "maxDuration": 60
@@ -11,14 +13,20 @@
       "schedule": "0 6 * * *"
     }
   ],
-  "routes": [
+  "rewrites": [
+    { "source": "/api/:path*", "destination": "/api/index.js" },
+    { "source": "/auth/:path*", "destination": "/api/index.js" },
+    { "source": "/admin", "destination": "/admin.html" },
+    { "source": "/:path*", "destination": "/api/index.js" }
+  ],
+  "headers": [
     {
-      "src": "/api/(.*)",
-      "dest": "/api/index.js"
+      "source": "/vendor/(.*)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
     },
     {
-      "src": "/(.*)",
-      "dest": "/api/index.js"
+      "source": "/fonts/(.*)",
+      "headers": [{ "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }]
     }
   ]
 }

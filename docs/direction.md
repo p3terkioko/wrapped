@@ -18,7 +18,7 @@ This file is the brand rules file for the build: where it conflicts with a defau
 ### B — Seven Inch ✔
 *A 1970s East African 45 on a lacquer-black night.* The persistent shape is a 7-inch single: lacquer with fine grooves, a cream paper centre label with ringed text, and the large centre hole held by a gold three-armed spider adapter (the jukebox-single detail). Headlines are set in a soft, slightly wonky display serif with the warmth of 70s sleeve lettering. Numbers are performed in italic vermilion. Data sits in a quiet monospace.
 - **Palette:** lacquer `#0e0b09`, lacquer-2 `#17120e`, label cream `#f3e9d6`, vermilion `#ff5b33` (the accent; one per screen), gold `#e9b44c` (you / personal), label green `#1d5c45` (label print only). Text alphas: 1.0 / 0.66 / 0.56 (captions; 0.56 keeps small text above 4.5:1).
-- **Type:** **Fraunces** (SOFT 100, WONK 1, opsz 144; 800 roman for headlines, 400–700 italic for numbers and asides); **Schibsted Grotesk** for body copy; **JetBrains Mono** for data, labels and captions (kept from the old identity, and shared with story mode).
+- **Type:** **Fraunces** (SOFT 100, WONK 1, opsz 144; 800 roman for headlines, 600 italic for numbers and asides; a text cut at opsz 14 for body copy); **JetBrains Mono** for data, labels and captions (kept from the old identity, and shared with story mode). *Stage 5 change:* the frame used Schibsted Grotesk for body copy, but Google only serves it as a 47 KB variable file; a Fraunces text cut does the same job at 18 KB and keeps the page in one family. All four faces self-hosted: 79 KB total.
 - **Motion character:** a film title sequence. Words rise out of a baseline mask on the beat and land with `expo.out`; numbers arrive in italic as if hand-set; the record spins at a true **45 rpm** while the film plays and settles when you stop. Light is warm and directional, tinted by the album art in view. Cuts between chapters are colour cuts and label changes, not long travels.
 - **Verdict:** chosen. See below.
 
@@ -50,6 +50,7 @@ This file is the brand rules file for the build: where it conflicts with a defau
 - Vermilion marks the subject of the headline only. Everything else is cream at 0.66 or 0.56, or neutral grey bars. Gold is reserved for *you* (find yourself) and for the playhead.
 - Charts are labelled directly. On phones, names sit above bars. Values show the count and its share of the stated whole.
 - Captions (JetBrains Mono, 12.5 px, 0.56) state the basis and coverage on every chart.
+- **No eyebrow labels anywhere** (Peter, 13 Oct 2026): no small caps kicker above headlines. The headline sentence carries the chapter; context goes into the headline, the lede or the caption.
 - No chapter numbers, no slide counters, no wordmark parked in a corner. The only fixed UI is the motion toggle and, once chosen, the "you" chip.
 
 **The record**
@@ -58,8 +59,8 @@ This file is the brand rules file for the build: where it conflicts with a defau
 - It spins at 45 rpm (270°/s) while the film is in motion, speeds up slightly with scroll velocity (capped), and settles to still after one beat of no scroll. Reduced motion or motion-off: still.
 
 **Type**
-- Fraunces 800 for headlines (`"SOFT" 100, "WONK" 1, opsz 144`), tracking −0.02em, line-height 0.95, `text-wrap: balance`. Italic 400–700 for numbers and asides.
-- Schibsted Grotesk 400/500 for body (≥ 16 px on phone), JetBrains Mono 400/600 for data.
+- Fraunces 800 for headlines (`"SOFT" 100, "WONK" 1, opsz 144`), tracking −0.02em, line-height 0.95, `text-wrap: balance`. Italic 600 for numbers and asides.
+- Fraunces text cut (opsz 14, SOFT 50) 400 for body (≥ 17 px on phone), JetBrains Mono 400 for data.
 - Tabular figures for any number that changes.
 
 **Light and texture**
