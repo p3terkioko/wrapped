@@ -139,9 +139,13 @@ main.film { position: relative; z-index: 4; }
 .motion-toggle::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--gold); }
 .motion-toggle[aria-pressed='false']::before { background: transparent; border: 1px solid var(--cream-3); }
 
-/* Kinetic type helpers (set up by script only when motion is on) */
-.w { display: inline-block; overflow: clip; vertical-align: top; padding-bottom: 0.08em; margin-bottom: -0.08em; }
-.wi { display: inline-block; }
+/* Kinetic headlines: words rise out of a mask on the beat when the headline
+   comes into view. The mask is padded so italic overhangs and descenders are
+   never clipped once a word has landed. */
+.headline .w { display: inline-block; overflow: clip; vertical-align: top; padding: 0.14em 0.22em 0.24em 0.06em; margin: -0.14em -0.22em -0.24em -0.06em; }
+.headline .wi { display: inline-block; }
+html.reveal-ready:not(.motion-off) .headline[data-split] .wi { transform: translateY(112%); transition: transform calc(var(--beat) * 1.5) cubic-bezier(0.16, 1, 0.3, 1); transition-delay: calc(var(--i, 0) * var(--beat) / 8); }
+html.reveal-ready:not(.motion-off) .headline[data-split].is-in .wi { transform: none; }
 
 /* Reduced motion / motion off: the server-rendered final state, still. */
 @media (prefers-reduced-motion: reduce) {

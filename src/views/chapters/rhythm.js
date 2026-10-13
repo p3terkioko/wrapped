@@ -50,31 +50,31 @@ function calendar(cal, first, last) {
   const max = Math.max(...cal.map(c => c.n), 1);
   const y0 = Number(first.slice(0, 4)), y1 = Number(last.slice(0, 4));
   const cell = 5.2, gap = 1.2, L = 30;
-  let out = '', row = 0;
+  let labels = '', inRange = '', outRange = '', active = '', row = 0;
   for (let y = y0; y <= y1; y++) {
     const top = row * (7 * (cell + gap) + 14) + 12;
-    out += `<text class="axis" x="0" y="${top + 3.5 * (cell + gap)}">${y}</text>`;
+    labels += `<text class="axis" x="0" y="${top + 3.5 * (cell + gap)}">${y}</text>`;
     const jan1 = Date.UTC(y, 0, 1);
     const offset = (new Date(jan1).getUTCDay() + 6) % 7; // Monday-first
     for (let d = 0; d < 366; d++) {
-      const t = jan1 + d * 864e5;
-      const day = new Date(t).toISOString().slice(0, 10);
+      const day = new Date(jan1 + d * 864e5).toISOString().slice(0, 10);
       if (Number(day.slice(0, 4)) !== y) break;
-      const idx = d + offset, col = Math.floor(idx / 7), r = idx % 7;
+      const idx = d + offset, x = (L + Math.floor(idx / 7) * (cell + gap)).toFixed(1), yy = (top + (idx % 7) * (cell + gap)).toFixed(1);
       const n = byDay[day] || 0;
-      const inRange = day >= first.slice(0, 10) && day <= last.slice(0, 10);
-      out += `<rect x="${(L + col * (cell + gap)).toFixed(1)}" y="${(top + r * (cell + gap)).toFixed(1)}" width="${cell}" height="${cell}" rx="1" class="cal${n ? ' has' : ''}" style="--o:${n ? (0.25 + 0.75 * Math.min(1, n / Math.min(max, 12))).toFixed(3) : (inRange ? 0.07 : 0.025)}">${n ? `<title>${day}: ${n} songs</title>` : ''}</rect>`;
+      if (n) active += `<rect x="${x}" y="${yy}" width="${cell}" height="${cell}" rx="1" class="cal has" style="--o:${(0.25 + 0.75 * Math.min(1, n / Math.min(max, 12))).toFixed(3)}"><title>${day}: ${n} songs</title></rect>`;
+      else if (day >= first.slice(0, 10) && day <= last.slice(0, 10)) inRange += `M${x} ${yy}h${cell}v${cell}h-${cell}z`;
+      else outRange += `M${x} ${yy}h${cell}v${cell}h-${cell}z`;
     }
     row++;
   }
   const W = L + 54 * (cell + gap), H = row * (7 * (cell + gap) + 14) + 6;
-  return `<svg class="calendar" viewBox="0 0 ${W.toFixed(0)} ${H.toFixed(0)}" role="img" aria-label="Calendar of days with songs added, one row per year" data-reveal="fade">${out}</svg>`;
+  return `<svg class="calendar" viewBox="0 0 ${W.toFixed(0)} ${H.toFixed(0)}" role="img" aria-label="Calendar of days with songs added, one row per year: ${cal.length} days had at least one song" data-reveal="fade">${labels}<path class="cal-empty" d="${inRange}"/><path class="cal-out" d="${outRange}"/><g>${active}</g></svg>`;
 }
 
 function renderRhythm(film) {
   const r = film.rhythm;
   const order = [1, 2, 3, 4, 5, 6, 0];
-  const cols = order.map(d => ({ label: nbo.DAYS[d].slice(0, 3), value: r.weekday[d], highlight: d === r.peak.weekday }));
+  const cols = order.map(d => ({ label: nbo.DAYS[d].slice(0, 3), tipLabel: nbo.DAYS[d], value: r.weekday[d], highlight: d === r.peak.weekday }));
   const second = [...r.weekday].map((n, d) => ({ n, d })).sort((a, b) => b.n - a.n)[1];
   return `<section class="chapter rhythm" id="rhythm" aria-labelledby="rhythm-h" data-chapter="rhythm" data-record="rhythm">
   <div class="chapter__head">

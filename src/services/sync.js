@@ -19,6 +19,7 @@ function trackRow(t) {
     albumName: t.album?.name || null,
     albumType: t.album?.album_type || null,
     imageUrl: imgs[0]?.url || null,
+    imageMedium: (imgs.find(i => i.width && i.width <= 320 && i.width >= 200) || imgs[1] || imgs[0])?.url || null,
     imageSmall: imgs[imgs.length - 1]?.url || null,
     releaseDate: t.album?.release_date || null,
     releasePrecision: t.album?.release_date_precision || null,
@@ -40,7 +41,7 @@ async function storePlaylist(prisma, playlistId, items, { log = () => {} } = {})
 
   // Mutable fields on known tracks (popularity, artwork URLs), batched.
   const updates = [...rows.values()].filter(r => existing.has(r.id)).map(r =>
-    prisma.track.update({ where: { id: r.id }, data: { popularity: r.popularity, imageUrl: r.imageUrl, imageSmall: r.imageSmall, name: r.name, artistNames: r.artistNames } }));
+    prisma.track.update({ where: { id: r.id }, data: { popularity: r.popularity, imageUrl: r.imageUrl, imageMedium: r.imageMedium, imageSmall: r.imageSmall, name: r.name, artistNames: r.artistNames } }));
   for (let i = 0; i < updates.length; i += 200) await prisma.$transaction(updates.slice(i, i + 200));
 
   await prisma.$transaction([

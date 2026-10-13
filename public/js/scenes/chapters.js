@@ -54,22 +54,19 @@ export function setupChapters() {
     }
     for (const key of keys) record.state[key] = v[key];
     record.render();
+    // Label and ring cut over once a chapter is past its arrival window.
+    const current = y >= w.end || k === 0 ? k : k - 1;
+    if (current !== shown) { shown = current; applyChapter(sections[current].dataset.chapter); }
+  };
+  let shown = -1;
+  const applyChapter = ch => {
+    const lab = LABEL[ch];
+    if (lab) record.setLabel({ title: typeof lab === 'function' ? lab() : lab });
+    const v = ringFor(ch);
+    if (v != null) gsap.to(record.state, { arc: v, duration: BEAT * 2, ease: 'power2.inOut', onUpdate: record.render, overwrite: 'auto' });
   };
   const traveller = ScrollTrigger.create({ start: 0, end: 'max', onUpdate: place, onRefresh: () => { measure(); place(); } });
   kill.push(() => traveller.kill());
-
-  // Ring value and label per chapter, cut on entry.
-  sections.forEach(sec => {
-    const ch = sec.dataset.chapter;
-    const apply = () => {
-      const lab = LABEL[ch];
-      if (lab) record.setLabel({ title: typeof lab === 'function' ? lab() : lab });
-      const v = ringFor(ch);
-      if (v != null) gsap.to(record.state, { arc: v, duration: BEAT * 2, ease: 'power2.inOut', onUpdate: record.render, overwrite: 'auto' });
-    };
-    const st = ScrollTrigger.create({ trigger: sec, start: 'top 55%', end: 'bottom 55%', onEnter: apply, onEnterBack: apply });
-    kill.push(() => st.kill());
-  });
 
   // Beat loops, only while their chapter is in view (the motion toggle kills them).
   const loop = (trigger, build) => {
@@ -131,4 +128,19 @@ export function setupLight() {
     entries.forEach(e => { if (e.isIntersecting) setMusic(e.target.style.getPropertyValue('--song').trim() || e.target.dataset.colour); });
   }, { rootMargin: '-40% 0px -40% 0px' });
   document.querySelectorAll('[data-song], [data-colour]').forEach(el => io.observe(el));
+}
+
+// Exact values: hover, focus or tap any [data-tip] mark.
+export function setupTips() {
+  const tip = document.createElement('div');
+  tip.className = 'tip'; tip.setAttribute('role', 'status'); tip.hidden = true;
+  document.body.appendChild(tip);
+  const show = el => { const r = el.getBoundingClientRect(); tip.textContent = el.dataset.tip; tip.style.left = (r.left + r.width / 2) + 'px'; tip.style.top = Math.max(8, r.top) + 'px'; tip.hidden = false; };
+  const hide = () => { tip.hidden = true; };
+  document.addEventListener('pointerover', e => { const el = e.target.closest('[data-tip]'); if (el && e.pointerType === 'mouse') show(el); });
+  document.addEventListener('pointerout', e => { if (e.target.closest('[data-tip]') && e.pointerType === 'mouse') hide(); });
+  document.addEventListener('click', e => { const el = e.target.closest('[data-tip]'); if (el) show(el); else hide(); });
+  document.addEventListener('focusin', e => { const el = e.target.closest('[data-tip]'); if (el) show(el); });
+  document.addEventListener('focusout', e => { if (e.target.closest('[data-tip]')) hide(); });
+  addEventListener('scroll', hide, { passive: true });
 }

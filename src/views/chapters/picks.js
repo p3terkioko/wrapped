@@ -8,14 +8,14 @@ const { hbars } = require('../charts');
 function single(song, { kicker, why, rule }) {
   if (!song) return '';
   return `<article class="single" data-song="${esc(song.id)}"${song.colour ? ` style="--song:${esc(song.colour)}"` : ''}>
-    ${song.image ? `<img class="single__art" src="${artwork(song.image)}" width="640" height="640" alt="Album artwork for ${esc(song.name)} by ${esc(song.artists)}" loading="lazy" decoding="async">` : '<span class="single__art single__art--none"></span>'}
-    <div class="single__body">
+    ${song.image ? `<img class="single__art" src="${artwork(song.image)}" width="300" height="300" alt="Album artwork for ${esc(song.name)} by ${esc(song.artists)}" loading="lazy" decoding="async">` : '<span class="single__art single__art--none"></span>'}
+    <div class="single__meta">
       <h3 class="single__name"><a href="${spotifyTrack(song.id)}">${esc(song.name)}</a></h3>
       <p class="single__artist">${esc(song.artists)}${song.year ? ' · ' + song.year : ''}</p>
-      <p class="single__why"><em>${esc(kicker)}.</em> ${why}</p>
-      <button type="button" class="btn btn--small" data-play="${esc(song.id)}" aria-label="Play ${esc(song.name)} here">Play here</button>
-      ${rule ? `<p class="caption">${esc(rule)}</p>` : ''}
     </div>
+    <p class="single__why"><em>${esc(kicker)}.</em> ${why}</p>
+    <button type="button" class="btn btn--small single__play" data-play="${esc(song.id)}" aria-label="Play ${esc(song.name)} here">Play here</button>
+    ${rule ? `<p class="caption single__rule">${esc(rule)}</p>` : ''}
   </article>`;
 }
 
@@ -76,7 +76,7 @@ function renderCredits(film) {
   <p class="lede"><span class="n">${fmt(t.entries)}</span> songs and counting. The record's still spinning. What's the next one?</p>
   <div class="actions">
     <a class="btn btn--primary" href="${esc(film.playlist.url || 'https://open.spotify.com/playlist/' + film.playlist.id)}" rel="noopener">Add a song ↗</a>
-    <button type="button" class="btn" data-story-open>Play the 12-slide story</button>
+    <a class="btn" href="#opening" data-find-open>Find yourself</a>
     <button type="button" class="btn" data-share>Share</button>
   </div>
   <p class="attribution"><img src="/img/spotify-logo.png" width="140" height="38" alt="Spotify"> <span>Songs, artwork and data from Spotify; audio features from ReccoBeats, Deezer and essentia.js; origins from MusicBrainz; lyric counts from LRCLIB. Numbers as of ${esc(date(film.generatedAt))}.</span></p>

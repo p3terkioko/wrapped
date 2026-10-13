@@ -17,7 +17,7 @@ const imageHash = url => (url ? String(url).split('/image/')[1] || url : null);
 function songRef(t, extra = {}) {
   return {
     id: t.id, name: t.name, artists: t.artistNames.join(', '), year: t.year,
-    image: imageHash(t.imageUrl), colour: t.colour || null, url: `https://open.spotify.com/track/${t.id}`, ...extra,
+    image: imageHash(t.imageMedium || t.imageUrl), colour: t.colour || null, url: `https://open.spotify.com/track/${t.id}`, ...extra,
   };
 }
 

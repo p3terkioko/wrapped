@@ -50,6 +50,7 @@ model Track {
   albumName        String?
   albumType        String?
   imageUrl         String? // largest artwork
+  imageMedium      String? // ~300 px artwork, used for cards
   imageSmall       String? // smallest artwork (used for colour extraction)
   releaseDate      String?
   releasePrecision String?

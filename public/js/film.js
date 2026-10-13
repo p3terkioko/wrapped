@@ -2,31 +2,44 @@
 // With motion off (reduced-motion preference or the toggle), this only wires
 // up the controls and the cover-art mosaic; the page is already complete.
 
-import { BEAT, motionOn, setupToggle, startVelocity, stopVelocity, velocity, clamp } from './motion.js';
+import { BEAT, motionOn, setupToggle, startVelocity, stopVelocity } from './motion.js';
 import * as record from './record.js';
 import { createMosaic } from './mosaic.js';
 import { setupGrowth } from './scenes/growth.js';
 import { setupRuntime } from './scenes/runtime.js';
 import { setupReveals } from './scenes/reveals.js';
 import { setupRace } from './scenes/race.js';
-import { setupChapters, setupPlay, setupLight } from './scenes/chapters.js';
+import { setupChapters, setupPlay, setupLight, setupTips } from './scenes/chapters.js';
 import { setupFind } from './find.js';
 import { setupPulse } from './pulse.js';
 import { setupShare } from './share.js';
 
 let teardown = [];
+let running = false;
 setupPlay();
-const mosaic = createMosaic();
-mosaic.setDay(Infinity, 0);
+// The mosaic (and its covers) is created when the growth chapter comes within
+// a screen and a half; until then the growth scene draws into a stand-in.
+let realMosaic = null;
+let pendingDay = [Infinity, 0], pendingHighlight = null;
+const mosaic = {
+  setDay(d, g) { pendingDay = [d, g]; realMosaic?.setDay(d, g); },
+  highlight(set) { pendingHighlight = set; realMosaic?.highlight(set); },
+};
 
 setupFind(mosaic);
+setupTips();
 setupShare();
 setupLight();
 setupPulse();
 
-// Covers load when the mosaic is about a screen away, motion or not.
+// Covers load when the mosaic is about a screen and a half away, motion or not.
 new IntersectionObserver((entries, io) => {
-  if (entries.some(e => e.isIntersecting)) { io.disconnect(); mosaic.loadArt(); }
+  if (!entries.some(e => e.isIntersecting)) return;
+  io.disconnect();
+  realMosaic = createMosaic();
+  realMosaic.setDay(...pendingDay);
+  if (pendingHighlight) realMosaic.highlight(pendingHighlight);
+  realMosaic.loadArt();
 }, { rootMargin: '150% 0px' }).observe(document.getElementById('mosaic'));
 
 // SplitText masks clip to the glyph box, which cuts italic overhangs and
@@ -38,20 +51,6 @@ function roomyMasks(split) {
     m.style.margin = '-0.14em -0.22em -0.24em -0.06em';
   });
   return split;
-}
-
-function splitHeadlines() {
-  const { gsap, SplitText } = window;
-  const splits = [];
-  document.querySelectorAll('.headline[data-split]').forEach(h => {
-    const split = roomyMasks(SplitText.create(h, { type: 'words', mask: 'words', aria: 'auto' }));
-    splits.push(split);
-    gsap.from(split.words, {
-      yPercent: 110, duration: BEAT * 1.5, ease: 'expo.out', stagger: BEAT / 8,
-      scrollTrigger: { trigger: h, start: 'top 82%', toggleActions: 'play none none reverse' },
-    });
-  });
-  return () => splits.forEach(s => s.revert());
 }
 
 // The title sequence (about two bars): the room warms, the record spins up,
@@ -82,24 +81,11 @@ function recordTravel() {
   return () => { a.kill(); b.kill(); record.armMix.intro = 1; record.armMix.lift = 0; record.armMix.drop = 0; };
 }
 
-// Headlines lean very slightly with fast scrolling (±3°), never body copy.
-function velocitySkew() {
-  const { gsap } = window;
-  const heads = [...document.querySelectorAll('.headline')];
-  const setters = heads.map(h => gsap.quickTo(h, 'skewY', { duration: BEAT / 2, ease: 'power3.out' }));
-  let last = 0;
-  const fn = () => {
-    const k = Math.round(clamp(-velocity.smooth / 1200, -3, 3) * 20) / 20;
-    if (k === last) return;
-    last = k;
-    setters.forEach(s => s(k));
-  };
-  gsap.ticker.add(fn);
-  return () => { gsap.ticker.remove(fn); gsap.set(heads, { clearProps: 'transform' }); };
-}
+const yieldToBrowser = () => (window.scheduler?.yield ? window.scheduler.yield() : new Promise(r => setTimeout(r, 0)));
 
-function start({ intro = true } = {}) {
+async function start({ intro = true } = {}) {
   const { gsap, ScrollTrigger } = window;
+  running = true;
   gsap.registerPlugin(ScrollTrigger, window.SplitText);
   // Mobile address bars resizing the viewport must not re-layout pins mid-scroll.
   ScrollTrigger.config({ ignoreMobileResize: true });
@@ -108,16 +94,15 @@ function start({ intro = true } = {}) {
   teardown.push(stopVelocity);
   const playIntro = intro && scrollY < innerHeight * 0.5;
   if (playIntro) teardown.push(openingSequence());
-  teardown.push(splitHeadlines());
-  teardown.push(setupGrowth(mosaic));
-  teardown.push(setupRuntime());
-  teardown.push(setupRace());
-  teardown.push(setupReveals());
-  teardown.push(recordTravel());
-  teardown.push(setupChapters());
-  teardown.push(velocitySkew());
   record.startSpin({ spinUp: playIntro });
   teardown.push(record.stopSpin);
+  // Everything below the opening is set up in small steps, so no single task
+  // blocks input for long. Pins are created first, in page order.
+  for (const step of [() => setupGrowth(mosaic), setupRuntime, setupRace, setupReveals, recordTravel, setupChapters]) {
+    await yieldToBrowser();
+    if (!running) return;
+    teardown.push(step());
+  }
   // Triggers were created by scene, not in page order; sort them so each is
   // measured after the pins above it, then measure again once fonts swap in.
   ScrollTrigger.sort();
@@ -126,6 +111,7 @@ function start({ intro = true } = {}) {
 }
 
 function stop() {
+  running = false;
   teardown.reverse().forEach(fn => { try { fn(); } catch (e) { /* keep going */ } });
   teardown = [];
   window.ScrollTrigger?.getAll().forEach(t => t.kill(true));

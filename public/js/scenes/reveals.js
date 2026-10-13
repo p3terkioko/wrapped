@@ -1,44 +1,37 @@
-// Reveals driven by data-reveal attributes on server-rendered charts.
-// Each plays when its element is 80% up the viewport (≤ 1.5 beats) and
-// reverses when scrolled back above. Bars always grow from zero.
+// Reveals: CSS transitions switched on by an IntersectionObserver, so nothing
+// is measured or tweened at load. An element gets .is-in when it is 82% up the
+// viewport and loses it when it drops back below (reversible). Bars grow from
+// zero. Staggers come from --i, set once here. Without this script (or with
+// motion off) the reveal rules don't apply and everything shows final state.
 
-import { BEAT } from '../motion.js';
+const SELECTORS = {
+  bars: '.bar',
+  cols: '.col',
+  fade: ':scope > *',
+  stack: '.stack__part',
+  wheel: '.kw-seg',
+  clock: '.clock-bar',
+  dots: '.moodmap__dots',
+};
 
 export function setupReveals() {
-  const { gsap } = window;
-  const tweens = [];
-  const st = el => ({ trigger: el, start: 'top 82%', toggleActions: 'play none none reverse' });
-  const add = t => { tweens.push(t); return t; };
-
-  document.querySelectorAll('[data-reveal="bars"]').forEach(el => {
-    add(gsap.from(el.querySelectorAll('.bar'), { scaleX: 0, duration: BEAT * 1.5, ease: 'power3.out', stagger: BEAT / 4, scrollTrigger: st(el) }));
+  const html = document.documentElement;
+  const els = [...document.querySelectorAll('[data-reveal], .headline[data-split]')];
+  els.forEach(el => {
+    const sel = SELECTORS[el.dataset.reveal];
+    if (!sel) return;
+    el.querySelectorAll(sel).forEach((kid, i) => kid.style.setProperty('--i', i));
   });
-  document.querySelectorAll('[data-reveal="cols"]').forEach(el => {
-    const cols = el.querySelectorAll('.col');
-    add(gsap.from(cols, { scaleY: 0, duration: BEAT * 1.5, ease: 'power3.out', stagger: { amount: BEAT, from: 'start' }, scrollTrigger: st(el) }));
-  });
-  document.querySelectorAll('[data-reveal="fade"]').forEach(el => {
-    const kids = el.children.length > 1 ? el.children : [el];
-    add(gsap.from(kids, { y: 16, opacity: 0, duration: BEAT * 1.2, ease: 'expo.out', stagger: BEAT / 4, scrollTrigger: st(el) }));
-  });
-  document.querySelectorAll('[data-reveal="stack"]').forEach(el => {
-    add(gsap.from(el.querySelectorAll('.stack__part'), { scaleX: 0, duration: BEAT, ease: 'power3.out', stagger: BEAT / 2, scrollTrigger: st(el) }));
-  });
-  document.querySelectorAll('[data-reveal="wheel"]').forEach(el => {
-    add(gsap.from(el.querySelectorAll('.kw-seg'), { opacity: 0, duration: BEAT, ease: 'power2.out', stagger: { amount: BEAT * 1.5, from: 0 }, scrollTrigger: st(el) }));
-  });
-  document.querySelectorAll('[data-reveal="clock"]').forEach(el => {
-    add(gsap.from(el.querySelectorAll('.clock-bar'), { scale: 0.3, opacity: 0, svgOrigin: '0 0', duration: BEAT * 1.5, ease: 'power3.out', stagger: { amount: BEAT, from: 0 }, scrollTrigger: st(el) }));
-  });
-  // Mood map: dots appear from the middle outward through a growing circle.
-  document.querySelectorAll('[data-reveal="dots"]').forEach(el => {
-    const NS = 'http://www.w3.org/2000/svg';
-    const clip = document.createElementNS(NS, 'clipPath'); clip.id = 'mood-clip';
-    const c = document.createElementNS(NS, 'circle'); c.setAttribute('cx', 150); c.setAttribute('cy', 150); c.setAttribute('r', 0);
-    clip.appendChild(c); el.appendChild(clip);
-    const dots = el.querySelector('.moodmap__dots'); dots.setAttribute('clip-path', 'url(#mood-clip)');
-    const tw = add(gsap.fromTo(c, { attr: { r: 0 } }, { attr: { r: 230 }, duration: BEAT * 2, ease: 'power2.out', scrollTrigger: st(el) }));
-    tweens.push({ kill: () => { dots.removeAttribute('clip-path'); clip.remove(); tw.kill(); } });
-  });
-  return () => tweens.forEach(t => { t.scrollTrigger?.kill(); t.kill(); });
+  // Anything already on screen starts revealed, so nothing flashes.
+  const vh = innerHeight;
+  els.forEach(el => { if (el.getBoundingClientRect().top < vh * 0.82) el.classList.add('is-in'); });
+  html.classList.add('reveal-ready');
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) e.target.classList.add('is-in');
+      else if (e.boundingClientRect.top > 0) e.target.classList.remove('is-in'); // scrolled back above it
+    });
+  }, { rootMargin: '0px 0px -18% 0px' });
+  els.forEach(el => io.observe(el));
+  return () => { io.disconnect(); html.classList.remove('reveal-ready'); els.forEach(el => el.classList.remove('is-in')); };
 }

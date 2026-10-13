@@ -7,16 +7,33 @@ const { esc, fmt, date, time12, spotifyTrack, artwork } = require('../util');
 
 const COLS = 23;
 
+// The no-script mosaic: each add as a colour tile (its cover's extracted
+// colour, not the artwork), encoded as one small PNG with gaps between tiles.
+// The script draws the real covers over it on a canvas.
+function mosaicPng(colours) {
+  const zlib = require('zlib');
+  const T = 10, G = 1, rows = Math.ceil(colours.length / COLS);
+  const W = COLS * T, H = rows * T;
+  const raw = Buffer.alloc((W * 3 + 1) * H);
+  for (let y = 0; y < H; y++) {
+    raw[y * (W * 3 + 1)] = 0;
+    for (let x = 0; x < W; x++) {
+      const i = Math.floor(y / T) * COLS + Math.floor(x / T);
+      const inGap = x % T >= T - G || y % T >= T - G || i >= colours.length;
+      const hex = inGap ? '0e0b09' : (colours[i] || '3a332c');
+      const o = y * (W * 3 + 1) + 1 + x * 3;
+      raw[o] = parseInt(hex.slice(0, 2), 16); raw[o + 1] = parseInt(hex.slice(2, 4), 16); raw[o + 2] = parseInt(hex.slice(4, 6), 16);
+    }
+  }
+  const chunk = (t, d) => { const len = Buffer.alloc(4); len.writeUInt32BE(d.length); const td = Buffer.concat([Buffer.from(t), d]); const crc = Buffer.alloc(4); crc.writeUInt32BE(zlib.crc32(td) >>> 0); return Buffer.concat([len, td, crc]); };
+  const ihdr = Buffer.alloc(13); ihdr.writeUInt32BE(W, 0); ihdr.writeUInt32BE(H, 4); ihdr[8] = 8; ihdr[9] = 2;
+  const png = Buffer.concat([Buffer.from([137, 80, 78, 71, 13, 10, 26, 10]), chunk('IHDR', ihdr), chunk('IDAT', zlib.deflateSync(raw, { level: 9 })), chunk('IEND', Buffer.alloc(0))]);
+  return { uri: 'data:image/png;base64,' + png.toString('base64'), rows };
+}
+
 function mosaicSvg(colours) {
-  const n = colours.length;
-  const rows = Math.ceil(n / COLS);
-  const gap = 0.14;
-  let rects = '';
-  colours.forEach((c, i) => {
-    const x = (i % COLS) + gap / 2, y = Math.floor(i / COLS) + gap / 2;
-    rects += `<rect x="${x}" y="${y}" width="${1 - gap}" height="${1 - gap}" rx=".08" fill="${c ? '#' + c : 'rgba(243,233,214,.22)'}"/>`;
-  });
-  return `<svg viewBox="0 0 ${COLS} ${rows}" role="img" aria-labelledby="mosaic-title" preserveAspectRatio="xMinYMin meet"><title id="mosaic-title">${fmt(n)} tiles, one per song added, in the order they were added, each coloured by its album artwork.</title>${rects}</svg>`;
+  const { uri, rows } = mosaicPng(colours);
+  return `<svg viewBox="0 0 ${COLS} ${rows}" role="img" aria-labelledby="mosaic-title" preserveAspectRatio="xMinYMin meet"><title id="mosaic-title">${fmt(colours.length)} tiles, one per song added, in the order they were added, each in the main colour of its album artwork.</title><image href="${uri}" x="0" y="0" width="${COLS}" height="${rows}" preserveAspectRatio="none"/></svg>`;
 }
 
 function growthSvg(film) {
@@ -53,7 +70,7 @@ function growthSvg(film) {
 </svg>`;
 }
 
-function renderOpening(film, { storyAvailable = true } = {}) {
+function renderOpening(film) {
   const t = film.totals;
   const p = film.pulse;
   const people = film.people.ranking;
@@ -64,9 +81,8 @@ function renderOpening(film, { storyAvailable = true } = {}) {
     <p class="lede"><span class="n">${fmt(t.entries)}</span> songs, pressed by <span class="n">${fmt(t.contributors)}</span> people of the KamiLimu community since ${esc(date(t.firstAddedAt))}.</p>
     <p class="label-strip"><span>Side A</span><span>${rt.hours}h ${String(rt.minutes).padStart(2, '0')}m</span><span>${fmt(t.artists)} artists</span><span>${fmt(t.genres)} genres</span><span>45 rpm</span></p>
     <div class="actions">
-      ${storyAvailable ? '<button type="button" class="btn btn--primary" id="view-story-btn" data-story-open>Play the 12-slide story</button>' : ''}
       <details class="find" id="find">
-        <summary class="btn">Find yourself</summary>
+        <summary class="btn btn--primary">Find yourself</summary>
         <ul class="find__list">${people.map(r => `<li><a href="/?me=${encodeURIComponent(r.id)}" data-me="${esc(r.id)}">${esc(r.name)} <span class="mono">${fmt(r.n)}</span></a></li>`).join('')}</ul>
       </details>
       <a class="btn" href="${esc(film.playlist.url || 'https://open.spotify.com/playlist/' + film.playlist.id)}" rel="noopener">Add a song ↗</a>
@@ -86,7 +102,7 @@ function renderFirst(film) {
   <div class="first__grid">
     <h2 class="headline" id="first-h" data-split>It started with <span class="n">one</span> song.</h2>
     <figure class="song-card">
-      ${first.song.image ? `<img src="${artwork(first.song.image)}" width="640" height="640" alt="Album artwork for ${esc(first.song.name)} by ${esc(first.song.artists)}" loading="lazy" decoding="async">` : ''}
+      ${first.song.image ? `<img src="${artwork(first.song.image)}" width="300" height="300" alt="Album artwork for ${esc(first.song.name)} by ${esc(first.song.artists)}" loading="lazy" decoding="async">` : ''}
       <figcaption>
         <a class="song-card__name" href="${spotifyTrack(first.song.id)}">${esc(first.song.name)}</a>
         <span class="song-card__artist">${esc(first.song.artists)}${first.song.year ? ' · ' + first.song.year : ''}</span>

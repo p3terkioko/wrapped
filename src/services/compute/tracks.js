@@ -25,7 +25,7 @@ function buildTracks(ctx) {
       name: col(t => t.name),
       artists: col(t => t.artistNames.join(', ')),
       year: col(t => t.year),
-      image: col(t => imageHash(t.imageUrl)),
+      image: col(t => imageHash(t.imageMedium || t.imageUrl)),
       small: col(t => imageHash(t.imageSmall)),
       colour: col(t => t.colour ? t.colour.slice(1) : null),
       tempo: col(t => (t.tempo > 0 ? round(t.tempo, 0) : null)),

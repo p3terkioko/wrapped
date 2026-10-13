@@ -22,6 +22,32 @@ const LS = String.fromCharCode(0x2028);
 const PS = String.fromCharCode(0x2029);
 const inlineJson = obj => JSON.stringify(obj).split('<').join(BS + 'u003c').split(LS).join(BS + 'u2028').split(PS).join(BS + 'u2029');
 
+// Headlines arrive pre-split into words (each in a clipping mask with its
+// stagger index), so the entrance is pure CSS: no splitting or tweening at
+// runtime. The heading keeps its plain text as its accessible name.
+function splitHeadlines(html) {
+  return html.replace(/<h2 class="headline"([^>]*) data-split>([\s\S]*?)<\/h2>/g, (m, attrs, inner) => {
+    let i = 0;
+    const words = inner.replace(/(<[^>]+>)|([^<]+)/g, (t, tag, text) => tag || text.replace(/\S+/g, w => `<span class="w" aria-hidden="true"><span class="wi" style="--i:${i++}">${w}</span></span>`));
+    const label = inner.replace(/<[^>]+>/g, '').replace(/\s+/g, ' ').trim().replace(/"/g, '&quot;');
+    return `<h2 class="headline"${attrs} data-split aria-label="${label}">${words}</h2>`;
+  });
+}
+
+// The subset of the film payload the page's scripts read (everything else is
+// already in the HTML). Keeps the inline data small.
+function clientFilm(film) {
+  return {
+    version: film.version, generatedAt: film.generatedAt, beat: film.beat, totals: film.totals, runtime: film.runtime, pulse: film.pulse,
+    opening: { tiles: film.opening.tiles, milestones: film.opening.milestones.map(m => ({ n: m.n, at: m.at, name: m.name, song: { name: m.song.name } })) },
+    people: { ranking: film.people.ranking, race: film.people.race, badges: film.people.badges.map(b => ({ id: b.id, name: b.name, holder: b.holder })) },
+    sound: { families: film.sound.families.map(x => ({ family: x.family, n: x.n })), familyCoverage: film.sound.familyCoverage, tempo: { median: film.sound.tempo.median }, keys: { top: film.sound.keys.top } },
+    rhythm: { peak: film.rhythm.peak },
+    picks: { conversation: film.picks.conversation ? { turns: film.picks.conversation.turns.map(t => ({ by: t.by })) } : null },
+    credits: { roll: film.credits.roll.map(r => ({ id: r.id, name: r.name })) },
+  };
+}
+
 function head(film, { url, me }) {
   const t = film.totals;
   const person = me ? film.people.ranking.find(r => r.id === me) : null;
@@ -54,9 +80,9 @@ ${film.playlist.image ? `<meta property="og:image" content="${esc(film.playlist.
 function renderPage(film, { url = '/', me = null } = {}) {
   const t = film.totals;
   const years = `${new Date(t.firstAddedAt).getUTCFullYear()}–${new Date(t.lastAddedAt).getUTCFullYear()}`;
-  return `${head(film, { url, me })}
+  return splitHeadlines(`${head(film, { url, me })}
 <body>
-<a class="skip" href="#first">Skip to the story of the playlist</a>
+<a class="skip" href="#first">Skip to the film</a>
 <div class="light" aria-hidden="true"></div>
 <div class="grain" aria-hidden="true"></div>
 <div class="vignette" aria-hidden="true"></div>
@@ -85,30 +111,13 @@ ${renderCredits(film)}
 </main>
 <button type="button" class="motion-toggle" id="motion-toggle" aria-pressed="true">Motion</button>
 
-<!-- Story mode (unchanged markup from the old page) -->
-<div id="story-container" class="story-container hidden">
-  <div class="story-progress-track">
-    <div class="story-progress-bar" id="story-progress-bar"></div>
-  </div>
-
-  <div class="story-slides" id="story-slides"></div>
-
-  <div class="story-ui">
-    <button type="button" class="story-nav-text" id="story-prev-btn">← Prev</button>
-    <span class="story-counter" id="story-counter">1 / 12</span>
-    <button type="button" class="story-nav-text primary" id="story-next-btn">Next →</button>
-  </div>
-
-  <button type="button" class="story-close" id="story-exit-btn">✕</button>
-</div>
-<script id="film-data" type="application/json">${inlineJson(film)}</script>
+<script id="film-data" type="application/json">${inlineJson(clientFilm(film))}</script>
 <script defer src="/vendor/gsap-3.15.0/gsap.min.js"></script>
 <script defer src="/vendor/gsap-3.15.0/ScrollTrigger.min.js"></script>
 <script defer src="/vendor/gsap-3.15.0/SplitText.min.js"></script>
 <script type="module" src="/js/film.js?v=${ASSET_VERSION}"></script>
-<script defer src="/story/loader.js?v=${ASSET_VERSION}"></script>
 </body>
-</html>`;
+</html>`);
 }
 
 function renderUnavailable() {

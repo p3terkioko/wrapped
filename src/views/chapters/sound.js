@@ -40,7 +40,7 @@ function renderEras(film) {
   const y0 = s.years[0].year, y1 = s.years[s.years.length - 1].year;
   const byYear = Object.fromEntries(s.years.map(y => [y.year, y.n]));
   const cols = [];
-  for (let y = y0; y <= y1; y++) cols.push({ label: y % 10 === 0 ? String(y) : '', value: byYear[y] || 0, highlight: y >= 2020, tick: y % 10 === 0 });
+  for (let y = y0; y <= y1; y++) cols.push({ label: y % 10 === 0 ? String(y) : '', tipLabel: String(y), value: byYear[y] || 0, highlight: y >= 2020, tick: y % 10 === 0 });
   const p = film.picks;
   return `<section class="chapter eras" id="eras" aria-labelledby="eras-h" data-chapter="eras" data-record="eras">
   <div class="chapter__head">
@@ -90,7 +90,7 @@ function renderMood(film) {
 
 function renderTempo(film) {
   const t = film.sound.tempo;
-  const cols = t.bins.map(b => ({ label: b.from % 20 === 0 ? String(b.from) : '', value: b.n, highlight: t.median >= b.from && t.median < b.to, tick: b.from % 20 === 0 }));
+  const cols = t.bins.map(b => ({ label: b.from % 20 === 0 ? String(b.from) : '', tipLabel: `${b.from}–${b.to} BPM`, value: b.n, highlight: t.median >= b.from && t.median < b.to, tick: b.from % 20 === 0 }));
   const src = t.sources;
   return `<section class="chapter tempo" id="tempo" aria-labelledby="tempo-h" data-chapter="tempo" data-record="tempo">
   <div class="chapter__head">

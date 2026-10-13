@@ -28,7 +28,14 @@ export function setupFind(mosaic) {
   document.addEventListener('click', e => {
     const a = e.target.closest('a[data-me]');
     if (a) { e.preventDefault(); choose(a.dataset.me); a.closest('details')?.removeAttribute('open'); return; }
-    if (e.target.closest('[data-me-clear]')) { e.preventDefault(); choose(null); }
+    if (e.target.closest('[data-me-clear]')) { e.preventDefault(); choose(null); return; }
+    if (e.target.closest('[data-find-open]')) {
+      e.preventDefault();
+      const d = document.getElementById('find');
+      d.open = true;
+      d.scrollIntoView({ block: 'center' });
+      d.querySelector('summary')?.focus({ preventScroll: true });
+    }
   });
   let initial = document.getElementById('dashboard').dataset.me || null;
   if (!initial) { try { initial = localStorage.getItem('kle-me'); } catch { /* ignore */ } }

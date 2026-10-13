@@ -18,23 +18,21 @@ ${rows.map(r => `  <li class="hbar${r.highlight ? ' is-lead' : ''}${r.you ? ' is
 </ol>${caption ? `<p class="caption">${caption}</p>` : ''}`;
 }
 
-// Vertical column chart as SVG with an accessible table fallback.
+// Vertical columns as HTML, so labels keep their real size at any width
+// (an SVG stretched to the container distorts text). Each column can be
+// focused or tapped to read its exact value.
 // cols: [{ label, value, highlight?, tick? }]
-function columns(cols, { height = 180, title, desc, labelEvery = 1, id = '', valueLabels = false } = {}) {
-  const W = Math.max(cols.length * 14, 300), H = height, B = 22, T = valueLabels ? 18 : 6;
+function columns(cols, { title, desc, id = '', valueLabels = false, height = 200, unit = 'songs' } = {}) {
   const max = Math.max(...cols.map(c => c.value), 1);
-  const bw = W / cols.length;
-  const bars = cols.map((c, i) => {
-    const h = ((H - B - T) * c.value) / max;
-    const x = i * bw + bw * 0.12, w = bw * 0.76;
-    return `<rect class="col${c.highlight ? ' is-lead' : ''}" x="${x.toFixed(1)}" y="${(H - B - h).toFixed(1)}" width="${w.toFixed(1)}" height="${h.toFixed(1)}" rx="1"><title>${esc(c.label)}: ${fmt(c.value)}</title></rect>` +
-      (valueLabels && c.value ? `<text class="col-v" x="${(x + w / 2).toFixed(1)}" y="${(H - B - h - 5).toFixed(1)}" text-anchor="middle">${fmt(c.value)}</text>` : '') +
-      ((i % labelEvery === 0 || c.tick) && c.label ? `<text class="axis" x="${(x + w / 2).toFixed(1)}" y="${H - 6}" text-anchor="middle">${esc(c.label)}</text>` : '');
+  const plot = cols.map(c => {
+    const tip = `${c.tipLabel || c.label}: ${fmt(c.value)} ${unit}`;
+    return `<span class="colchart__c${c.highlight ? ' is-lead' : ''}" tabindex="0" data-tip="${esc(tip)}">${valueLabels ? `<span class="colchart__v">${c.value ? fmt(c.value) : ''}</span>` : ''}<span class="col" style="--h:${((c.value / max) * 100).toFixed(2)}%"></span></span>`;
   }).join('');
-  return `<svg class="columns"${id ? ` id="${esc(id)}"` : ''} viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-labelledby="${id}-t ${id}-d" data-reveal="cols">
-  <title id="${id}-t">${esc(title)}</title><desc id="${id}-d">${esc(desc)}</desc>
-  <line class="baseline" x1="0" x2="${W}" y1="${H - B}" y2="${H - B}"/>${bars}
-</svg>`;
+  const axis = cols.map(c => `<span>${esc(c.label || '')}</span>`).join('');
+  return `<figure class="colchart"${id ? ` id="${esc(id)}"` : ''} style="--plot-h:${height}px" data-reveal="cols">
+  <div class="colchart__plot" role="img" aria-label="${esc(title)}. ${esc(desc)}">${plot}</div>
+  <div class="colchart__axis" aria-hidden="true">${axis}</div>
+</figure>`;
 }
 
 // A small two-ring glyph whose overlap reflects a Jaccard similarity.
