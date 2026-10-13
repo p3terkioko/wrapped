@@ -182,7 +182,7 @@ html.motion-off .scroll-cue i::after { animation: none; transform: scaleY(1); }
 .song-card__artist { font: 400 0.8rem/1.4 var(--data); color: var(--cream-3); }
 .first__note { font-size: clamp(1.1rem, 1.6vw, 1.3rem); }
 @media (min-width: 760px) {
-  .first__grid { grid-template-columns: auto minmax(0, 1fr); grid-template-areas: 'card head' 'card note'; column-gap: 56px; max-width: 58%; }
+  .first__grid { grid-template-columns: minmax(220px, 300px) minmax(0, 34rem); grid-template-areas: 'card head' 'card note'; column-gap: 56px; max-width: 64rem; }
   .first__grid .headline { grid-area: head; align-self: end; }
   .song-card { grid-area: card; }
   .first__note { grid-area: note; align-self: start; }

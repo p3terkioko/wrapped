@@ -154,6 +154,8 @@ function sound(ctx) {
     },
     quadrants: { brightLoud: q(true, true), darkLoud: q(true, false), brightCalm: q(false, true), darkCalm: q(false, false) },
     coverage: { songs: withF.length, of: N },
+    // [positivity 0-100, energy 0-100, artwork colour] per song with features
+    points: withF.map(t => [Math.round(t.valence * 100), Math.round(t.energy * 100), (t.colour || '').replace('#', '')]),
   };
 
   // Language mix from lyric lines (numbers only).
@@ -184,6 +186,11 @@ function sound(ctx) {
     coverage: { songs: withCountry.length, of: N },
     eastAfricanFamily: S.filter(t => t.family === 'East African').length,
   };
+
+  // How well the outside sources cover East African songs specifically.
+  const ea = S.filter(t => t.family === 'East African');
+  language.eastAfrican = { songs: ea.filter(t => t.lyricsKnown).length, of: ea.length };
+  geography.eastAfrican = { songs: ea.filter(t => t.country).length, of: ea.length, kenya: ea.filter(t => t.country === 'KE').length };
 
   return {
     families, familyCoverage: { songs: covered, of: N }, familyOrder: FAMILIES,
@@ -344,6 +351,16 @@ function perfectMix(ctx) {
   };
 }
 
+// Song of the day: chosen by the Nairobi date, the same for everyone that day.
+function songOfDay(ctx, when) {
+  const day = nbo.dayKey(when.getTime());
+  let h = 2166136261;
+  for (const ch of day) { h ^= ch.charCodeAt(0); h = Math.imul(h, 16777619) >>> 0; }
+  const t = ctx.songs[h % ctx.songs.length];
+  const e = ctx.entries.find(x => x.track.songKey === t.songKey);
+  return songRef(t, { day, addedBy: ctx.nameOf(e.addedBy), addedAt: new Date(e.at).toISOString(), family: t.family });
+}
+
 function credits(ctx, stats) {
   return {
     roll: [...stats].sort((a, b) => a.first - b.first).map(c => ({
@@ -370,7 +387,7 @@ function buildFilm(ctx, { generatedAt = new Date() } = {}) {
     people: { ranking: p.ranking, unattributed: p.unattributed, race: p.race, twins: p.twins, badges: p.badges },
     sound: s,
     rhythm: rhythm(ctx),
-    picks: { ...picks(ctx), perfectMix: perfectMix(ctx) },
+    picks: { ...picks(ctx), perfectMix: perfectMix(ctx), songOfDay: songOfDay(ctx, generatedAt) },
     credits: credits(ctx, stats),
     pulse: { at: new Date(last.at).toISOString(), by: last.addedBy, name: ctx.nameOf(last.addedBy), song: songRef(last.track) },
   };

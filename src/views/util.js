@@ -25,12 +25,13 @@ function time12(iso) {
   return `${((h + 11) % 12) + 1}:${String(m).padStart(2, '0')}${h < 12 ? 'am' : 'pm'}`;
 }
 
-// "one in five" style phrasing for a share, only when it is exactly true as
-// "more than one in N" (N = floor(1/share)).
+// "More than one in every N" phrasing, true by construction: share > 1/N
+// exactly when N = ceil(100 / share) (22.1% → "five", since 22.1% > 20%).
 function oneIn(share) {
-  const n = Math.floor(100 / share);
+  const n = Math.ceil(100 / share);
   const words = ['', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
-  return n >= 2 && n <= 10 ? `More than one in every ${words[n]}.` : null;
+  if (n < 2 || n > 10) return null;
+  return 100 / share === n ? `One in every ${words[n]}.` : `More than one in every ${words[n]}.`;
 }
 
 const spotifyTrack = id => `https://open.spotify.com/track/${id}`;

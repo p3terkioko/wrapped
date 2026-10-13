@@ -7,6 +7,10 @@
 const { esc, fmt } = require('./util');
 const { renderRecord } = require('./record');
 const { renderOpening, renderFirst, renderGrowth, renderRuntime } = require('./chapters/opening');
+const { renderPeople, renderRace, renderTwins, renderGreatMinds, renderBadges } = require('./chapters/people');
+const { renderFamilies, renderEras, renderMood, renderTempo, renderKeys, renderLanguage, renderGeography } = require('./chapters/sound');
+const { renderRhythm, renderRhythmTimeline } = require('./chapters/rhythm');
+const { renderPicks, renderCredits } = require('./chapters/picks');
 
 const ASSET_VERSION = '1';
 const FAVICON = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="-50 -50 100 100"><circle r="48" fill="#0e0b09"/><circle r="22" fill="#f3e9d6"/><circle r="9" fill="#0e0b09"/><circle r="4" fill="#e9b44c"/></svg>');
@@ -40,6 +44,7 @@ ${film.playlist.image ? `<meta property="og:image" content="${esc(film.playlist.
 <link rel="preload" href="/fonts/fraunces-800.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="/fonts/fraunces-text.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="/css/film.css?v=${ASSET_VERSION}">
+<link rel="stylesheet" href="/css/chapters.css?v=${ASSET_VERSION}">
 <script>(function(){try{var s=localStorage.getItem('kle-motion'),r=matchMedia('(prefers-reduced-motion: reduce)').matches;if(s==='off'||(s!=='on'&&r))document.documentElement.classList.add('motion-off')}catch(e){}document.documentElement.classList.add('js')})()</script>
 </head>`;
 }
@@ -59,6 +64,22 @@ ${renderOpening(film)}
 ${renderFirst(film)}
 ${renderGrowth(film)}
 ${renderRuntime(film)}
+${renderPeople(film)}
+${renderRace(film)}
+${renderTwins(film)}
+${renderGreatMinds(film)}
+${renderBadges(film)}
+${renderFamilies(film)}
+${renderEras(film)}
+${renderMood(film)}
+${renderTempo(film)}
+${renderKeys(film)}
+${renderLanguage(film)}
+${renderGeography(film)}
+${renderRhythm(film)}
+${renderRhythmTimeline(film)}
+${renderPicks(film)}
+${renderCredits(film)}
 </main>
 <button type="button" class="motion-toggle" id="motion-toggle" aria-pressed="true">Motion</button>
 <script id="film-data" type="application/json">${inlineJson(film)}</script>

@@ -14,11 +14,17 @@ let tickerFn = null;
 
 // Positions are fractions of the viewport (centre of the record) plus a size
 // in px; phone and desktop have their own layouts.
+const CORNER = { desk: { cx: 0.92, cy: 0.15, s: 0.3, o: 0.85 }, phone: { cx: 0.93, cy: 0.07, s: 0.2, o: 0.6 } };
 const ROLES = {
   opening: { desk: { cx: 0.7, cy: 0.5, s: 1, o: 1 }, phone: { cx: 0.62, cy: 0.27, s: 1, o: 1 } },
   first: { desk: { cx: 0.86, cy: 0.52, s: 0.7, o: 0.9 }, phone: { cx: 0.9, cy: 0.13, s: 0.42, o: 0.85 } },
   growth: { desk: { cx: 0.92, cy: 0.84, s: 0.36, o: 0.55 }, phone: { cx: 0.9, cy: 0.07, s: 0.3, o: 0.6 } },
   runtime: { desk: { cx: 0.8, cy: 0.42, s: 0.8, o: 1 }, phone: { cx: 0.5, cy: 0.16, s: 0.62, o: 0.35 } },
+  people: { desk: { cx: 0.84, cy: 0.38, s: 0.62, o: 1 }, phone: { cx: 0.88, cy: 0.1, s: 0.34, o: 0.8 } },
+  families: { desk: { cx: 0.88, cy: 0.42, s: 0.5, o: 0.9 }, phone: CORNER.phone },
+  tempo: { desk: { cx: 0.84, cy: 0.36, s: 0.55, o: 1 }, phone: { cx: 0.88, cy: 0.1, s: 0.3, o: 0.8 } },
+  finale: { desk: { cx: 0.7, cy: 0.5, s: 1, o: 1 }, phone: { cx: 0.62, cy: 0.27, s: 1, o: 1 } },
+  corner: CORNER,
 };
 
 function size() { return el.getBoundingClientRect().width / (state.s || 1); }
@@ -63,6 +69,16 @@ const arm = document.getElementById('tonearm');
 const armAttr = arm ? arm.getAttribute('transform') || '' : '';
 export const armState = { angle: parseFloat(armAttr.slice(armAttr.indexOf('(') + 1)) || 15 };
 export function renderArm() { arm?.setAttribute('transform', `rotate(${armState.angle.toFixed(2)} 112 -100)`); }
+
+// One owner for the arm: a function of scroll position (lift as the first
+// chapter arrives, drop as the finale arrives), scaled by the intro.
+export const armMix = { intro: 1, lift: 0, drop: 0 };
+const easeInOut = t => (t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2);
+export function updateArm() {
+  const onRecord = (1 - easeInOut(armMix.lift)) + easeInOut(armMix.drop);
+  armState.angle = 15 * armMix.intro * Math.min(1, onRecord);
+  renderArm();
+}
 
 export function setLabel({ title, cat }) {
   if (title != null) document.getElementById('label-title').textContent = title;
