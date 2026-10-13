@@ -157,4 +157,17 @@ Decisions:
   3. Load the catalogue and compute the payloads.
   4. Merge to main.
   Merging first would deploy code whose tables don't exist yet, and the site would show "unavailable".
-- **Not yet done:** these steps need production access, which this session's permissions blocked; they are Peter's to run or to allow.
+- **Done 13 Oct 2026 with Peter's go-ahead,** via `scripts/migrate-production.js` (a dry run first, then `--apply`):
+  - **Backup:** `.cache/prod/backup-*.json`, covering playlist_data (1 row) and update_logs (133 rows).
+  - **Schema:** the 11 additive statements were checked against the live database and applied with `prisma db push`.
+  - **Copied from the local copy:** 42 contributors, 494 artists, 487 tracks, 515 entries, and the playlistMeta setting. It held no admin corrections or test events.
+  - **Fresh Spotify sync:** 0 new songs.
+  - **Payloads:** version 42891e69f69c.
+  - **Totals in production:** 515 entries, 485 unique songs, 42 people, 494 artists, all equal to local.
+- The PR merge went out before the migration and had two faults:
+  - `/` hit Vercel's 404, because `/:path*` doesn't match the bare root. Fixed with an explicit `/` rewrite.
+  - The other pages said "being refreshed" until the data landed.
+- **Still Peter's:**
+  - Set `CRON_SECRET` in Vercel; without it the daily refresh is refused.
+  - Set `ADMIN_PASSWORD`; without it `/admin` is disabled.
+  - Apply the Sauti Sol and Mutoriah genre corrections in `/admin`.
