@@ -53,8 +53,11 @@ async function runRefresh(triggeredBy = 'admin', { gapMinutes = 1 } = {}) {
   }
 }
 
-async function recompute(triggeredBy = 'admin') {
+// Admin corrections recompute straight away; the automatic recompute after a
+// deploy passes a gap so it runs once, not on every visit.
+async function recompute(triggeredBy = 'admin', { gapMinutes = 0 } = {}) {
   if (!prisma) throw new AppError(503, 'Database not available');
+  if (gapMinutes && !(await claim(gapMinutes))) throw new AppError(409, 'A refresh is running or ran moments ago.');
   const built = await buildAndStore(prisma);
   await logUpdate('success', `${triggeredBy}: recomputed payload ${built.version}`, null, triggeredBy);
   return built;

@@ -14,6 +14,16 @@ const { FAMILIES } = require('../genres');
 const YEAR_MS = 365.25 * 864e5;
 const imageHash = url => (url ? String(url).split('/image/')[1] || url : null);
 
+// Spotify serves each picture at several sizes under one id. Artist rows stored
+// before we kept the medium size hold the 640 px one; ask for its 320/300 px
+// sibling instead (a third of the weight).
+const MEDIUM_OF = [['ab6761610000e5eb', 'ab67616100005174'], ['ab67616d0000b273', 'ab67616d00001e02']];
+function artistImage(url) {
+  const h = imageHash(url);
+  const m = h && MEDIUM_OF.find(([big]) => h.startsWith(big));
+  return m ? m[1] + h.slice(m[0].length) : h;
+}
+
 function songRef(t, extra = {}) {
   return {
     id: t.id, name: t.name, artists: t.artistNames.join(', '), year: t.year,
@@ -307,7 +317,7 @@ function picks(ctx) {
   } : null;
 
   return {
-    mostPopular: mostPopular ? songRef(mostPopular, { popularity: mostPopular.popularity }) : null,
+    mostPopular: mostPopular ? songRef(mostPopular, { popularity: mostPopular.popularity, addedBy: ctx.nameOf(firstAdd.get(mostPopular.songKey).addedBy) }) : null,
     hiddenGem: hiddenGem ? songRef(hiddenGem, { popularity: hiddenGem.popularity, addedBy: ctx.nameOf(firstAdd.get(hiddenGem.songKey).addedBy) }) : null,
     hiddenGemRule: 'Lowest Spotify popularity among songs added once, with a non-zero score, that were at least six months old when added.',
     deepestCut: deepestCut ? songRef(deepestCut, { followers: followersOf(deepestCut), artist: ctx.artists.get(deepestCut.artistIds[0])?.name, addedBy: ctx.nameOf(firstAdd.get(deepestCut.songKey).addedBy) }) : null,
@@ -384,6 +394,34 @@ function songsOfDays(ctx, when) {
   return out;
 }
 
+// The lineup: every credited artist (features count), ranked by the unique
+// songs they're on, then by how many people added them, then by name.
+function lineup(ctx, n = 10) {
+  const by = new Map();
+  for (const e of ctx.entries) {
+    e.track.artistIds.forEach((id, i) => {
+      let a = by.get(id);
+      if (!a) by.set(id, (a = { id, name: e.track.artistNames[i], songs: new Map(), people: new Set() }));
+      if (!a.songs.has(e.track.songKey)) a.songs.set(e.track.songKey, e.track);
+      if (e.addedBy) a.people.add(e.addedBy);
+    });
+  }
+  const ranked = [...by.values()].sort((a, b) => b.songs.size - a.songs.size || b.people.size - a.people.size || a.name.localeCompare(b.name));
+  return {
+    top: ranked.slice(0, n).map((a, i) => {
+      const ar = ctx.artists.get(a.id);
+      return {
+        id: a.id, name: ar?.name || a.name, songs: a.songs.size, people: a.people.size, adders: [...a.people],
+        image: artistImage(ar?.imageUrl), imageLarge: i < 4 ? imageHash(ar?.imageUrl) : undefined,
+        titles: i === 0 ? [...a.songs.values()].map(t => ({ id: t.id, name: t.name })) : undefined,
+      };
+    }),
+    artists: ranked.length,
+    once: ranked.filter(a => a.songs.size === 1).length,
+    rule: 'Every credited artist counts, features included. Ranked by unique songs, then by how many people added them.',
+  };
+}
+
 function credits(ctx, stats) {
   return {
     roll: [...stats].sort((a, b) => a.first - b.first).map(c => ({
@@ -408,6 +446,7 @@ function buildFilm(ctx, { generatedAt = new Date() } = {}) {
     runtime: runtime(t.runtimeMs),
     opening: opening(ctx),
     people: { ranking: p.ranking, unattributed: p.unattributed, race: p.race, twins: p.twins, badges: p.badges },
+    lineup: lineup(ctx),
     sound: s,
     rhythm: rhythm(ctx),
     picks: { ...picks(ctx), perfectMix: perfectMix(ctx), songOfDay: songOfDay(ctx, generatedAt), songsOfDays: songsOfDays(ctx, generatedAt) },
@@ -417,4 +456,4 @@ function buildFilm(ctx, { generatedAt = new Date() } = {}) {
   return { film, stats, twins: p._twins, badgeList: p._badges };
 }
 
-module.exports = { buildFilm, songRef, runtime, imageHash };
+module.exports = { buildFilm, songRef, runtime, imageHash, artistImage };

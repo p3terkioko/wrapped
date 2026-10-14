@@ -163,6 +163,10 @@ function apply(me, people, tracks) {
   const countries = new Set(mine.map(i => S.country[i]).filter(Boolean));
   if (countries.size) line('geography', `Your songs come from artists in ${countries.size} countr${countries.size === 1 ? 'y' : 'ies'} that the records know.`);
 
+  // Lineup: gold on every top artist you've added.
+  mark(`.artist[data-people~="${CSS.escape(me.id)}"]`);
+  if (me.topArtist) line('lineup', `Your most-added artist: <b>${esc(me.topArtist.name)}</b> (${me.topArtist.n} song${me.topArtist.n === 1 ? '' : 's'}).`);
+
   // Rhythm.
   if (me.favouriteWeekday != null) line('rhythm', `Your favourite day to add a song: <b>${DAYS[me.favouriteWeekday]}</b>.`);
   if (me.favouriteHour != null) line('hours', `Your favourite hour: <b>${hourLabel(me.favouriteHour)}</b>${me.nightShare ? `; ${me.nightShare}% of your songs came in between 10pm and 4am` : ''}.`);

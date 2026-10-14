@@ -2,7 +2,9 @@
    lacquer, cream, vermilion for the selection, gold for "you". */
 
 .crate-page main, .crate-head { position: relative; z-index: 4; }
-.crate-head { padding: 28px var(--gutter) 8px; display: grid; gap: 14px; }
+/* The half record hangs off the right edge on purpose; clip it so the page
+   never scrolls sideways. */
+.crate-head { padding: 28px var(--gutter) 8px; display: grid; gap: 14px; overflow-x: clip; }
 .crate-head__top { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
 .crate-back { font: 400 0.78rem/1 var(--data); letter-spacing: 0.08em; color: var(--cream-2); text-decoration: none; }
 .crate-back:hover { color: var(--cream); }
@@ -37,13 +39,16 @@ html:not(.motion-off) .crate-disc.is-spinning { animation: crate-spin calc(60s /
 .crate-stats { margin: 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(min(46%, 150px), 1fr)); gap: 18px 28px; padding: 22px 0; border-top: 1px solid var(--hair); border-bottom: 1px solid var(--hair); }
 .crate-stats > div { display: grid; gap: 4px; }
 .crate-stats dt { order: 2; font: 400 0.72rem/1.2 var(--data); letter-spacing: 0.1em; text-transform: uppercase; color: var(--cream-3); }
-.crate-stats dd { order: 1; margin: 0; font: 800 clamp(2rem, 4.6vw, 3.6rem)/1 var(--display); font-variation-settings: 'SOFT' 100, 'WONK' 1; font-variant-numeric: tabular-nums; }
+.crate-stats dd { order: 1; margin: 0; white-space: nowrap; font: 800 clamp(2rem, 4.6vw, 3.6rem)/1 var(--display); font-variation-settings: 'SOFT' 100, 'WONK' 1; font-variant-numeric: tabular-nums; }
 .crate-stats dd.is-filtered { color: var(--vermilion); }
 
 /* Panels: deliberately different sizes, tracklist as the centrepiece. */
 .crate-grid { display: grid; gap: 22px; grid-template-columns: minmax(0, 1fr); }
-.panel { display: grid; gap: 10px; align-content: start; padding: 20px; border: 1px solid var(--hair); border-radius: 18px; background: linear-gradient(170deg, rgba(243, 233, 214, 0.035), transparent 70%); min-width: 0; }
-.panel__h { margin: 0; font: 400 0.74rem/1 var(--data); letter-spacing: 0.14em; text-transform: uppercase; color: var(--cream-3); }
+.panel { display: grid; grid-template-columns: minmax(0, 1fr); gap: 10px; align-content: start; padding: 20px; border: 1px solid var(--hair); border-radius: 18px; background: linear-gradient(170deg, rgba(243, 233, 214, 0.035), transparent 70%); min-width: 0; }
+/* No eyebrow labels: each panel's line already says what it shows, so the
+   panel names are for screen readers only. The tracklist keeps a real title. */
+.panel__h { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+#tracklist-h { position: static; width: auto; height: auto; margin: 0; overflow: visible; clip: auto; white-space: normal; font: 800 clamp(1.6rem, 3vw, 2.2rem)/1 var(--display); letter-spacing: -0.02em; color: var(--cream); }
 .panel__line { margin: 0 0 4px; font: 600 clamp(1.15rem, 1.8vw, 1.45rem)/1.2 var(--display); font-style: italic; color: var(--cream); }
 .panel__line .n { color: var(--vermilion); }
 .panel__body { min-width: 0; }
@@ -55,6 +60,7 @@ html:not(.motion-off) .crate-disc.is-spinning { animation: crate-spin calc(60s /
   .panel--decades { grid-column: span 4; }
   .panel--weekday { grid-column: span 4; }
   .panel--months { grid-column: span 12; }
+  .panel--artists { grid-column: span 12; }
   .panel--hour { grid-column: span 6; }
   .panel--mood { grid-column: span 3; }
   .panel--keys { grid-column: span 3; }
@@ -62,6 +68,25 @@ html:not(.motion-off) .crate-disc.is-spinning { animation: crate-spin calc(60s /
 }
 
 /* Clickable bars */
+/* Artists: Spotify pictures shown whole; the frame sits outside the picture. */
+/* Phones and tablets: one swipeable row; desktop: a 12-wide grid. */
+.arts { list-style: none; margin: 0; padding: 0 0 10px; display: grid; gap: 12px; grid-auto-flow: column; grid-auto-columns: 108px; overflow-x: auto; overscroll-behavior-x: contain; scroll-snap-type: x proximity; }
+.art { scroll-snap-align: start; }
+@media (min-width: 900px) { .arts { grid-auto-flow: row; grid-template-columns: repeat(12, minmax(0, 1fr)); gap: 16px 12px; overflow: visible; padding-bottom: 0; } }
+.art { display: grid; gap: 2px; align-content: start; min-width: 0; }
+.art button { display: grid; gap: 6px; width: 100%; padding: 0; border: 0; background: none; color: var(--cream-2); text-align: left; cursor: pointer; font: 400 0.76rem/1.25 var(--data); }
+.art img, .art__none { display: block; width: 100%; height: auto; border-radius: 4px; background: rgba(243, 233, 214, 0.06); box-shadow: 0 0 0 0 transparent; transition: box-shadow 0.2s; }
+.art__none { aspect-ratio: 1; display: grid; place-items: center; font: 800 1.4rem/1 var(--display); color: var(--cream-3); }
+.art__name { color: var(--cream); font: 600 0.92rem/1.2 var(--display); font-style: italic; overflow-wrap: anywhere; }
+.art__n { color: var(--cream-3); font-variant-numeric: tabular-nums; }
+.art button:focus-visible img { box-shadow: 0 0 0 2px var(--cream-2); }
+@media (hover: hover) { .art button:hover img { box-shadow: 0 0 0 2px var(--cream-2); } }
+.art button[aria-pressed='true'] img, .art button[aria-pressed='true'] .art__none { box-shadow: 0 0 0 3px var(--vermilion); }
+.art button[aria-pressed='true'] .art__name { color: var(--vermilion); }
+.art--zero { opacity: 0.45; }
+.art__out { justify-self: start; font: 400 0.66rem/1.6 var(--data); letter-spacing: 0.04em; color: var(--cream-3); text-decoration: none; }
+.art__out:hover { color: var(--cream); }
+
 .picker { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
 .pick { display: grid; grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: 'label value' 'track track'; gap: 4px 10px; width: 100%; padding: 6px 8px; border: 0; border-radius: 10px; background: transparent; color: var(--cream-2); text-align: left; cursor: pointer; font: 400 0.82rem/1.25 var(--data); }
 .pick:hover, .pick:focus-visible { background: rgba(243, 233, 214, 0.05); color: var(--cream); }

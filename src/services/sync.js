@@ -54,12 +54,18 @@ async function storePlaylist(prisma, playlistId, items, { log = () => {} } = {})
   return { entries: usable.length, newTrackIds: fresh.map(r => r.id) };
 }
 
+// The artist picture closest to 320 px (shown at up to ~300 px), else the largest.
+function artistPicture(images = []) {
+  const imgs = images.slice().sort((a, b) => (b.width || 0) - (a.width || 0));
+  return (imgs.find(i => i.width && i.width <= 400 && i.width >= 200) || imgs[0])?.url || null;
+}
+
 // Upsert artists given full Spotify artist objects.
 async function storeArtists(prisma, artists) {
   const ops = artists.map(a => prisma.artist.upsert({
     where: { id: a.id },
-    create: { id: a.id, name: a.name, genres: a.genres || [], genresAt: new Date(), popularity: a.popularity ?? null, followers: a.followers?.total ?? null, imageUrl: a.images?.[0]?.url || null },
-    update: { name: a.name, genres: a.genres || [], genresAt: new Date(), popularity: a.popularity ?? null, followers: a.followers?.total ?? null, imageUrl: a.images?.[0]?.url || null },
+    create: { id: a.id, name: a.name, genres: a.genres || [], genresAt: new Date(), popularity: a.popularity ?? null, followers: a.followers?.total ?? null, imageUrl: artistPicture(a.images) },
+    update: { name: a.name, genres: a.genres || [], genresAt: new Date(), popularity: a.popularity ?? null, followers: a.followers?.total ?? null, imageUrl: artistPicture(a.images) },
   }));
   for (let i = 0; i < ops.length; i += 200) await prisma.$transaction(ops.slice(i, i + 200));
 }

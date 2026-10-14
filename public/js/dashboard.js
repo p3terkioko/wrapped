@@ -20,14 +20,14 @@ const hourLabel = h => `${((h + 11) % 12) + 1}${h < 12 ? 'am' : 'pm'}`;
 const median = xs => { if (!xs.length) return null; const s = [...xs].sort((a, b) => a - b); const m = s.length >> 1; return s.length % 2 ? s[m] : (s[m - 1] + s[m]) / 2; };
 const motion = () => !document.documentElement.classList.contains('motion-off');
 
-let S, E, P, firstAt, months, me = null;
-const F = { person: null, family: null, decade: null, weekday: null, hour: null, month: null, key: null, mood: null, q: '' };
+let S, E, P, A, firstAt, months, me = null;
+const F = { person: null, artist: null, family: null, decade: null, weekday: null, hour: null, month: null, key: null, mood: null, q: '' };
 let sortBy = 'added', shown = PAGE;
 
 // ── Load and index ───────────────────────────────────────────────────────────
 async function load() {
   const tracks = await (await fetch('/api/public/tracks')).json();
-  S = tracks.songs; P = tracks.people; firstAt = Date.parse(tracks.firstAt);
+  S = tracks.songs; P = tracks.people; A = tracks.artistInfo || {}; firstAt = Date.parse(tracks.firstAt);
   const N = S.id.length;
   S.decade = S.year.map(y => (y ? Math.floor(y / 10) * 10 : null));
   S.mood = S.energy.map((e, i) => (e == null || S.valence[i] == null ? null : (S.valence[i] >= 0.5 ? 'b' : 'd') + (e >= 0.5 ? 'L' : 'C')));
@@ -49,6 +49,7 @@ async function load() {
 function matches(e, skip) {
   const si = e.si;
   if (skip !== 'person' && F.person && e.person !== F.person) return false;
+  if (skip !== 'artist' && F.artist && !(S.artistIds[si] || []).includes(F.artist)) return false;
   if (skip !== 'weekday' && F.weekday != null && e.weekday !== F.weekday) return false;
   if (skip !== 'hour' && F.hour != null && e.hour !== F.hour) return false;
   if (skip !== 'month' && F.month && e.month !== F.month) return false;
@@ -73,7 +74,7 @@ function toggle(dim, value) {
 }
 
 // ── URL ──────────────────────────────────────────────────────────────────────
-const KEYS = ['person', 'family', 'decade', 'weekday', 'hour', 'month', 'key', 'mood', 'q'];
+const KEYS = ['person', 'artist', 'family', 'decade', 'weekday', 'hour', 'month', 'key', 'mood', 'q'];
 function readUrl() {
   const u = new URL(location.href);
   for (const k of KEYS) {
@@ -81,6 +82,7 @@ function readUrl() {
     if (v == null) continue;
     F[k] = ['decade', 'weekday', 'hour'].includes(k) ? Number(v) : v;
   }
+  if (F.artist && !A[F.artist]) F.artist = null; // an artist no longer in the playlist
   $('#crate-q').value = F.q || '';
 }
 function writeUrl() {
@@ -127,6 +129,36 @@ function renderPeople() {
   const total = sel.length;
   if (F.person) { const p = rows.find(r => r.value === F.person); line('p-people', `Showing <span class="n">${esc(p?.label)}</span>: ${fmt(entries().length)} songs.`); }
   else line('p-people', rows[0].n ? `${esc(rows[0].label)} added <span class="n">${fmt(rows[0].n)}</span> of these ${fmt(total)}.` : 'Nobody matches this selection.');
+}
+
+// Artists: every credited artist (features count) by unique songs in the
+// selection, with their Spotify pictures. Tap to filter; the selected artist
+// stays pinned first. Pictures are shown whole, and each links to Spotify.
+function renderArtists() {
+  const host = $('#p-artists-body');
+  const songs = songsOf(entries('artist'));
+  const counts = new Map();
+  songs.forEach(si => (S.artistIds[si] || []).forEach(id => counts.set(id, (counts.get(id) || 0) + 1)));
+  let rows = [...counts].map(([id, n]) => ({ id, n, name: A[id]?.[0] || 'Unknown artist', img: A[id]?.[1] || null }))
+    .sort((a, b) => b.n - a.n || a.name.localeCompare(b.name));
+  const limit = host.dataset.open === '1' ? 36 : 12;
+  let list = rows.slice(0, limit);
+  if (F.artist) {
+    const chosen = rows.find(r => r.id === F.artist) || { id: F.artist, n: 0, name: A[F.artist]?.[0] || 'Unknown artist', img: A[F.artist]?.[1] || null };
+    list = [chosen, ...list.filter(r => r.id !== F.artist)].slice(0, limit);
+  }
+  const initials = s => s.split(/\s+/).map(w => w[0]).filter(Boolean).slice(0, 2).join('').toUpperCase();
+  host.innerHTML = `<ol class="arts">${list.map(r => `<li class="art${r.n ? '' : ' art--zero'}">
+      <button type="button" data-dim="artist" data-value="${esc(r.id)}" aria-pressed="${F.artist === r.id}" aria-label="${esc(r.name)}: ${fmt(r.n)} songs">
+        ${r.img ? `<img src="https://i.scdn.co/image/${r.img}" width="160" height="160" alt="" loading="lazy" decoding="async">` : `<span class="art__none" aria-hidden="true">${esc(initials(r.name))}</span>`}
+        <span class="art__name">${esc(r.name)}</span><span class="art__n">${fmt(r.n)}</span>
+      </button>
+      <a class="art__out" href="https://open.spotify.com/artist/${encodeURIComponent(r.id)}" aria-label="${esc(r.name)} on Spotify">Spotify ↗</a>
+    </li>`).join('')}</ol>${rows.length > 12 ? `<button type="button" class="more" data-more>${host.dataset.open === '1' ? 'Show fewer' : 'Show more'}</button>` : ''}
+    <p class="caption">Unique songs per artist, features included. ${fmt(rows.length)} artists${KEYS.some(k => k !== 'artist' && (k === 'q' ? !!F.q : F[k] != null)) ? ' match the other filters' : ' in all'}.</p>`;
+  const sel = F.artist && rows.find(r => r.id === F.artist);
+  if (sel) line('p-artists', `Showing <span class="n">${esc(sel.name)}</span>: ${fmt(sel.n)} songs.`);
+  else line('p-artists', rows.length ? `${esc(rows[0].name)} leads with <span class="n">${fmt(rows[0].n)}</span> songs.` : 'No artists in this selection.');
 }
 
 function renderFamilies() {
@@ -242,7 +274,7 @@ function renderTracks(sel) {
 function renderChips() {
   const name = id => P.find(p => p.id === id)?.name || id;
   const labels = {
-    person: v => name(v), family: v => v, decade: v => `${v}s`, weekday: v => DAYS[v], hour: v => hourLabel(v),
+    person: v => name(v), artist: v => A[v]?.[0] || 'Artist', family: v => v, decade: v => `${v}s`, weekday: v => DAYS[v], hour: v => hourLabel(v),
     month: v => { const [y, m] = v.split('-').map(Number); return `${MONTHS_LONG[m - 1]} ${y}`; }, key: v => KEY_NAMES[v], mood: v => MOOD[v], q: v => `“${v}”`,
   };
   const active = KEYS.filter(k => (k === 'q' ? !!F.q : F[k] != null));
@@ -258,7 +290,7 @@ function renderChips() {
 
 function render(changed = false) {
   const sel = entries();
-  renderStats(sel); renderPeople(); renderFamilies(); renderMonths(); renderDecades(); renderWeekday(); renderHour(); renderMood(); renderKeys(); renderTracks(sel); renderChips();
+  renderStats(sel); renderPeople(); renderArtists(); renderFamilies(); renderMonths(); renderDecades(); renderWeekday(); renderHour(); renderMood(); renderKeys(); renderTracks(sel); renderChips();
   if (changed) writeUrl();
 }
 

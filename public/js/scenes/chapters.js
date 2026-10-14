@@ -16,7 +16,7 @@ function ringFor(chapter) {
   return 0;
 }
 const LABEL = {
-  opening: 'Side A', first: 'Track 1', people: () => film.people.ranking[0].name, race: 'The race', twins: 'Twins', minds: 'Great minds', badges: 'Badges',
+  opening: 'Side A', first: 'Track 1', people: () => film.people.ranking[0].name, race: 'The race', twins: 'Twins', minds: 'Great minds', badges: 'Badges', lineup: 'Lineup',
   families: () => film.sound.families[0].family, eras: 'The eras', mood: 'The mood', tempo: () => `${Math.round(film.sound.tempo.median)} BPM`, keys: () => film.sound.keys.top.name,
   language: 'Kiswahili', geo: 'Made in', rhythm: () => film.rhythm.peak.name, hours: 'The hours', streaks: 'Binges', picks: 'Today', nostalgia: 'Then & now', convo: 'Replies', credits: 'Credits', finale: 'Side A',
 };

@@ -6,8 +6,8 @@
 const express = require('express');
 const router = express.Router();
 const { prisma } = require('../db/client');
-const { readPayload } = require('../services/payloads');
-const { runRefresh } = require('../services/refresh');
+const { readPayload, COMPUTE_VERSION } = require('../services/payloads');
+const { runRefresh, recompute } = require('../services/refresh');
 const spotify = require('../services/spotify');
 const { env } = require('../config/env');
 const { asyncHandler, AppError } = require('../middleware/errorHandler');
@@ -72,6 +72,9 @@ router.get('/pulse', asyncHandler(async (req, res) => {
   const stale = live && film && (!fallback || Date.parse(live.at) > Date.parse(fallback.at) || live.total < film.data.totals.entries);
   if (stale) {
     try { await runRefresh('new song', { gapMinutes: 10 }); pulse.refreshed = true; } catch { /* locked or failed: the daily run catches up */ }
+  } else if (film && film.data.computeVersion !== COMPUTE_VERSION) {
+    // A deploy changed what the payloads hold: recompute from stored data.
+    try { await recompute('new version', { gapMinutes: 10 }); pulse.refreshed = true; } catch { /* locked or failed */ }
   }
   res.set('Cache-Control', 'public, max-age=60, s-maxage=120, stale-while-revalidate=3600');
   res.json(pulse);

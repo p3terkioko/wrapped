@@ -27,7 +27,7 @@ function renderPicks(film) {
   const sod = p.songsOfDays?.[nbo.dayKey(Date.now())] || p.songOfDay;
   const nost = p.nostalgia;
   const cards = [
-    single(p.mostPopular, { kicker: 'The crowd favourite', why: `The most popular song here on Spotify, at ${fmt(p.mostPopular?.popularity)} out of 100.`, rule: 'Spotify popularity (0–100) reflects recent plays across all of Spotify.' }),
+    single(p.mostPopular, { kicker: 'The crowd favourite', why: `Added by ${esc(p.mostPopular?.addedBy)}. The most popular song here on Spotify, at ${fmt(p.mostPopular?.popularity)} out of 100.`, rule: 'Spotify popularity (0–100) reflects recent plays across all of Spotify.' }),
     single(p.hiddenGem, { kicker: 'The hidden gem', why: `Added by ${esc(p.hiddenGem?.addedBy)}. Spotify popularity ${fmt(p.hiddenGem?.popularity)} out of 100.`, rule: p.hiddenGemRule }),
     single(p.deepestCut, { kicker: 'The deepest cut', why: `${esc(p.deepestCut?.artist)} has ${fmt(p.deepestCut?.followers)} followers on Spotify. Added by ${esc(p.deepestCut?.addedBy)}.`, rule: p.deepestCutRule }),
     single(p.oldest, { kicker: 'The oldest', why: `Released ${esc(String(p.oldest?.released || '').slice(0, 4))}. Added by ${esc(p.oldest?.addedBy)}.` }),
@@ -37,9 +37,9 @@ function renderPicks(film) {
   return `<section class="chapter picks" id="picks" aria-labelledby="picks-h" data-chapter="picks" data-record="picks">
   <div class="chapter__head">
     <h2 class="headline" id="picks-h" data-split>Today's song is <span class="n">${esc(sod.name)}</span>.</h2>
-    <p class="sub">${esc(sod.artists)}${sod.year ? ', ' + sod.year : ''}. Added by ${esc(sod.addedBy)} on ${esc(date(sod.addedAt))}. A new one is picked every day.</p>
+    <p class="sub">${esc(sod.artists)}${sod.year ? ', ' + sod.year : ''}. A new one is picked every day at midnight, Nairobi time.</p>
   </div>
-  ${single(sod, { kicker: 'Song of the day', why: `${sod.family ? esc(sod.family) + ' · ' : ''}one of ${fmt(film.totals.uniqueSongs)} songs.` })}
+  ${single(sod, { kicker: 'Song of the day', why: `Added by <b>${esc(sod.addedBy)}</b> on ${esc(date(sod.addedAt))}. ${sod.family ? esc(sod.family) + ' · ' : ''}one of ${fmt(film.totals.uniqueSongs)} songs.` })}
   <div class="singles">${cards}</div>
 </section>
 <section class="chapter nostalgia" id="nostalgia" aria-labelledby="nost-h" data-chapter="nostalgia" data-record="nostalgia">

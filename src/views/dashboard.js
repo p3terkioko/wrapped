@@ -47,7 +47,7 @@ function renderDashboard(film, { url = '/dashboard' } = {}) {
     <div class="crate-disc" aria-hidden="true"><span class="crate-disc__label" id="crate-label">All</span></div>
   </div>
   <h1 class="crate-title">The Crate</h1>
-  <p class="crate-lede">Every song in KamiLimu.inthe.Ears. Tap any bar, day, hour, key or corner to dig; everything re-cuts to match.</p>
+  <p class="crate-lede">Every song in KamiLimu.inthe.Ears. Tap any artist, bar, day, hour, key or corner to dig; everything re-cuts to match.</p>
   <div class="crate-tools">
     <label class="crate-search"><span class="sr-only">Search songs, artists or people</span><input type="search" id="crate-q" placeholder="Search songs, artists, people" autocomplete="off"></label>
     <button type="button" class="btn btn--small" id="crate-mine" hidden>Only mine</button>
@@ -70,6 +70,7 @@ function renderDashboard(film, { url = '/dashboard' } = {}) {
     ${panel('p-families', 'Genre families', '', 'panel--families')}
     ${panel('p-decades', 'Release decades', '', 'panel--decades')}
     ${panel('p-weekday', 'Day of the week', '', 'panel--weekday')}
+    ${panel('p-artists', 'Artists', '', 'panel--artists')}
     ${panel('p-months', 'Month by month', '', 'panel--months')}
     ${panel('p-hour', 'Hour of the day', '', 'panel--hour')}
     ${panel('p-mood', 'Mood', '', 'panel--mood')}

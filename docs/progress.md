@@ -184,3 +184,15 @@ Decisions:
   - The "breathing" beat loop on its bars is gone: it fought the reveal transition, and each bar trailed it by its own delay.
   - Bars in a chart now grow together.
   - The value labels sit in reserved headroom, so the tallest bar is no longer squeezed.
+- **The lineup** (new chapter after the people chapters): the top 10 artists with their Spotify pictures, laid out as a festival poster.
+  - **Ranking:** every credited artist counts, features included. Ranked by unique songs, then by how many people added them. Mutoriah leads with 13 songs from 8 people.
+  - **Picture rules:** shown whole (never cropped, covered or animated), each linking to the artist on Spotify.
+  - **Picture sizes:** artists are now stored with the ~320 px picture. Older rows hold the 640 px one, and the compute step asks Spotify's CDN for its 320 px sibling. All top-10 URLs were checked.
+  - **Find yourself** turns your artists gold and names your most-added artist.
+- **Crate:** an Artists panel with pictures.
+  - Tapping an artist filters every other panel and goes into the URL; the chosen artist is pinned first.
+  - On phones it's a swipeable row.
+  - Panel titles are now screen-reader only (no eyebrow labels).
+  - The header's half record no longer makes the page scroll sideways.
+- **"Added by"** is now on the song-of-the-day and crowd-favourite cards.
+- **Payloads self-update after a deploy.** `COMPUTE_VERSION` is stored on the film payload; when the live check sees an older number, it recomputes once from stored data (with the same lock).

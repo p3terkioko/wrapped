@@ -150,6 +150,7 @@
 .single__artist { margin: 0; font: 400 0.78rem/1.4 var(--data); color: var(--cream-3); }
 .single__why { grid-area: why; margin: 0; font-size: 0.98rem; color: var(--cream-2); }
 .single__why em { color: var(--gold); }
+.single__why b { color: var(--cream); font-weight: 600; }
 .single__play, .single .embed { grid-area: play; }
 .single__rule { grid-area: rule; font-size: 0.7rem; }
 .btn--small { min-height: 40px; padding: 10px 16px; font-size: 0.72rem; justify-self: start; }
@@ -183,6 +184,34 @@
   .finale { align-content: end; padding-top: 52svh; padding-bottom: 10svh; }
 }
 
+
+/* The lineup: a festival poster. Spotify pictures are shown whole, never
+   cropped, covered or animated; frames sit outside the picture. */
+.lineup > * { width: 100%; max-width: 1100px; }
+.lineup__headliner { display: grid; gap: 18px 36px; align-items: end; }
+@media (min-width: 760px) { .lineup__headliner { grid-template-columns: minmax(0, 360px) minmax(0, 1fr); } }
+.lineup__pic { display: block; border-radius: 4px; }
+.lineup__about { display: grid; gap: 12px; align-content: end; }
+.lineup__name { margin: 0; font: 800 clamp(2.6rem, 7.4vw, 6rem)/0.9 var(--display); letter-spacing: -0.03em; font-variation-settings: 'SOFT' 100, 'WONK' 1; overflow-wrap: anywhere; }
+.lineup__name a { color: inherit; text-decoration: none; }
+.lineup__name a:hover { color: var(--vermilion); }
+.lineup__songs { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 16px; font: 400 0.95rem/1.35 var(--text); }
+.lineup__songs a { color: var(--cream-2); text-decoration: none; border-bottom: 1px solid var(--hair); }
+.lineup__songs a:hover { color: var(--cream); border-color: var(--cream-3); }
+.lineup__list { list-style: none; margin: 0; padding: 0; display: grid; gap: 26px 18px; grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (min-width: 760px) { .lineup__list--small { grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 22px 16px; } }
+.artist__link { display: grid; gap: 8px; align-content: start; color: inherit; text-decoration: none; border-radius: 4px; }
+.artist__link:focus-visible, .lineup__pic:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
+.artist__img { display: block; width: 100%; height: auto; border-radius: 3px; background: rgba(243, 233, 214, 0.06); }
+.artist__img--none { aspect-ratio: 1; display: grid; place-items: center; font: 800 clamp(1.4rem, 3vw, 2.4rem)/1 var(--display); color: var(--cream-3); }
+.artist__name { font: 600 clamp(1.05rem, 1.9vw, 1.45rem)/1.15 var(--display); font-style: italic; overflow-wrap: anywhere; }
+.lineup__list--small .artist__name { font-size: clamp(0.95rem, 1.3vw, 1.08rem); }
+.artist__rank { font: 400 0.72em/1 var(--data); font-style: normal; color: var(--vermilion); vertical-align: 0.15em; }
+.artist__meta { margin: 0; font: 400 0.7rem/1.35 var(--data); letter-spacing: 0.03em; color: var(--cream-3); }
+.lineup__headliner .artist__meta { font-size: 0.8rem; color: var(--cream-2); }
+.artist__link:hover .artist__name { color: var(--vermilion); }
+.artist.is-you .artist__name, .artist.is-you .lineup__name { color: var(--gold); }
+.artist.is-you .artist__img { box-shadow: 0 0 0 2px var(--gold); }
 
 /* Find yourself */
 .you-chip { position: fixed; z-index: 50; left: max(14px, env(safe-area-inset-left)); bottom: max(14px, env(safe-area-inset-bottom)); display: inline-flex; align-items: center; gap: 10px; min-height: 40px; padding: 6px 6px 6px 14px; border: 1px solid var(--gold); border-radius: 999px; background: rgba(14, 11, 9, 0.88); color: var(--cream-2); font: 400 0.72rem/1 var(--data); backdrop-filter: blur(6px); max-width: calc(100vw - 180px); }

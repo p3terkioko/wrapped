@@ -8,11 +8,12 @@ const { esc, fmt } = require('./util');
 const { renderRecord } = require('./record');
 const { renderOpening, renderFirst, renderGrowth, renderRuntime } = require('./chapters/opening');
 const { renderPeople, renderRace, renderTwins, renderGreatMinds, renderBadges } = require('./chapters/people');
+const { renderLineup } = require('./chapters/lineup');
 const { renderFamilies, renderEras, renderMood, renderTempo, renderKeys, renderLanguage, renderGeography } = require('./chapters/sound');
 const { renderRhythm, renderRhythmTimeline } = require('./chapters/rhythm');
 const { renderPicks, renderCredits } = require('./chapters/picks');
 
-const ASSET_VERSION = '2';
+const ASSET_VERSION = '3';
 const FAVICON = 'data:image/svg+xml,' + encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" viewBox="-50 -50 100 100"><circle r="48" fill="#0e0b09"/><circle r="22" fill="#f3e9d6"/><circle r="9" fill="#0e0b09"/><circle r="4" fill="#e9b44c"/></svg>');
 
 // JSON safe to embed in a <script> element: escape "<" and the two line
@@ -97,6 +98,7 @@ ${renderRace(film)}
 ${renderTwins(film)}
 ${renderGreatMinds(film)}
 ${renderBadges(film)}
+${renderLineup(film)}
 ${renderFamilies(film)}
 ${renderEras(film)}
 ${renderMood(film)}

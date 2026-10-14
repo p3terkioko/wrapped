@@ -4,7 +4,7 @@
 // individual songs: the mood map, key wheel, song of the day, Find yourself pins.
 
 const { camelot, round } = require('./stats');
-const { imageHash } = require('./film');
+const { imageHash, artistImage } = require('./film');
 
 function buildTracks(ctx) {
   const people = [...new Set(ctx.entries.map(e => e.addedBy).filter(Boolean))];
@@ -18,8 +18,16 @@ function buildTracks(ctx) {
   const S = ctx.songs;
   const col = f => S.map(f);
   const first = ctx.entries[0].at;
+  // Every credited artist: id → [name, picture hash or null].
+  const artistInfo = {};
+  for (const t of S) t.artistIds.forEach((id, i) => {
+    if (artistInfo[id]) return;
+    const a = ctx.artists.get(id);
+    artistInfo[id] = [a?.name || t.artistNames[i], artistImage(a?.imageUrl)];
+  });
   return {
     people: people.map(id => ({ id, name: ctx.nameOf(id) })),
+    artistInfo,
     songs: {
       id: col(t => t.id),
       name: col(t => t.name),
