@@ -351,14 +351,37 @@ function perfectMix(ctx) {
   };
 }
 
+function hash32(str) {
+  let h = 2166136261;
+  for (const ch of str) { h ^= ch.charCodeAt(0); h = Math.imul(h, 16777619); }
+  h ^= h >>> 16; h = Math.imul(h, 0x85ebca6b); h ^= h >>> 13; h = Math.imul(h, 0xc2b2ae35); h ^= h >>> 16;
+  return h >>> 0;
+}
+
 // Song of the day: chosen by the Nairobi date, the same for everyone that day.
+// Every song scores hash(date + song) and the top score wins, so adding or
+// removing a song only changes a day's pick if that song is (or was) the
+// winner: the pick holds through the day as the playlist grows.
 function songOfDay(ctx, when) {
   const day = nbo.dayKey(when.getTime());
-  let h = 2166136261;
-  for (const ch of day) { h ^= ch.charCodeAt(0); h = Math.imul(h, 16777619) >>> 0; }
-  const t = ctx.songs[h % ctx.songs.length];
+  let t = null, best = -1;
+  for (const s of ctx.songs) {
+    const h = hash32(day + '|' + s.songKey);
+    if (h > best) { best = h; t = s; }
+  }
   const e = ctx.entries.find(x => x.track.songKey === t.songKey);
   return songRef(t, { day, addedBy: ctx.nameOf(e.addedBy), addedAt: new Date(e.at).toISOString(), family: t.family });
+}
+
+// The picks for the next 31 days, keyed by Nairobi date, so the page can show
+// the right one at render time even on days without a refresh.
+function songsOfDays(ctx, when) {
+  const out = {};
+  for (let i = 0; i < 31; i++) {
+    const s = songOfDay(ctx, new Date(when.getTime() + i * 864e5));
+    out[s.day] = s;
+  }
+  return out;
 }
 
 function credits(ctx, stats) {
@@ -387,7 +410,7 @@ function buildFilm(ctx, { generatedAt = new Date() } = {}) {
     people: { ranking: p.ranking, unattributed: p.unattributed, race: p.race, twins: p.twins, badges: p.badges },
     sound: s,
     rhythm: rhythm(ctx),
-    picks: { ...picks(ctx), perfectMix: perfectMix(ctx), songOfDay: songOfDay(ctx, generatedAt) },
+    picks: { ...picks(ctx), perfectMix: perfectMix(ctx), songOfDay: songOfDay(ctx, generatedAt), songsOfDays: songsOfDays(ctx, generatedAt) },
     credits: credits(ctx, stats),
     pulse: { at: new Date(last.at).toISOString(), by: last.addedBy, name: ctx.nameOf(last.addedBy), song: songRef(last.track) },
   };

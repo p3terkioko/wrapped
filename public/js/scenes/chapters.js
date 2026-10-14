@@ -1,5 +1,5 @@
 // Chapter-level motion: the record's role in each chapter, the ring's value,
-// beat loops (heartbeat, breathing bars, record pulse) and play-in-place.
+// beat loops (heartbeat, record pulse) and play-in-place.
 
 import { film, BEAT, isPhone } from '../motion.js';
 import * as record from '../record.js';
@@ -85,10 +85,7 @@ export function setupChapters() {
       .to(record.state, { s: '+=0.02', duration: BEAT * 0.18, ease: 'power2.out', yoyo: true, repeat: 1, onUpdate: record.render }, BEAT);
     return tl;
   });
-  const wk = document.querySelector('#weekday-chart');
-  if (wk) loop('#rhythm', () => gsap.timeline({ repeat: -1, paused: true })
-    .to(wk.querySelectorAll('.col'), { scaleY: 1.03, duration: BEAT * 0.18, ease: 'power2.out' })
-    .to(wk.querySelectorAll('.col'), { scaleY: 1, duration: BEAT * 0.82, ease: 'power2.in' }));
+  // No loops on chart bars: a bar's length is its value and never moves.
 
   return () => kill.forEach(fn => fn());
 }

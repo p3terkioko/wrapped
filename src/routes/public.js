@@ -7,13 +7,15 @@ const express = require('express');
 const router = express.Router();
 const { prisma } = require('../db/client');
 const { readPayload } = require('../services/payloads');
+const { runRefresh } = require('../services/refresh');
 const spotify = require('../services/spotify');
 const { env } = require('../config/env');
 const { asyncHandler, AppError } = require('../middleware/errorHandler');
 
-// Browsers revalidate after a minute; the CDN serves for 10 minutes and keeps
-// serving a stale copy for a day while it refetches in the background.
-const CACHE = 'public, max-age=60, s-maxage=600, stale-while-revalidate=86400';
+// Browsers and the CDN revalidate after a minute (cheap: ETag + 304), so a
+// refresh shows up quickly; the CDN keeps serving a stale copy for a day while
+// it refetches in the background.
+const CACHE = 'public, max-age=60, s-maxage=60, stale-while-revalidate=86400';
 
 function servePayload(key, wrap = data => data) {
   return asyncHandler(async (req, res) => {
@@ -64,7 +66,14 @@ router.get('/pulse', asyncHandler(async (req, res) => {
     }
   } catch { /* fall back */ }
   const pulse = live && (!fallback || Date.parse(live.at) >= Date.parse(fallback.at)) ? { ...live, live: true } : { ...fallback, live: false };
-  res.set('Cache-Control', 'public, max-age=60, s-maxage=300, stale-while-revalidate=3600');
+  // Spotify has a newer add (or fewer songs) than the last refresh: rebuild
+  // everything now, at most once every 10 minutes, so the mosaic, charts and
+  // the Crate follow the playlist without waiting for the daily run.
+  const stale = live && film && (!fallback || Date.parse(live.at) > Date.parse(fallback.at) || live.total < film.data.totals.entries);
+  if (stale) {
+    try { await runRefresh('new song', { gapMinutes: 10 }); pulse.refreshed = true; } catch { /* locked or failed: the daily run catches up */ }
+  }
+  res.set('Cache-Control', 'public, max-age=60, s-maxage=120, stale-while-revalidate=3600');
   res.json(pulse);
 }));
 

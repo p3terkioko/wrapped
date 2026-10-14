@@ -71,7 +71,7 @@ app.get('/dashboard', asyncHandler(async (req, res) => {
   res.set('Content-Type', 'text/html; charset=utf-8');
   if (!film) { res.set('Cache-Control', 'no-store'); return res.status(503).send(renderUnavailable()); }
   const host = req.headers['x-forwarded-host'] || req.headers.host || 'wrapped-beige.vercel.app';
-  res.set('Cache-Control', 'public, max-age=0, s-maxage=600, stale-while-revalidate=86400');
+  res.set('Cache-Control', 'public, max-age=0, s-maxage=60, stale-while-revalidate=86400');
   res.send(renderDashboard({ ...film.data, version: film.version }, { url: `https://${host}/dashboard` }));
 }));
 
@@ -87,7 +87,8 @@ app.get('*', asyncHandler(async (req, res) => {
   const me = typeof req.query.me === 'string' && /^[A-Za-z0-9._-]{1,64}$/.test(req.query.me) ? req.query.me : null;
   const host = req.headers['x-forwarded-host'] || req.headers.host || 'wrapped-beige.vercel.app';
   const url = `https://${host}${req.originalUrl.split('#')[0]}`;
-  res.set('Cache-Control', 'public, max-age=0, s-maxage=600, stale-while-revalidate=86400');
+  // A minute at the CDN, so a refresh (and the day's new song) shows up fast.
+  res.set('Cache-Control', 'public, max-age=0, s-maxage=60, stale-while-revalidate=86400');
   res.send(renderPage({ ...film.data, version: film.version }, { url, me }));
 }));
 

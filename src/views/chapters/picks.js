@@ -4,6 +4,7 @@
 
 const { esc, fmt, date, time12, spotifyTrack, artwork, plural } = require('../util');
 const { hbars } = require('../charts');
+const nbo = require('../../lib/nairobi');
 
 function single(song, { kicker, why, rule }) {
   if (!song) return '';
@@ -21,7 +22,9 @@ function single(song, { kicker, why, rule }) {
 
 function renderPicks(film) {
   const p = film.picks;
-  const sod = p.songOfDay;
+  // Today's pick by the Nairobi date at render time (the page is re-rendered
+  // at least every minute), falling back to the pick made at the last refresh.
+  const sod = p.songsOfDays?.[nbo.dayKey(Date.now())] || p.songOfDay;
   const nost = p.nostalgia;
   const cards = [
     single(p.mostPopular, { kicker: 'The crowd favourite', why: `The most popular song here on Spotify, at ${fmt(p.mostPopular?.popularity)} out of 100.`, rule: 'Spotify popularity (0–100) reflects recent plays across all of Spotify.' }),

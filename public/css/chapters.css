@@ -203,10 +203,14 @@ html.motion-off .now-playing.is-new .dot { animation: none; }
 .share-btn[aria-busy='true'] { opacity: 0.5; }
 
 /* Reveals (active only once the script has prepared them, and never with
-   motion off): bars grow from zero, columns rise, lists land on the beat. */
+   motion off): bars grow from zero, columns rise, lists land on the beat.
+   All bars in a chart grow together, so their proportions are true in every
+   frame; column values fade in once the columns have risen. */
 html.reveal-ready:not(.motion-off) [data-reveal] .bar,
-html.reveal-ready:not(.motion-off) [data-reveal] .stack__part { transform: scaleX(0); transition: transform calc(var(--beat) * 1.5) cubic-bezier(0.16, 1, 0.3, 1); transition-delay: calc(var(--i, 0) * var(--beat) / 4); }
-html.reveal-ready:not(.motion-off) [data-reveal] .col { transform: scaleY(0); transition: transform calc(var(--beat) * 1.5) cubic-bezier(0.16, 1, 0.3, 1); transition-delay: calc(var(--i, 0) * var(--beat) / 16); }
+html.reveal-ready:not(.motion-off) [data-reveal] .stack__part { transform: scaleX(0); transition: transform calc(var(--beat) * 1.5) cubic-bezier(0.16, 1, 0.3, 1); }
+html.reveal-ready:not(.motion-off) [data-reveal] .col { transform: scaleY(0); transition: transform calc(var(--beat) * 1.5) cubic-bezier(0.16, 1, 0.3, 1); }
+html.reveal-ready:not(.motion-off) [data-reveal] .colchart__v { opacity: 0; transition: opacity calc(var(--beat) * 0.5) ease-out; }
+html.reveal-ready:not(.motion-off) [data-reveal].is-in .colchart__v { opacity: 1; transition-delay: calc(var(--beat) * 1.1); }
 html.reveal-ready:not(.motion-off) [data-reveal='fade'] > * { opacity: 0; transform: translateY(16px); transition: opacity calc(var(--beat) * 1.2) ease-out, transform calc(var(--beat) * 1.2) cubic-bezier(0.16, 1, 0.3, 1); transition-delay: calc(var(--i, 0) * var(--beat) / 4); }
 html.reveal-ready:not(.motion-off) [data-reveal] .kw-seg,
 html.reveal-ready:not(.motion-off) [data-reveal] .clock-bar { opacity: 0; transition: opacity var(--beat) ease-out; transition-delay: calc(var(--i, 0) * var(--beat) / 16); }
@@ -225,12 +229,15 @@ html.reveal-ready:not(.motion-off) [data-reveal='dots'].is-in .moodmap__dots { o
 /* Column charts (HTML) */
 .colchart { margin: 0; width: 100%; max-width: 980px; }
 .colchart__plot { display: flex; align-items: flex-end; height: var(--plot-h, 200px); border-bottom: 1px solid var(--hair); }
+/* Values sit above their columns in reserved headroom, so the tallest column
+   keeps its full height and every column is exactly proportional. */
+.colchart--values .colchart__plot { padding-top: 20px; }
 .colchart__c { position: relative; flex: 1 1 0; min-width: 0; height: 100%; display: flex; flex-direction: column; justify-content: flex-end; align-items: center; outline-offset: 1px; cursor: default; }
-.colchart .col { display: block; width: 76%; max-width: 64px; height: var(--h); background: var(--bar); border-radius: 2px 2px 0 0; transform-origin: bottom; }
+.colchart .col { display: block; flex: none; width: 76%; max-width: 64px; height: var(--h); background: var(--bar); border-radius: 2px 2px 0 0; transform-origin: bottom; }
 .colchart__c.is-lead .col { background: var(--vermilion); }
 .colchart__c:hover .col, .colchart__c:focus-visible .col { background: var(--cream-2); }
 .colchart__c.is-lead:hover .col, .colchart__c.is-lead:focus-visible .col { background: #ff7451; }
-.colchart__v { margin-bottom: 6px; font: 400 0.72rem/1 var(--data); color: var(--cream-2); font-variant-numeric: tabular-nums; }
+.colchart__v { position: absolute; left: 0; right: 0; bottom: calc(var(--h) + 6px); text-align: center; font: 400 0.72rem/1 var(--data); color: var(--cream-2); font-variant-numeric: tabular-nums; }
 .colchart__c.is-lead .colchart__v { color: var(--vermilion); }
 .colchart__axis { display: flex; margin-top: 6px; }
 .colchart__axis span { flex: 1 1 0; min-width: 0; text-align: center; white-space: nowrap; overflow: visible; font: 400 0.68rem/1.2 var(--data); color: var(--cream-3); }

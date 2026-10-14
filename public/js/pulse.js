@@ -20,7 +20,9 @@ export function setupPulse() {
       if (!p || !p.song || !p.live) return;
       const shown = JSON.parse(document.getElementById('film-data').textContent).pulse;
       if (shown && Date.parse(p.at) <= Date.parse(shown.at)) return;
-      line.innerHTML = `<span class="dot" aria-hidden="true"></span><span class="now-playing__k">Latest add</span> <span>${esc(stamp(p.at))}</span> <span>${esc(p.name)} added <a href="${esc(p.song.url)}">${esc(p.song.name)}</a> by ${esc(p.song.artists)}</span>`;
+      // When this check rebuilt the numbers, a reload shows the song everywhere.
+      const more = p.refreshed ? ` <a href="${esc(location.pathname + location.search)}">Reload to see it in the mosaic and charts</a>` : '';
+      line.innerHTML = `<span class="dot" aria-hidden="true"></span><span class="now-playing__k">Latest add</span> <span>${esc(stamp(p.at))}</span> <span>${esc(p.name)} added <a href="${esc(p.song.url)}">${esc(p.song.name)}</a> by ${esc(p.song.artists)}</span>${more}`;
       line.classList.add('is-new');
     } catch { /* keep the server's version */ }
   };

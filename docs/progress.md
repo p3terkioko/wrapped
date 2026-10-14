@@ -171,3 +171,16 @@ Decisions:
   - Set `CRON_SECRET` in Vercel; without it the daily refresh is refused.
   - Set `ADMIN_PASSWORD`; without it `/admin` is disabled.
   - Apply the Sauti Sol and Mutoriah genre corrections in `/admin`.
+
+## After go-live (14 Oct 2026)
+
+- **The site follows the playlist.** When the live check (`/api/public/pulse`, which runs on every visit to the film or the Crate) sees a song newer than the data, it rebuilds everything: sync, enrichment of the new song, payloads.
+  - It runs at most once every 10 minutes, guarded by an atomic lock row in `settings`. Cron and admin runs take the same lock, so two refreshes never overlap.
+  - Pages and payloads now stay at the CDN for 60 s, so the mosaic, charts and the Crate show a new song within a couple of minutes.
+  - Tested locally: Michelle's add was picked up in 18 s, giving 516 songs.
+- **Song of the day changes at Nairobi midnight** without a refresh. Each refresh schedules the next 31 days, and the page picks today's at render time.
+  - The pick uses rendezvous hashing over the date and each song: adding a song changes a day's pick only if the new song wins. Before this, the pick was tied to the refresh date and could jump when a song was added.
+- **The weekday chart is honest in every frame.**
+  - The "breathing" beat loop on its bars is gone: it fought the reveal transition, and each bar trailed it by its own delay.
+  - Bars in a chart now grow together.
+  - The value labels sit in reserved headroom, so the tallest bar is no longer squeezed.

@@ -307,6 +307,10 @@ function wire() {
   readUrl();
   wire();
   render();
+  // Let the server check Spotify for newer songs (it rebuilds the numbers when
+  // there are some, at most every 10 minutes). Nothing here waits on it.
+  const ping = () => fetch('/api/public/pulse').catch(() => {});
+  ('requestIdleCallback' in window) ? requestIdleCallback(ping, { timeout: 6000 }) : setTimeout(ping, 3000);
 })();
 
 // Exact values on hover, focus or tap for every column.

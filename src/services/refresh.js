@@ -16,9 +16,21 @@ const { AppError } = require('../middleware/errorHandler');
 const BUDGET_MS = 50000;      // whole run
 const COMPUTE_RESERVE_MS = 8000; // kept back for computing and storing payloads
 
-async function runRefresh(triggeredBy = 'admin') {
+// One refresh at a time: a run claims a row in settings atomically, and nobody
+// else can start until `gapMinutes` have passed since the last claim. Manual
+// and cron runs use a short gap (just covers a run in progress); the automatic
+// run triggered by a new song uses a longer one.
+async function claim(gapMinutes) {
+  const cutoff = new Date(Date.now() - gapMinutes * 60000);
+  await prisma.setting.createMany({ data: [{ key: 'refreshLock', value: {}, updatedAt: new Date(0) }], skipDuplicates: true });
+  const { count } = await prisma.setting.updateMany({ where: { key: 'refreshLock', updatedAt: { lt: cutoff } }, data: { value: { at: new Date().toISOString() } } });
+  return count === 1;
+}
+
+async function runRefresh(triggeredBy = 'admin', { gapMinutes = 1 } = {}) {
   if (!prisma) throw new AppError(503, 'Database not available');
   if (!env.SPOTIFY_REFRESH_TOKEN) throw new AppError(400, 'SPOTIFY_REFRESH_TOKEN not configured');
+  if (!(await claim(gapMinutes))) throw new AppError(409, 'A refresh is running or ran moments ago. Try again in a minute.');
   const start = Date.now();
   const lines = [];
   const log = m => { lines.push(m); console.log('[refresh]', m); };

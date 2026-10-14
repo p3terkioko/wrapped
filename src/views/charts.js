@@ -26,10 +26,10 @@ function columns(cols, { title, desc, id = '', valueLabels = false, height = 200
   const max = Math.max(...cols.map(c => c.value), 1);
   const plot = cols.map(c => {
     const tip = `${c.tipLabel || c.label}: ${fmt(c.value)} ${unit}`;
-    return `<span class="colchart__c${c.highlight ? ' is-lead' : ''}" tabindex="0" data-tip="${esc(tip)}">${valueLabels ? `<span class="colchart__v">${c.value ? fmt(c.value) : ''}</span>` : ''}<span class="col" style="--h:${((c.value / max) * 100).toFixed(2)}%"></span></span>`;
+    return `<span class="colchart__c${c.highlight ? ' is-lead' : ''}" tabindex="0" data-tip="${esc(tip)}" style="--h:${((c.value / max) * 100).toFixed(2)}%">${valueLabels ? `<span class="colchart__v">${c.value ? fmt(c.value) : ''}</span>` : ''}<span class="col"></span></span>`;
   }).join('');
   const axis = cols.map(c => `<span>${esc(c.label || '')}</span>`).join('');
-  return `<figure class="colchart"${id ? ` id="${esc(id)}"` : ''} style="--plot-h:${height}px" data-reveal="cols">
+  return `<figure class="colchart${valueLabels ? ' colchart--values' : ''}"${id ? ` id="${esc(id)}"` : ''} style="--plot-h:${height}px" data-reveal="cols">
   <div class="colchart__plot" role="img" aria-label="${esc(title)}. ${esc(desc)}">${plot}</div>
   <div class="colchart__axis" aria-hidden="true">${axis}</div>
 </figure>`;
